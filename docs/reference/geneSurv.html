@@ -126,40 +126,150 @@ The function provides a robust estimation of the log-rank p-value and the Hazard
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">matrixData</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data set ‘matrixData’ not found</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">geneSurvExprs</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  </span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">genExpr</span> <span class="op">&lt;-</span> <span class="va">mExprs</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="st">"ESR1"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mExprs</span><span class="op">)</span><span class="op">)</span>, <span class="op">]</span></span></span>
 <span class="r-in"><span>  <span class="va">time</span> <span class="op">&lt;-</span> <span class="va">mPheno</span><span class="op">$</span><span class="va">time</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mPheno' not found</span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mPheno</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'rownames': object 'mPheno' not found</span>
 <span class="r-in"><span>  <span class="va">status</span> <span class="op">&lt;-</span> <span class="va">mPheno</span><span class="op">$</span><span class="va">status</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mPheno' not found</span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">status</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mPheno</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'rownames': object 'mPheno' not found</span>
-<span class="r-in"><span>  <span class="co"># The TIME value must be transformed to YEARS</span></span></span>
-<span class="r-in"><span>  <span class="co"># The gene expression vector must be provided with the NAMES of each sample, that should match with the NAMES of the time and status vectors </span></span></span>
-<span class="r-in"><span>  <span class="va">outputKM</span> <span class="op">&lt;-</span> <span class="fu">geneSurv</span><span class="op">(</span><span class="va">mExprs</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="st">"ESR1"</span>,<span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mExprs</span><span class="op">)</span><span class="op">)</span>,<span class="op">]</span>, <span class="va">time</span>, <span class="va">status</span>, <span class="st">"ESR1"</span>, </span></span>
-<span class="r-in"><span>                       type <span class="op">=</span> <span class="st">"exprs"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mExprs' not found</span>
 <span class="r-in"><span>  </span></span>
-<span class="r-in"><span>  <span class="co"># If we consider p53 gene instead (ENSG00000141510)</span></span></span>
-<span class="r-in"><span>  <span class="va">outputKM.TP53</span> <span class="op">&lt;-</span> <span class="fu">geneSurv</span><span class="op">(</span><span class="va">mExprs</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="st">"TP53"</span>,<span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mExprs</span><span class="op">)</span><span class="op">)</span>,<span class="op">]</span>, <span class="va">time</span>, <span class="va">status</span>, <span class="st">"TP53"</span>, </span></span>
-<span class="r-in"><span>                            type <span class="op">=</span> <span class="st">"exprs"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mExprs' not found</span>
+<span class="r-in"><span>  <span class="co"># The TIME value must be transformed to YEARS</span></span></span>
+<span class="r-in"><span>  <span class="co"># The gene expression vector must be provided with the NAMES of each sample,</span></span></span>
+<span class="r-in"><span>  <span class="co"># that should match the time and status NAMES.</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">outputKM</span> <span class="op">&lt;-</span> <span class="fu">geneSurv</span><span class="op">(</span><span class="va">genExpr</span>, <span class="va">time</span>, <span class="va">status</span>, <span class="st">"ESR1"</span>, type <span class="op">=</span> <span class="st">"exprs"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> samples ok</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-04-24 14:04:10.20728</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 1 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 2 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 3 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 4 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 5 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 6 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 7 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 8 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 9 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 10 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 11 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 12 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 13 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 14 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 15 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 16 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 17 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 18 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 19 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 20 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 21 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 22 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 23 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 24 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 25 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 26 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 27 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 28 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 29 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 30 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 31 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 32 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 33 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 34 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 35 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 36 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 37 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 38 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 39 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 40 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 41 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 42 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 43 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 44 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 45 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 46 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 47 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 48 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 49 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 50 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 51 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 52 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 53 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 54 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 55 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 56 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 57 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 58 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 59 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 60 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 61 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 62 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 63 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 64 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 65 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 66 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 67 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 68 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 69 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 70 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 71 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 72 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 73 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 74 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 75 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 76 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 77 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 78 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 79 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 80 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 81 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 82 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 83 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 84 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 85 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 86 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 87 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 88 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 89 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 90 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 91 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 92 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 93 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 94 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 95 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 96 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 97 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 98 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 99 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100 of 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 200</span>
+<span class="r-plt img"><img src="geneSurv-1.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="geneSurv-2.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="geneSurv-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span>                            </span></span>
 <span class="r-in"><span>  <span class="co"># Generate the plots again</span></span></span>
 <span class="r-in"><span>  <span class="co">## Plots for c(type = exprs)</span></span></span>
 <span class="r-in"><span>  <span class="fu">asuri</span><span class="fu">:::</span><span class="fu">plotBoxplot</span><span class="op">(</span><span class="va">outputKM</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'outputKM' not found</span>
+<span class="r-plt img"><img src="geneSurv-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span>  <span class="fu">asuri</span><span class="fu">:::</span><span class="fu">plotProbClass</span><span class="op">(</span><span class="va">outputKM</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'outputKM' not found</span>
+<span class="r-plt img"><img src="geneSurv-5.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span>  <span class="fu">asuri</span><span class="fu">:::</span><span class="fu">plotKM</span><span class="op">(</span><span class="va">outputKM</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'outputKM' not found</span>
+<span class="r-plt img"><img src="geneSurv-6.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># If we instead consider to run the function as *type* = risk</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">geneSurvRisk</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="va">genExpr</span> <span class="op">&lt;-</span> <span class="va">mExprs</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="st">"BRCA1"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mExprs</span><span class="op">)</span><span class="op">)</span>, <span class="op">]</span></span></span>
+<span class="r-in"><span>  <span class="va">time</span> <span class="op">&lt;-</span> <span class="va">mPheno</span><span class="op">$</span><span class="va">time</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mPheno</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">status</span> <span class="op">&lt;-</span> <span class="va">mPheno</span><span class="op">$</span><span class="va">status</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">status</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mPheno</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">outputKM.TP53</span> <span class="op">&lt;-</span> <span class="fu">geneSurv</span><span class="op">(</span><span class="va">genExpr</span>, <span class="va">time</span>, <span class="va">status</span>, <span class="st">"BRCA1"</span>, type <span class="op">=</span> <span class="st">"risk"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="geneSurv-7.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co">## Plots for c(type = risk)</span></span></span>
 <span class="r-in"><span>  <span class="fu">asuri</span><span class="fu">:::</span><span class="fu">plotKM</span><span class="op">(</span><span class="va">outputKM</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'outputKM' not found</span>
+<span class="r-plt img"><img src="geneSurv-8.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

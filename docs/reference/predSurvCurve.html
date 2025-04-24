@@ -84,33 +84,99 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Load the expression matrix with the subset of genes selected</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">matrixData</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data set ‘matrixData’ not found</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Train a multivariate risk predictor. If you have run already this function, please skip this step.</span></span></span>
-<span class="r-in"><span><span class="va">multivariate_risk_predictor</span> <span class="op">&lt;-</span> <span class="fu"><a href="patientRisk.html">patientRisk</a></span><span class="op">(</span><span class="va">mExprSelectedGenes</span>, <span class="va">time</span>, <span class="va">status</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mExprSelectedGenes' not found</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Expression matrix for a single test patient</span></span></span>
-<span class="r-in"><span><span class="va">i</span> <span class="op">&lt;-</span> <span class="fl">5</span></span></span>
-<span class="r-in"><span><span class="va">mExprs_testData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span> <span class="va">mExprSelectedGenes</span><span class="op">[</span>, <span class="va">i</span> <span class="op">]</span> <span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mExprSelectedGenes' not found</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span> <span class="va">mExprs_testData</span> <span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mExprSelectedGenes</span><span class="op">)</span><span class="op">[</span> <span class="va">i</span> <span class="op">]</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'colnames': object 'mExprSelectedGenes' not found</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Cox prediction for training and test sets</span></span></span>
-<span class="r-in"><span><span class="va">cox_pred_training</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span> <span class="fu"><a href="predict.patientRisk.html">predict.patientRisk</a></span><span class="op">(</span><span class="va">multivariate_risk_predictor</span>, <span class="va">mExprSelectedGenes</span> <span class="op">)</span><span class="op">$</span><span class="va">risk_score</span> <span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mExprSelectedGenes' not found</span>
-<span class="r-in"><span><span class="va">cox_pred_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span> <span class="fu"><a href="predict.patientRisk.html">predict.patientRisk</a></span><span class="op">(</span><span class="va">multivariate_risk_predictor</span>, <span class="va">mExprs_testData</span> <span class="op">)</span><span class="op">$</span><span class="va">risk_score</span> <span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mExprs_testData' not found</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Survival curve estimation</span></span></span>
-<span class="r-in"><span><span class="va">eval_surv_times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">mPheno</span><span class="op">$</span><span class="va">time</span><span class="op">)</span>, by<span class="op">=</span><span class="fl">0.2</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mPheno' not found</span>
-<span class="r-in"><span><span class="va">surv_curv_cox</span> <span class="op">&lt;-</span> <span class="fu">predSurvCurve</span><span class="op">(</span> <span class="va">cox_pred_training</span>, <span class="va">mPheno</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span><span class="op">]</span>, <span class="va">cox_pred_test</span>, <span class="va">eval_surv_times</span> <span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mPheno' not found</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">predSurvCurve</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># COX prediction for the training set</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">cox_pred_training</span> <span class="op">&lt;-</span> <span class="fu"><a href="predict.patientRisk.html">predict.patientRisk</a></span><span class="op">(</span><span class="va">multivariate_risk_predictor</span>, <span class="va">mExprSelectedGenes</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="predSurvCurve-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span>  <span class="va">cox_pred_training</span><span class="op">$</span><span class="va">risk_score</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM491233    GSM540243    GSM540162    GSM540353    GSM540238    GSM540197 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.794974646 -0.681587724  0.628877440  0.509780999  0.641865583 -0.891489008 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM447221    GSM540205    GSM491226    GSM540241    GSM491214    GSM540140 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.589102923 -1.046099095 -0.397609723 -0.517601962 -0.481844371  0.565231240 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540270    GSM540182    GSM540150    GSM540267    GSM491260    GSM540247 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.330692030 -0.250508276 -0.726282168  0.336248198 -0.306032540 -0.927606531 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM491264    GSM540364    GSM540240    GSM540282    GSM491284    GSM491262 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.344837523  0.637596957 -0.393924241  0.854486426  0.522117388 -0.581046627 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540161    GSM491195    GSM491240    GSM447202    GSM540310    GSM540292 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.219403852  0.464498323 -0.651585598 -0.142053848  0.549845582  0.585690181 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540272    GSM447231    GSM491276    GSM540291    GSM447243    GSM540318 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.516902612  0.131253139 -0.789568119  1.024277344 -0.955420327 -0.369948480 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540342    GSM540328    GSM540253    GSM540370    GSM540167    GSM540319 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.447607166 -0.219205014 -0.477420623  0.980114711  0.095025119 -0.768131354 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540123    GSM491223    GSM540135    GSM491278    GSM540110    GSM540248 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.933678908  0.931988575 -0.975401561 -0.264072934  0.055889753  0.533906925 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540332    GSM540297    GSM540341    GSM491281    GSM491261    GSM447212 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.354534227 -0.436061029 -0.864453342 -0.864035135 -0.490204702 -0.498585701 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540125    GSM540179    GSM540235    GSM540126    GSM491222    GSM540229 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.500922625 -0.400651106  0.261516585 -0.360551989 -0.700486553 -0.362458948 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540178    GSM540201    GSM491267    GSM447205    GSM540284    GSM540118 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.023503458  0.498925415 -0.603285234 -0.788250628 -0.413032102  0.382042676 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540120    GSM540230    GSM447209    GSM491181    GSM540261    GSM540148 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.405871811 -0.562381594  0.552437934  0.476263340  0.967338964 -0.778990887 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540231    GSM491282    GSM540237    GSM540351    GSM540339    GSM540344 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.318786787 -0.793087600  0.500093747  0.663986174  0.949067914 -0.633763936 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM447197    GSM491288    GSM540142    GSM540203    GSM491211    GSM540173 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.617408897 -0.152466478 -0.568383120 -0.566699758  0.039410484 -0.726762253 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540281    GSM491272    GSM491180    GSM540280    GSM491265    GSM540245 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.638319178 -0.604439433  0.950501390 -0.344058950 -0.252004567 -0.403060556 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540359    GSM540154    GSM491198    GSM540330    GSM491199    GSM540159 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.740253963 -0.181718620  0.995363711 -0.328253368  0.650882475  0.455762677 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540196    GSM540215    GSM540293    GSM447206    GSM540350    GSM491182 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.048464995  0.495713353 -0.165993803  0.458307623  0.833496750  0.837228314 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM491219    GSM540337    GSM491204    GSM491231    GSM491263    GSM540371 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.813582525 -0.904517574 -0.369419678  0.645825090 -0.616201197  0.446064604 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM447227    GSM491183    GSM540354    GSM540302    GSM540285    GSM491197 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.282674222  0.854974984  0.272019486  0.905487744  0.706817722  0.888058296 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM447233    GSM540165    GSM540124    GSM540340    GSM540295    GSM491196 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.579771958 -0.557923192  0.590214471 -0.107481272 -0.831604907  0.545018668 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM491191    GSM491279    GSM540277    GSM491234    GSM540166    GSM540273 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.909951926 -0.005467978 -0.383290681 -0.181787703 -0.456630059  0.761567768 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540363    GSM447215    GSM540268    GSM491269    GSM540219    GSM540299 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.880313617  0.722293265  1.017307157 -0.611620506  0.748843899 -0.688590901 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540213    GSM491238    GSM540233    GSM491227    GSM491257    GSM540356 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.131400546  0.675354671 -0.470153182 -0.964564708 -0.315638752  0.556133571 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540143    GSM540160    GSM540130    GSM491220    GSM540141    GSM540199 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.302052246  0.165832662  0.403964921 -0.517077697 -0.361430390 -0.354970693 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540109    GSM447207    GSM447232    GSM491242    GSM491246    GSM540347 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.730270044 -1.324825189  0.390235265 -0.160417359 -0.707647295 -0.304237944 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540157    GSM491259    GSM540362    GSM491184    GSM540334    GSM491203 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.358018505 -0.614406250  0.483969244  0.692642414 -1.119258251  0.007772479 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM491229    GSM491268    GSM540265    GSM491202    GSM491245    GSM540144 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.359191133 -0.732841436  0.612081133  0.887230704  1.434945962 -0.326795478 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM491193    GSM491189    GSM540137    GSM540188    GSM491221    GSM540266 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.732130845  0.581510992 -0.347999654 -0.490966818 -0.514560060 -0.933858867 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM491252    GSM447226    GSM447216    GSM447198    GSM540172    GSM491275 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.537298336  0.321934031 -0.161678464  0.566925069  0.836746533 -0.235081735 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM447199    GSM540249    GSM491280    GSM491178    GSM540220    GSM447208 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.361261231  0.480987015 -1.084941759  0.759941718 -0.372148617 -0.953970457 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540216    GSM540367    GSM540208    GSM540108    GSM540269    GSM540244 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.095950104  0.758258480 -0.396851963  0.047783889 -0.565467348 -0.804141272 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540195    GSM540286    GSM491228    GSM540369    GSM447245    GSM540322 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.425527325 -1.000275669  0.461504343  0.367311431 -0.382339451 -0.735490645 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540177    GSM540155    GSM540242    GSM540346    GSM540214    GSM491225 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.635546876  0.375293584 -0.057143173  1.022823575  0.459705935 -0.808013599 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GSM540349    GSM491243 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.882444715  0.706730129 </span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># COX prediction for the test patient</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">cox_pred_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="predict.patientRisk.html">predict.patientRisk</a></span><span class="op">(</span><span class="va">multivariate_risk_predictor</span>, <span class="va">mExprs_testSingleData</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Normalized patient Risk (0 100): 27.9017675117161</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The patient is classified as Low Risk </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Low Risk interval: (0, 37.0600635839135)</span>
+<span class="r-in"><span>  <span class="va">cox_pred_test</span><span class="op">$</span><span class="va">risk_score</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Sample4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.5548003 </span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># Survival curve estimation</span></span></span>
+<span class="r-in"><span>  <span class="va">eval_surv_times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">mPheno</span><span class="op">$</span><span class="va">time</span><span class="op">)</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">surv_curv_cox</span> <span class="op">&lt;-</span> <span class="fu">predSurvCurve</span><span class="op">(</span><span class="va">cox_pred_training</span><span class="op">$</span><span class="va">risk_score</span>, <span class="va">mPheno</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span><span class="op">]</span>, <span class="va">cox_pred_test</span><span class="op">$</span><span class="va">risk_score</span>, <span class="va">eval_surv_times</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The Survival curve is only estimated for the interval [%.1f, %.1f]07.66083333333333</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No observation beyond this point in the training set</span>
+<span class="r-plt img"><img src="predSurvCurve-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -75,27 +75,40 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">matrixData</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data set ‘matrixData’ not found</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">predictPatientRisk</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># patientRisk function estimates the parameters of a multivariate Cox model</span></span></span>
-<span class="r-in"><span><span class="va">multivariate_risk_predictor</span> <span class="op">&lt;-</span> <span class="fu"><a href="patientRisk.html">patientRisk</a></span><span class="op">(</span><span class="va">mExprSelectedGenes</span>, <span class="va">time</span>, <span class="va">status</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mExprSelectedGenes' not found</span>
+<span class="r-in"><span>  <span class="co"># Generate the validation set, mExprs_testData if necessary.</span></span></span>
+<span class="r-in"><span>  <span class="co"># Vector of genes (same ones used in Cox model training)</span></span></span>
+<span class="r-in"><span>  <span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mExprSelectedGenes</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Risk prediction for a subset of new patients. If you don't have the multivariate_risk_predictor object, run the previous line</span></span></span>
-<span class="r-in"><span><span class="co"># mExprs_testData is the gene expression matrix for the test samples (as columns) and the same subset </span></span></span>
-<span class="r-in"><span><span class="co"># of genes (as rows) considered in the training of the Cox model using patientRisk function.</span></span></span>
-<span class="r-in"><span><span class="va">risk_prediction_validation_set</span> <span class="op">&lt;-</span> <span class="fu">predict.patientRisk</span><span class="op">(</span><span class="va">multivariate_risk_predictor</span>, <span class="va">mExprs_testData</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mExprs_testData' not found</span>
+<span class="r-in"><span>  <span class="co"># Simulate expression data</span></span></span>
+<span class="r-in"><span>  <span class="va">num_samples</span> <span class="op">&lt;-</span> <span class="fl">20</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">mExprs_testData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">genes</span><span class="op">)</span> <span class="op">*</span> <span class="va">num_samples</span>, mean <span class="op">=</span> <span class="fl">10</span>, sd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                            nrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">genes</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="va">num_samples</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Risk prediction for a single patient. Patient fourth is selected.</span></span></span>
-<span class="r-in"><span><span class="va">mExprs_testSingleData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span> <span class="va">mExprs_testData</span><span class="op">[</span>, <span class="fl">4</span> <span class="op">]</span> <span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mExprs_testData' not found</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span> <span class="va">mExprs_testSingleData</span> <span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mExprs_testData</span><span class="op">)</span><span class="op">[</span> <span class="fl">4</span> <span class="op">]</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'colnames': object 'mExprs_testData' not found</span>
-<span class="r-in"><span><span class="va">risk_prediction_one_patient</span> <span class="op">&lt;-</span> <span class="fu">predict.patientRisk</span><span class="op">(</span><span class="va">multivariate_risk_predictor</span>, <span class="va">mExprs_testSingleData</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mExprs_testSingleData' not found</span>
+<span class="r-in"><span>  <span class="co"># Assign row names (genes) and column names (samples)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mExprs_testData</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">genes</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mExprs_testData</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Sample"</span>, <span class="fl">1</span><span class="op">:</span><span class="va">num_samples</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">risk_prediction_validation_set</span> <span class="op">&lt;-</span> <span class="fu">predict.patientRisk</span><span class="op">(</span><span class="va">multivariate_risk_predictor</span>, <span class="va">mExprs_testData</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="predict.patientRisk-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># Example for single patient prediction: Patient fourth is selected.</span></span></span>
+<span class="r-in"><span>  <span class="va">mExprs_testSingleData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">mExprs_testData</span><span class="op">[</span>, <span class="fl">4</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mExprs_testSingleData</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mExprs_testData</span><span class="op">)</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span></span></span>
+<span class="r-in"><span>  <span class="co"># Risk prediction for the optimal subset of genes selected by patientRisk function</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">risk_prediction_one_patient</span> <span class="op">&lt;-</span> <span class="fu">predict.patientRisk</span><span class="op">(</span><span class="va">multivariate_risk_predictor</span>, <span class="va">mExprs_testSingleData</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Normalized patient Risk (0 100): 27.9017675117161</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The patient is classified as Low Risk </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Low Risk interval: (0, 37.0600635839135)</span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># Normalized patient Risk (0 100): 27.9017675117161</span></span></span>
+<span class="r-in"><span>  <span class="co"># The patient is classified as Low Risk </span></span></span>
+<span class="r-in"><span>  <span class="co"># Low Risk interval: (0, 37.0600635839135)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

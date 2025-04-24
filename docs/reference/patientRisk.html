@@ -140,46 +140,502 @@ The algorithm considered is based on UNICOX, a regularized multivariate Cox regr
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">matrixData</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data set ‘matrixData’ not found</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">patientRisk</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># The TIME value must be transformed to YEARS</span></span></span>
-<span class="r-in"><span><span class="co">## Names of time and status vectors are the sample names</span></span></span>
-<span class="r-in"><span><span class="va">time</span> <span class="op">&lt;-</span> <span class="va">mPheno</span><span class="op">$</span><span class="va">time</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mPheno' not found</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mPheno</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'rownames': object 'mPheno' not found</span>
-<span class="r-in"><span><span class="va">status</span> <span class="op">&lt;-</span> <span class="va">mPheno</span><span class="op">$</span><span class="va">status</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mPheno' not found</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">status</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mPheno</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'rownames': object 'mPheno' not found</span>
+<span class="r-in"><span>  <span class="co"># Survival times should be provided in YEARS</span></span></span>
+<span class="r-in"><span>  <span class="va">time</span> <span class="op">&lt;-</span> <span class="va">mPheno</span><span class="op">$</span><span class="va">time</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mPheno</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">status</span> <span class="op">&lt;-</span> <span class="va">mPheno</span><span class="op">$</span><span class="va">status</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">status</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mPheno</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Pred_Er.IHC$genes is the subset of genes to be tested. In our case study it is the list of genes</span></span></span>
-<span class="r-in"><span><span class="co"># related to the ER clinical variable obtained by function genePheno. It can be any subset of genes</span></span></span>
-<span class="r-in"><span><span class="co"># to analyze the relationship with survival.</span></span></span>
-<span class="r-in"><span><span class="va">geneList</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pred_ER.IHC</span><span class="op">$</span><span class="va">genes</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'Pred_ER.IHC' not found</span>
-<span class="r-in"><span><span class="co"># Next, the expression matrix for the list of genes selected is obtained.</span></span></span>
-<span class="r-in"><span><span class="va">mExprSelectedGenes</span> <span class="op">&lt;-</span> <span class="va">mExprs</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">geneList</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mExprs</span><span class="op">)</span><span class="op">)</span>,<span class="op">]</span> </span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mExprs' not found</span>
+<span class="r-in"><span>  <span class="co"># Pred_ER.IHC$genes is the subset of genes to be tested. In our case study,</span></span></span>
+<span class="r-in"><span>  <span class="co"># it is the list of genes related to the ER clinical variable that was</span></span></span>
+<span class="r-in"><span>  <span class="co"># obtained using the function **genePheno()**.</span></span></span>
+<span class="r-in"><span>  <span class="va">geneList</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pred_ER.IHC</span><span class="op">$</span><span class="va">genes</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># Next, the expression matrix for the list of genes selected is obtained.</span></span></span>
+<span class="r-in"><span>  <span class="va">mExprSelectedGenes</span> <span class="op">&lt;-</span> <span class="va">mExprs</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">geneList</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mExprs</span><span class="op">)</span><span class="op">)</span>, <span class="op">]</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Training of the multivariate Cox model.</span></span></span>
-<span class="r-in"><span><span class="co"># You have to provide: the expression matrix (genes as rows and samples as columns) for the list of genes selected, the time and status vectors.</span></span></span>
-<span class="r-in"><span><span class="va">multivariate_risk_predictor</span> <span class="op">&lt;-</span> <span class="fu">patientRisk</span><span class="op">(</span><span class="va">mExprSelectedGenes</span>, <span class="va">time</span>, <span class="va">status</span>, method <span class="op">=</span> <span class="st">"class.probs"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mExprSelectedGenes' not found</span>
+<span class="r-in"><span>  <span class="co"># Training of the multivariate COX model. Provide the expression matrix</span></span></span>
+<span class="r-in"><span>  <span class="co"># (genes as rows and samples as columns) for the list of genes selected,</span></span></span>
+<span class="r-in"><span>  <span class="co"># the time and the status vectors, and the method to stratify the patients</span></span></span>
+<span class="r-in"><span>  <span class="co"># (select one of these methods: `min.pval`, `med.pval`, `class.probs`).</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">multivariate_risk_predictor</span> <span class="op">&lt;-</span> <span class="fu">patientRisk</span><span class="op">(</span><span class="va">mExprSelectedGenes</span>, <span class="va">time</span>, <span class="va">status</span>, method <span class="op">=</span> <span class="st">"class.probs"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 1out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 2out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 3out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 4out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 5out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 6out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 7out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 8out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 9out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 10out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 11out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 12out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 13out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 14out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 15out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 16out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 17out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 18out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 19out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 20out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 21out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 22out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 23out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 24out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 25out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 26out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 27out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 28out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 29out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 30out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Nested ten fold cross validation: Predicting the risk for each lambda...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 10 %</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 1out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 2out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 3out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 4out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 5out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 6out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 7out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 8out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 9out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 10out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 11out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 12out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 13out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 14out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 15out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 16out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 17out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 18out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 19out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 20out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 21out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 22out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 23out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 24out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 25out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 26out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 27out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 28out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 29out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 30out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 20 %</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 1out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 2out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 3out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 4out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 5out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 6out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 7out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 8out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 9out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 10out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 11out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 12out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 13out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 14out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 15out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 16out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 17out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 18out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 19out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 20out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 21out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 22out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 23out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 24out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 25out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 26out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 27out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 28out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 29out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 30out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 30 %</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 1out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 2out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 3out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 4out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 5out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 6out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 7out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 8out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 9out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 10out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 11out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 12out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 13out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 14out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 15out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 16out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 17out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 18out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 19out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 20out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 21out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 22out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 23out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 24out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 25out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 26out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 27out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 28out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 29out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 30out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 40 %</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 1out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 2out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 3out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 4out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 5out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 6out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 7out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 8out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 9out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 10out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 11out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 12out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 13out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 14out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 15out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 16out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 17out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 18out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 19out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 20out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 21out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 22out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 23out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 24out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 25out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 26out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 27out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 28out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 29out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 30out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 50 %</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 1out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 2out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 3out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 4out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 5out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 6out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 7out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 8out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 9out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 10out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 11out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 12out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 13out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 14out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 15out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 16out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 17out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 18out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 19out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 20out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 21out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 22out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 23out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 24out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 25out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 26out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 27out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 28out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 29out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 30out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 60 %</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 1out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 2out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 3out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 4out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 5out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 6out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 7out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 8out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 9out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 10out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 11out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 12out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 13out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 14out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 15out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 16out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 17out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 18out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 19out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 20out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 21out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 22out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 23out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 24out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 25out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 26out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 27out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 28out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 29out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 30out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 70 %</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 1out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 2out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 3out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 4out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 5out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 6out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 7out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 8out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 9out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 10out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 11out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 12out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 13out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 14out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 15out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 16out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 17out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 18out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 19out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 20out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 21out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 22out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 23out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 24out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 25out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 26out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 27out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 28out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 29out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 30out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 80 %</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 1out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 2out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 3out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 4out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 5out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 6out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 7out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 8out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 9out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 10out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 11out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 12out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 13out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 14out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 15out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 16out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 17out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 18out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 19out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 20out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 21out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 22out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 23out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 24out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 25out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 26out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 27out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 28out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 29out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 30out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 90 %</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 1out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 2out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 3out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 4out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 5out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 6out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 7out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 8out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 9out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 10out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 11out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 12out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 13out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 14out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 15out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 16out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 17out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 18out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 19out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 20out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 21out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 22out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 23out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 24out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 25out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 26out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 27out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 28out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 29out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 30out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100 %</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 1out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 2out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 3out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 4out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 5out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 6out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 7out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 8out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 9out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 10out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 11out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 12out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 13out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 14out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 15out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 16out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 17out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 18out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 19out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 20out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 21out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 22out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 23out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 24out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 25out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 26out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 27out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 28out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 29out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 30out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Risk predicted!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Nested Cross Validation: optimizing lambda...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 3%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 7%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 10%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 13%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 17%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 20%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 23%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 27%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 30%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 33%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 37%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 40%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 43%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 47%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 50%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 53%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 57%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 60%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 63%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 67%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 70%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 73%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 77%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 80%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 83%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 87%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 90%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 93%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 97%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Risk predicted!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 1out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 2out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 3out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 4out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 5out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 6out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 7out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 8out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 9out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 10out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 11out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 12out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 13out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 14out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 15out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 16out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 17out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 18out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 19out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 20out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 21out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 22out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 23out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 24out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 25out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 26out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 27out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 28out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 29out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 30out of 30TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 1out of 1TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> lambda value 1out of 1TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100%</span>
+<span class="r-plt img"><img src="patientRisk-1.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="patientRisk-2.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="patientRisk-3.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="patientRisk-4.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="patientRisk-5.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Generate the plots again</span></span></span>
-<span class="r-in"><span><span class="fu">asuri</span><span class="fu">:::</span><span class="fu">plotLogRank</span><span class="op">(</span><span class="va">multivariate_risk_predictor</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'multivariate_risk_predictor' not found</span>
-<span class="r-in"><span><span class="fu">asuri</span><span class="fu">:::</span><span class="fu">plotSigmoid</span><span class="op">(</span><span class="va">multivariate_risk_predictor</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'multivariate_risk_predictor' not found</span>
-<span class="r-in"><span><span class="fu">asuri</span><span class="fu">:::</span><span class="fu">plotLambda</span><span class="op">(</span><span class="va">multivariate_risk_predictor</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'multivariate_risk_predictor' not found</span>
-<span class="r-in"><span><span class="fu">asuri</span><span class="fu">:::</span><span class="fu">plotBetas</span><span class="op">(</span><span class="va">multivariate_risk_predictor</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'multivariate_risk_predictor' not found</span>
-<span class="r-in"><span><span class="fu">asuri</span><span class="fu">:::</span><span class="fu">plotKM</span><span class="op">(</span><span class="va">multivariate_risk_predictor</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'multivariate_risk_predictor' not found</span>
+<span class="r-in"><span>  <span class="co"># Generate the plots again</span></span></span>
+<span class="r-in"><span>  <span class="fu">asuri</span><span class="fu">:::</span><span class="fu">plotLogRank</span><span class="op">(</span><span class="va">multivariate_risk_predictor</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="patientRisk-6.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span>  <span class="fu">asuri</span><span class="fu">:::</span><span class="fu">plotSigmoid</span><span class="op">(</span><span class="va">multivariate_risk_predictor</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="patientRisk-7.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span>  <span class="fu">asuri</span><span class="fu">:::</span><span class="fu">plotLambda</span><span class="op">(</span><span class="va">multivariate_risk_predictor</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="patientRisk-8.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span>  <span class="fu">asuri</span><span class="fu">:::</span><span class="fu">plotBetas</span><span class="op">(</span><span class="va">multivariate_risk_predictor</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="patientRisk-9.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span>  <span class="fu">asuri</span><span class="fu">:::</span><span class="fu">plotKM</span><span class="op">(</span><span class="va">multivariate_risk_predictor</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="patientRisk-10.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

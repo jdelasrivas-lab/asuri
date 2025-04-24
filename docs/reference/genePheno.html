@@ -98,26 +98,37 @@ In order to improve the robustness and reproducibility of the gene signature dis
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span>  </span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">matrixData</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data set ‘matrixData’ not found</span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">genePheno</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># Gene expression matrix filtered by SAM differential expression function</span></span></span>
-<span class="r-in"><span>  <span class="va">mExprsDE</span> <span class="op">&lt;-</span> <span class="va">mExprs</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">DE_list_genes</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mExprs</span><span class="op">)</span><span class="op">)</span>,<span class="op">]</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mExprs' not found</span>
+<span class="r-in"><span>  <span class="va">mExprsDE</span> <span class="op">&lt;-</span> <span class="va">mExprs</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">DE_list_genes</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mExprs</span><span class="op">)</span><span class="op">)</span>, <span class="op">]</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">mExprsDE</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mExprsDE' not found</span>
-<span class="r-in"><span>  <span class="co"># [1] 5950  200</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 865 200</span>
+<span class="r-in"><span>  <span class="co"># [1] 865  200</span></span></span>
 <span class="r-in"><span>  <span class="va">tmExprsDE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">mExprsDE</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 't': object 'mExprsDE' not found</span>
-<span class="r-in"><span>  <span class="co"># IMPORTANT: tmExprsDE is the gene expression matrix with samples arranged as rows</span></span></span>
-<span class="r-in"><span>  <span class="co"># and genes as columns.</span></span></span>
-<span class="r-in"><span>  <span class="co"># mPheno$ER.IHC is the ER binary variable.</span></span></span>
-<span class="r-in"><span>  <span class="co"># colnames(mExprsDE) are the sample names.</span></span></span>
-<span class="r-in"><span>  <span class="va">Pred_ER</span> <span class="op">&lt;-</span> <span class="fu">genePheno</span><span class="op">(</span><span class="va">tmExprsDE</span>, <span class="va">mPheno</span><span class="op">$</span><span class="va">ER.IHC</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mExprsDE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'tmExprsDE' not found</span>
-<span class="r-in"><span>  <span class="co"># Pred_ER.IHC is an object with the list of genes related to the clinical variable and metrics of stability and degree of association</span></span></span>
-<span class="r-in"><span>  <span class="va">Pred_ER.IHC</span><span class="op">$</span><span class="va">betasTable</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'Pred_ER.IHC' not found</span>
+<span class="r-in"><span>  <span class="co"># Parameters: Number of bootstrap iterations: 100.</span></span></span>
+<span class="r-in"><span>  <span class="co"># The object `tmExprsDE` is the gene expression matrix for the subset of genes tested (samples as rows and genes as columns). The object `mPheno$ER.IHC` is a vector indicating the value per-sample of ER (as a binary variable: "0" or "1").</span></span></span>
+<span class="r-in"><span>  <span class="va">vectorSampleID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mPheno</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">vectorGroups</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">mPheno</span><span class="op">$</span><span class="va">ER.IHC</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">Pred_ER.IHC</span> <span class="op">&lt;-</span> <span class="fu">genePheno</span><span class="op">(</span><span class="va">tmExprsDE</span>, <span class="va">vectorGroups</span>, <span class="va">vectorSampleID</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-04-24 14:01:37.249795</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 10 %</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 20 %</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 30 %</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 40 %</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 50 %</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 60 %</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 70 %</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 80 %</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 90 %</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100 %</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># Pred_ER.IHC is an output object with the list of genes that show a significant correlation with the clinical variable. Since a bootstrap is performed, the results of how many times across iterations a gene is found significant are reported as *stability* (in relative numbers 0-1, 1=100%) and the *beta values* from the regression across iterations are also provided as *betaMedian* and *betaMean* :</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pred_ER.IHC</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "genes"       "listCoeff"   "stability"   "betasMedian" "betasMean"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6] "betasTable" </span>
+<span class="r-in"><span>  <span class="co"># [1] "genes" "listCoeff" "stability" "betasMedian" "betasMean" "betasTable"</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
