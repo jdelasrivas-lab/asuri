@@ -1,1 +1,11 @@
-Hola esto es una prueba.
+# Analysis of disease Survival and patient Risk prediction based on gene signatures
+S. Bueno-Fortes, A. Berral-Gonzalez, J.M. Sanchez-Santos, M. Martin-Merino Acera and J. De Las Rivas
+-Bioinformatics and Functional Genomics Group-
+Cancer Research Centre (CiC-IBMCC, USAL/CSIC/IBSAL) Salamanca (Spain)
+
+**Introduction:**
+Modern medicine based on *omic* technologies provides a new approach to the study of diseases because it renders a way to interrogate about the role of the genes as biomolecular *markers* associated with the risk, prognosis, or outcome of the patients. In this regard, the discovery and validation of *survival biomarkers* associated with a given phenotype or with a specific clinical variable is a critical step to achieve better disease prognosis and prediction. Furthermore, accurate risk prediction and patients stratification based on such predictions will help to advance in personalized treatments and precision medicine. Currently, there are not many tools available to discover genetic survival markers or to assess the prognostic capacity of specific gene signatures. Moreover, it is common that gene signatures discovered are not reproducible and robust, and cannot be correlated well with clinical phenotypes, or with the stages and outcome of the disease. Besides, there are not easy integrated tools providing molecular based assessment of patients *risk* and *survival*. 
+
+**Results:** *asuri* package provides an integrated set of functions to analyse disease *SURVIVAL* and provide patient *RISK* predictions based on gene signatures. The tool allows: (1) Discovery of robust and reproducible gene lists associated with disease survival based on gene expression or on another gene-related activity signal (**geneSurv**); (2) Discovery of gene markers by identification of the significant association of gene expression (or other gene-related signal) with clinical variables or phenotypic characteristics (**genePheno**); (3) Construction of robust patient risk predictors based on gene signatures using univariate and multivariate approaches (**patientRisk**).
+
+**Availability and implementation:** The R package *asuri* (including source code) is available from Bioconductor web page. This package requires R version >= 3.6.

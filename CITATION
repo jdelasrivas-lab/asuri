@@ -1,0 +1,25 @@
+citHeader("To cite this package in publications, use:")
+
+citation <- bibentry(
+  bibtype = "Article",
+  author = c(
+    person("S", "Bueno-Fortes"),
+    person("A", "Berral-Gonzalez"),
+    person("JM", "Sanchez-Santos"),
+    person("M", "Martin-Merino"),
+    person("J", "De Las Rivas")
+  ),
+  title = "Identification of a gene expression signature associated with breast cancer survival and risk that improves clinical genomic platforms",
+  journal = "Bioinformatics Advances",
+  year = 2023,
+  volume = 3,
+  number = 1,
+  pages = "vbad037",
+  doi = "10.1093/BIOADV/VBAD037",
+  issn = "26350041",
+  publisher = "Oxford Academic"
+)
+
+print(citation, style = "text")
+
+citFooter("For more information, see: https://doi.org/10.1093/BIOADV/VBAD037 or use citation(\"asuri\")")

@@ -1,0 +1,48 @@
+Package: asuri
+Date: 2024-04-03
+Type: Package
+Title: Analysis of SUrvival and RIsk prediction in patients based on gene signatures
+Version: 0.99.0
+Description: ASURI package (Analysis of SUrvival and patients RIsk prediction based on gene signatures) discovers marker genes that are both related with Risk prediction capabilities and a clinical variable of interest. It uses two main steps, including subsampling glmnet and unicox. This package implements robust functions to discover survival markers related to a clinical phenotype and to predict a risk score that allow us to study the patient's risk based on the gene signatures. Several plots are provided to visualize the relevance of the genes, the risk score, the patient stratification and a robust version of the Kaplan-Meier curves.
+Authors@R: c(
+  person(given = "Alberto",
+         family = "Berral-Gonzalez",
+         email = "aberralgonzalez@usal.es",
+         role = c("aut", "cre", "ctb"),
+         comment = c(ORCID = "0000-0001-8388-6051")),
+  person(given = "Santiago",
+         family = "Bueno-Fortes",
+         role = c("aut", "ctb"),
+         comment = c(ORCID = "0000-0001-7141-2860")),
+  person(given = "Natalia",
+         family = "Alonso-Moreda",
+         role = c("aut", "ctb"),
+         comment = c(ORCID = "0000-0002-2347-5127")),
+  person(given = "Jose Manuel",
+         family = "Sanchez-Santos",
+         role = c("aut", "ctb"),
+         comment = c(ORCID = "0000-0002-7434-7598")),
+  person(given = "Manuel",
+         family = "Martin-Merino Acera",
+         role = c("aut", "ctb"),
+         comment = c(ORCID = "0000-0002-5914-2332")),
+  person(given = "Javier", 
+         family = "De Las Rivas",
+         email = "jrivas@usal.es",
+         role = c("aut", "ctb"),
+         comment = c(ORCID = "0000-0002-0984-9946"))
+  )
+License: LGPL
+Depends: R (>= 4.4.0), stats, methods, survival, glmnet, siggenes, Biobase, survcomp, scales, ROCR, gplots, ggplot2, Rdpack
+Imports: Rdpack
+Suggests: BiocStyle, knitr, rmarkdown
+biocViews: Software, StatisticalMethod, WorkflowStep, GeneExpression, Microarray, DifferentialExpression, GenePrediction, Regression, Survival, ExonArray, MultipleComparison
+URL: https://github.com/jdelasrivas-lab/asuri
+BugReports: https://github.com/jdelasrivas-lab/asuri
+BiocType: Software
+ZipData: TRUE
+RoxygenNote: 5.0.1
+NeedsCompilation: no
+Macros: Rdpack
+Encoding: UTF-8
+VignetteBuilder: knitr

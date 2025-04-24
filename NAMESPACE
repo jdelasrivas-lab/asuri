@@ -1,0 +1,23 @@
+export(genePheno)
+export(geneSurv)
+export(patientRisk)
+export(predict.patientRisk) 
+export(predSurvCurve)
+export(prefilterSAM)
+
+import(methods)
+import(ROCR)
+import(siggenes)
+import(Biobase)
+import(survival)
+import(glmnet)
+import(survcomp)
+import(scales)
+import(Rdpack)
+import(ggplot2) 
+
+importFrom(gplots, textplot)
+importFrom("graphics", "abline", "axis", "boxplot", "hist", "image", "layout", 
+           "legend", "lines", "mtext", "par", "pie", "points", "polygon", 
+           "rect", "segments", "stripchart", "text", "title")
+importFrom("utils", "combn", "write.table")
