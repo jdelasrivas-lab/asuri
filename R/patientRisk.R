@@ -71,37 +71,38 @@
 #' }
 #'
 #' @examples
-#' data(matrixData)
-#' set.seed(5)
-#'
-#' # The TIME value must be transformed to YEARS
-#' ## Names of time and status vectors are the sample names
+#' data(patientRisk)
+#' 
+#' # Survival times should be provided in YEARS
 #' time <- mPheno$time
 #' names(time) <- rownames(mPheno)
 #' status <- mPheno$status
 #' names(status) <- rownames(mPheno)
-#'
-#' # Pred_Er.IHC$genes is the subset of genes to be tested. In our case study 
-#' # it is the list of genes related to the ER clinical variable obtained by 
-#' # function genePheno. It can be any subset of genes to analyze the 
-#' # relationship with survival.
+#' 
+#' # Pred_ER.IHC$genes is the subset of genes to be tested. In our case study,
+#' # it is the list of genes related to the ER clinical variable that was
+#' # obtained using the function **genePheno()**.
 #' geneList <- names(Pred_ER.IHC$genes)
+#' 
 #' # Next, the expression matrix for the list of genes selected is obtained.
 #' mExprSelectedGenes <- mExprs[match(geneList, rownames(mExprs)), ]
-#'
-#' # Training of the multivariate Cox model.
-#' # You have to provide: the expression matrix (genes as rows and samples 
-#' # as columns) for the list of genes selected, the time #' and status vectors.
-#' multivariate_risk_predictor <- patientRisk(mExprSelectedGenes, time, status, 
-#'                                            method = "class.probs")
-#'
+#' 
+#' # Training of the multivariate COX model. Provide the expression matrix
+#' # (genes as rows and samples as columns) for the list of genes selected,
+#' # the time and the status vectors, and the method to stratify the patients
+#' # (select one of these methods: `min.pval`, `med.pval`, `class.probs`).
+#' set.seed(5)
+#' multivariate_risk_predictor <- patientRisk(mExprSelectedGenes, time, status, method = "class.probs")
+#' 
 #' # Generate the plots again
 #' asuri:::plotLogRank(multivariate_risk_predictor)
 #' asuri:::plotSigmoid(multivariate_risk_predictor)
 #' asuri:::plotLambda(multivariate_risk_predictor)
 #' asuri:::plotBetas(multivariate_risk_predictor)
 #' asuri:::plotKM(multivariate_risk_predictor)
-#'
+#' 
+#' @export
+
 patientRisk <- function(mExpr,
                         time,
                         status,

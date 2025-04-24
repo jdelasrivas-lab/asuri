@@ -25,12 +25,13 @@
 #' @return A character vector of significant gene names.
 #'
 #' @examples
-#' # Example usage
-#' # Simulated gene expression matrix
-#' mExpr <- matrix(rnorm(1000), nrow = 100, ncol = 10)
-#' # Simulated group labels 
-#' groups_vector <- rep(c("Control", "Treatment"), each = 5) 
-#' significant_genes <- prefilterSAM(mExpr, groups_vector)
+#' # Bootstrapped differential expression based on SAM.
+#' # Parameters: FDR = 0.05, iter = 100, percentage filter = 80 %
+#' # CAUTION: if the data have a high number of genes this function will take several minutes to compute.
+#' data(prefilterSAM)
+#' 
+#' set.seed(5)
+#' DE_list_genes <- prefilterSAM(mExprs, mPheno$ER.IHC)
 #'
 #' @export
 prefilterSAM <- function(mExpr, groups_vector, FDRfilter = 0.05, 
