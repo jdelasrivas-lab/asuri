@@ -140,7 +140,7 @@ The input parameters for the function are the following:
 - `type` Specifies whether the two Kaplan-Meier curves are computed using the gene expression groups (by default "exprs"), or using the risk groups ("risk") if the samples are already classified by risk level and this is used directly to divide the samples into two groups.
 - `cut_time`  A numeric value specifying the cutoff time (in years) for survival analysis. All events beyond this time are treated as censored (by default = 10 years).
 
-```{r, echo = FALSE} 
+```{r, echo = TRUE, results = 'hide', fig.show='hide'} 
 data(geneSurvExprs)
 genExpr <- mExprs[match("ESR1", rownames(mExprs)), ]
 time <- mPheno$time
@@ -203,7 +203,7 @@ The result shown in **Figure \@ref(fig:kmesr1)**, with a p-value for the log-ran
 
 Run of the function  **geneSurv()** as `type = "risk"`:
 
-```{r, echo = FALSE} 
+```{r, echo = TRUE, results = 'hide', fig.show='hide'} 
 # If we instead consider to run the function as *type* = risk
 data(geneSurvRisk)
 genExpr <- mExprs[match("BRCA1", rownames(mExprs)), ]
@@ -239,7 +239,7 @@ The input parameters for the function are the following:
   - `iter`: The number of iterations for the bootstrapping. Default is 100.
   - `percentageFilter`: A numeric value indicating the percentage of iterations a gene must appear in to be considered significant. Default is 80.
 
-```{r, echo = FALSE} 
+```{r, echo = TRUE, results = 'hide'} 
 # Bootstrapped differential expression based on SAM.
 # Parameters: FDR = 0.05, iter = 100, percentage filter = 80 %
 # CAUTION: if the data have a high number of genes this function will take several minutes to compute.
@@ -261,7 +261,7 @@ The input parameters are the following:
 - `iter`: Number of bootstrap iterations (default: 100). This can be changed if the function takes too long to run.
 - `numberOfFolds`: Number of folds to implement nested cross-validation (default: 10).
 
-```{r, echo = FALSE} 
+```{r, echo = TRUE, results = 'hide'} 
 data(genePheno)
 # Gene expression matrix filtered by SAM differential expression function
 mExprsDE <- mExprs[match(DE_list_genes, rownames(mExprs)), ]
@@ -298,9 +298,8 @@ Pred_ER.IHC$betasTable
 <div align="center"><p><b>Table 1</b>: List of genes by Stability.</p></div>
 
 The output of the function is an object with the following elements:
-```{r, echo = FALSE} 
+```{r, echo = TRUE, results = 'hide'} 
 names(Pred_ER.IHC)
-Pred_ER.IHC$genes
 # [1] "genes" "listCoeff" "stability" "betasMedian" "betasMean" "betasTable"
 ```
 
@@ -325,7 +324,7 @@ The **optimal threshold for dividing the patients into two groups (low/high)** c
 
 The following code illustrates how to apply the **patientRisk()** function to discover/identify significant gene survival markers and to accurately predict patient risk.
 
-```{r, echo = FALSE} 
+```{r, echo = TRUE, results = 'hide', fig.show='hide'} 
 data(patientRisk)
 # Survival times should be provided in YEARS
 time <- mPheno$time
@@ -424,7 +423,7 @@ Once the multivariate risk predictor is trained by the **patientRisk()** functio
 
 The following lines show how to predict the risk score for an independent set of patients. The function plots the risk score and stratifies the patients into three groups.
 
-```{r, echo = FALSE} 
+```{r, echo = TRUE, results = 'hide', fig.show='hide'} 
 data(predictPatientRisk)
 
 # Generate the validation set, mExprs_testData if necessary.
@@ -462,7 +461,7 @@ knitr::include_graphics("figures/risk_plot_predict_patientRisk.png")
 
 This function can be applied also to predict the risk of a single patient given the gene expression profile. The mExprs_testData will contain now a column with the expression level for the list of genes selected.
 
-```{r, echo = FALSE} 
+```{r, echo = TRUE, results = 'hide'} 
 data(predictPatientRisk)
 # Example for single patient prediction: Patient fourth is selected.
 mExprs_testSingleData <- data.frame(mExprs_testData[, 4])
@@ -472,7 +471,7 @@ set.seed(5)
 risk_prediction_one_patient <- predict.patientRisk(multivariate_risk_predictor, mExprs_testSingleData)
 ```
 
-```{R, echo = FALSE} 
+```{R, echo = TRUE, results = 'hide'} 
 # Normalized patient Risk (0 100): 27.9017675117161
 # The patient is classified as Low Risk 
 # Low Risk interval: (0, 37.0600635839135)
@@ -491,7 +490,7 @@ The input parameters are:
 - `cox_pred_test` A numeric vector of length 1 representing the predicted risk score (or log-risk score) for the test patient. It can be obtained from **predict.patientRisk()** function.
 - `eval_surv_times`  A numeric vector of times at which the survival curve should be evaluated. If NULL (default), the times will be taken from the training data up to the maximum event time. 
 
-```{r, echo = FALSE}  
+```{r, echo = TRUE, results = 'hide', fig.show='hide'}  
 data(predSurvCurve)
 # COX prediction for the training set
 set.seed(5)
@@ -520,7 +519,7 @@ knitr::include_graphics("figures/surv_plot_breslow.png")
 
 
 # Session Info
-```{r echo = FALSE, eval=TRUE, results='markup'}  
+```{r, echo = TRUE, results = 'hide'}  
 devtools::session_info()
 ```
 

@@ -1,4 +1,4 @@
-## ----setup, include=FALSE------------------------------------------------------------------------------------------------------
+## ----setup, include=FALSE-----------------------------------------------------------------------------------------------------
 library(formatR)
 library(knitr)
 library(asuri)
@@ -8,17 +8,17 @@ knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 65), tidy = TRUE,
 ## ----diagramaCrop, fig.cap="Workflow diagram of the package ASURI showing the decision-making lines and the five main functions.", out.width = "100%", fig.align = "center", echo=FALSE, results="asis"----
 knitr::include_graphics("figures/diagramaCrop.png")
 
-## ------------------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------
 data(mExprs)
 # To visualize the dimensions of the ExpressionSet object
 dim(mExprs)
 
-## ------------------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------
 data(mPheno)
 # To visualize the dimensions of the phenotypic information object
 dim(mPheno)
 
-## ----echo = FALSE--------------------------------------------------------------------------------------------------------------
+## ----echo = TRUE, results = 'hide', fig.show='hide'---------------------------------------------------------------------------
 data(geneSurvExprs)
 genExpr <- mExprs[match("ESR1", rownames(mExprs)), ]
 time <- mPheno$time
@@ -40,7 +40,7 @@ knitr::include_graphics("figures/expr.png")
 ## ----kmesr1, fig.cap="Kaplan Meier curves obtained after the assignment of the patients by bootstrap to high or low survival using the selected feature ESR1.", out.width = "80%", fig.align = "center", echo=FALSE, results="asis"----
 knitr::include_graphics("figures/kmESR1.png")
 
-## ----echo = FALSE--------------------------------------------------------------------------------------------------------------
+## ----echo = TRUE, results = 'hide', fig.show='hide'---------------------------------------------------------------------------
 # If we instead consider to run the function as *type* = risk
 data(geneSurvRisk)
 genExpr <- mExprs[match("BRCA1", rownames(mExprs)), ]
@@ -54,7 +54,7 @@ outputKM.TP53 <- geneSurv(genExpr, time, status, "BRCA1", type = "risk")
 ## ----kmrisk, fig.cap="Kaplan Meier curves obtained after the assignment of the patients by bootstrap to high or low survival using the estimated risk based on feature BRCA1.", out.width = "80%", fig.align = "center", echo=FALSE, results="asis"----
 knitr::include_graphics("figures/kmtyperisk.png")
 
-## ----echo = FALSE--------------------------------------------------------------------------------------------------------------
+## ----echo = TRUE, results = 'hide'--------------------------------------------------------------------------------------------
 # Bootstrapped differential expression based on SAM.
 # Parameters: FDR = 0.05, iter = 100, percentage filter = 80 %
 # CAUTION: if the data have a high number of genes this function will take several minutes to compute.
@@ -63,7 +63,7 @@ data(prefilterSAM)
 set.seed(5)
 DE_list_genes <- prefilterSAM(mExprs, mPheno$ER.IHC)
 
-## ----echo = FALSE--------------------------------------------------------------------------------------------------------------
+## ----echo = TRUE, results = 'hide'--------------------------------------------------------------------------------------------
 data(genePheno)
 # Gene expression matrix filtered by SAM differential expression function
 mExprsDE <- mExprs[match(DE_list_genes, rownames(mExprs)), ]
@@ -83,12 +83,11 @@ Pred_ER.IHC$betasMedian
 Pred_ER.IHC$betasMean
 Pred_ER.IHC$betasTable
 
-## ----echo = FALSE--------------------------------------------------------------------------------------------------------------
+## ----echo = TRUE, results = 'hide'--------------------------------------------------------------------------------------------
 names(Pred_ER.IHC)
-Pred_ER.IHC$genes
 # [1] "genes" "listCoeff" "stability" "betasMedian" "betasMean" "betasTable"
 
-## ----echo = FALSE--------------------------------------------------------------------------------------------------------------
+## ----echo = TRUE, results = 'hide', fig.show='hide'---------------------------------------------------------------------------
 data(patientRisk)
 # Survival times should be provided in YEARS
 time <- mPheno$time
@@ -123,7 +122,7 @@ knitr::include_graphics("figures/betas.png")
 ## ----plot5risk, fig.cap="Kaplan Meier plot: Blue (low risk) and red (high risk) of the two groups of samples with different survival obtained from the stratification of the multivariate risk curve (Figure 6).", out.width = "80%", fig.align = "center", echo=FALSE, results="asis"----
 knitr::include_graphics("figures/km.png")
 
-## ----echo = FALSE--------------------------------------------------------------------------------------------------------------
+## ----echo = TRUE, results = 'hide', fig.show='hide'---------------------------------------------------------------------------
 data(predictPatientRisk)
 
 # Generate the validation set, mExprs_testData if necessary.
@@ -146,7 +145,7 @@ risk_prediction_validation_set <- predict.patientRisk(multivariate_risk_predicto
 ## ----predprisk, fig.cap="Risk score prediction for an independent set of patients using the optimal multivariate COX model trained by function patientRisk(). Green and blue/red lines correspond to the optimal thresholds that split the patients in two and three groups respectively. These thresholds were learned in training phase.", out.width = "80%", fig.align = "center", echo=FALSE, results="asis"----
 knitr::include_graphics("figures/risk_plot_predict_patientRisk.png")
 
-## ----echo = FALSE--------------------------------------------------------------------------------------------------------------
+## ----echo = TRUE, results = 'hide'--------------------------------------------------------------------------------------------
 data(predictPatientRisk)
 # Example for single patient prediction: Patient fourth is selected.
 mExprs_testSingleData <- data.frame(mExprs_testData[, 4])
@@ -155,12 +154,12 @@ colnames(mExprs_testSingleData) <- colnames(mExprs_testData)[4]
 set.seed(5)
 risk_prediction_one_patient <- predict.patientRisk(multivariate_risk_predictor, mExprs_testSingleData)
 
-## ----echo = FALSE--------------------------------------------------------------------------------------------------------------
+## ----echo = TRUE, results = 'hide'--------------------------------------------------------------------------------------------
 # Normalized patient Risk (0 100): 27.9017675117161
 # The patient is classified as Low Risk 
 # Low Risk interval: (0, 37.0600635839135)
 
-## ----echo = FALSE--------------------------------------------------------------------------------------------------------------
+## ----echo = TRUE, results = 'hide', fig.show='hide'---------------------------------------------------------------------------
 data(predSurvCurve)
 # COX prediction for the training set
 set.seed(5)
@@ -178,6 +177,6 @@ surv_curv_cox <- predSurvCurve(cox_pred_training$risk_score, mPheno[, c(2, 3)], 
 ## ----predSurv, fig.cap="Survival curve estimation for a single patient based on the risk score predicted by a multivariate COX model. The blue line shows the median survival time at which the survival probability drops to 0.5.", out.width = "80%", fig.align = "center", echo=FALSE, results="asis"----
 knitr::include_graphics("figures/surv_plot_breslow.png")
 
-## ----echo = FALSE, eval=TRUE, results='markup'---------------------------------------------------------------------------------
+## ----echo = TRUE, results = 'hide'--------------------------------------------------------------------------------------------
 devtools::session_info()
 
