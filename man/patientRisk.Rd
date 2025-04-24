@@ -63,33 +63,35 @@ The algorithm considered is based on UNICOX, a regularized multivariate Cox regr
   \item{membership_prob}{If method "class.probs" is selected a table with two columns is returned. The first one is the probability of classification to the low risk group while the second one is the membership probability to the high risk group.}
 }
 \examples{
-data(matrixData)
-set.seed(5)
+  data(patientRisk)
 
-# The TIME value must be transformed to YEARS
-## Names of time and status vectors are the sample names
-time <- mPheno$time
-names(time) <- rownames(mPheno)
-status <- mPheno$status
-names(status) <- rownames(mPheno)
+  # Survival times should be provided in YEARS
+  time <- mPheno$time
+  names(time) <- rownames(mPheno)
+  status <- mPheno$status
+  names(status) <- rownames(mPheno)
 
-# Pred_Er.IHC$genes is the subset of genes to be tested. In our case study it is the list of genes
-# related to the ER clinical variable obtained by function genePheno. It can be any subset of genes
-# to analyze the relationship with survival.
-geneList <- names(Pred_ER.IHC$genes)
-# Next, the expression matrix for the list of genes selected is obtained.
-mExprSelectedGenes <- mExprs[match(geneList, rownames(mExprs)),] 
+  # Pred_ER.IHC$genes is the subset of genes to be tested. In our case study,
+  # it is the list of genes related to the ER clinical variable that was
+  # obtained using the function **genePheno()**.
+  geneList <- names(Pred_ER.IHC$genes)
+  
+  # Next, the expression matrix for the list of genes selected is obtained.
+  mExprSelectedGenes <- mExprs[match(geneList, rownames(mExprs)), ]
 
-# Training of the multivariate Cox model.
-# You have to provide: the expression matrix (genes as rows and samples as columns) for the list of genes selected, the time and status vectors.
-multivariate_risk_predictor <- patientRisk(mExprSelectedGenes, time, status, method = "class.probs")
+  # Training of the multivariate COX model. Provide the expression matrix
+  # (genes as rows and samples as columns) for the list of genes selected,
+  # the time and the status vectors, and the method to stratify the patients
+  # (select one of these methods: `min.pval`, `med.pval`, `class.probs`).
+  set.seed(5)
+  multivariate_risk_predictor <- patientRisk(mExprSelectedGenes, time, status, method = "class.probs")
 
-# Generate the plots again
-asuri:::plotLogRank(multivariate_risk_predictor)
-asuri:::plotSigmoid(multivariate_risk_predictor)
-asuri:::plotLambda(multivariate_risk_predictor)
-asuri:::plotBetas(multivariate_risk_predictor)
-asuri:::plotKM(multivariate_risk_predictor)
+  # Generate the plots again
+  asuri:::plotLogRank(multivariate_risk_predictor)
+  asuri:::plotSigmoid(multivariate_risk_predictor)
+  asuri:::plotLambda(multivariate_risk_predictor)
+  asuri:::plotBetas(multivariate_risk_predictor)
+  asuri:::plotKM(multivariate_risk_predictor)
 }
 \references{
   Martinez-Romero, J., Bueno-Fortes, S., Martín-Merino, M. \emph{et al.} (2018) \bold{Survival marker genes of colorectal cancer derived from consistent transcriptomic profiling}. \emph{BMC Genomics} 19 (Suppl 8), 857 . \doi{10.1186/s12864-018-5193-9}

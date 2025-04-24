@@ -39,25 +39,22 @@ Vector with the survival probability estimated at each evaluation time for a giv
   }
 }
 \examples{
-# Load the expression matrix with the subset of genes selected
-data(matrixData)
-set.seed(5)
-
-# Train a multivariate risk predictor. If you have run already this function, please skip this step.
-multivariate_risk_predictor <- patientRisk(mExprSelectedGenes, time, status)
-
-# Expression matrix for a single test patient
-i <- 5
-mExprs_testData <- data.frame( mExprSelectedGenes[, i ] )
-colnames( mExprs_testData ) <- colnames(mExprSelectedGenes)[ i ]
-
-# Cox prediction for training and test sets
-cox_pred_training <- as.vector( predict.patientRisk(multivariate_risk_predictor, mExprSelectedGenes )$risk_score )
-cox_pred_test <- as.vector( predict.patientRisk(multivariate_risk_predictor, mExprs_testData )$risk_score )
-
-# Survival curve estimation
-eval_surv_times <- seq(0, max(mPheno$time), by=0.2)
-surv_curv_cox <- predSurvCurve( cox_pred_training, mPheno[,c(2,3)], cox_pred_test, eval_surv_times )
+  data(predSurvCurve)
+  
+  # COX prediction for the training set
+  set.seed(5)
+  cox_pred_training <- predict.patientRisk(multivariate_risk_predictor, mExprSelectedGenes)
+  cox_pred_training$risk_score
+  
+  # COX prediction for the test patient
+  set.seed(5)
+  cox_pred_test <- predict.patientRisk(multivariate_risk_predictor, mExprs_testSingleData)
+  cox_pred_test$risk_score
+  
+  # Survival curve estimation
+  eval_surv_times <- seq(0, max(mPheno$time), by = 0.1)
+  set.seed(5)
+  surv_curv_cox <- predSurvCurve(cox_pred_training$risk_score, mPheno[, c(2, 3)], cox_pred_test$risk_score, eval_surv_times)
 }
 \references{
   Martinez-Romero, J., Bueno-Fortes, S., Martín-Merino, M. \emph{et al.} (2018) \bold{Survival marker genes of colorectal cancer derived from consistent transcriptomic profiling}. \emph{BMC Genomics} 19 (Suppl 8), 857 . \doi{10.1186/s12864-018-5193-9}

@@ -54,20 +54,23 @@ In order to improve the robustness and reproducibility of the gene signature dis
 }
 \examples{ 
   
-  data(matrixData)
-  set.seed(5)
+  data(genePheno)
+
   # Gene expression matrix filtered by SAM differential expression function
-  mExprsDE <- mExprs[match(DE_list_genes, rownames(mExprs)),]
+  mExprsDE <- mExprs[match(DE_list_genes, rownames(mExprs)), ]
   dim(mExprsDE)
-  # [1] 5950  200
+  # [1] 865  200
   tmExprsDE <- t(mExprsDE)
-  # IMPORTANT: tmExprsDE is the gene expression matrix with samples arranged as rows
-  # and genes as columns.
-  # mPheno$ER.IHC is the ER binary variable.
-  # colnames(mExprsDE) are the sample names.
-  Pred_ER <- genePheno(tmExprsDE, mPheno$ER.IHC, as.character(colnames(mExprsDE)))
-  # Pred_ER.IHC is an object with the list of genes related to the clinical variable and metrics of stability and degree of association
-  Pred_ER.IHC$betasTable
+  # Parameters: Number of bootstrap iterations: 100.
+  # The object `tmExprsDE` is the gene expression matrix for the subset of genes tested (samples as rows and genes as columns). The object `mPheno$ER.IHC` is a vector indicating the value per-sample of ER (as a binary variable: "0" or "1").
+  vectorSampleID <- as.character(rownames(mPheno))
+  vectorGroups <- as.numeric(mPheno$ER.IHC)
+  Pred_ER.IHC <- genePheno(tmExprsDE, vectorGroups, vectorSampleID)
+
+  # Pred_ER.IHC is an output object with the list of genes that show a significant correlation with the clinical variable. Since a bootstrap is performed, the results of how many times across iterations a gene is found significant are reported as *stability* (in relative numbers 0-1, 1=100%) and the *beta values* from the regression across iterations are also provided as *betaMedian* and *betaMean* :
+
+  names(Pred_ER.IHC)
+  # [1] "genes" "listCoeff" "stability" "betasMedian" "betasMean" "betasTable"
 }
 \references{
   Martinez-Romero, J., Bueno-Fortes, S., Martín-Merino, M. \emph{et al.} (2018) \bold{Survival marker genes of colorectal cancer derived from consistent transcriptomic profiling}. \emph{BMC Genomics} 19 (Suppl 8), 857 . \doi{10.1186/s12864-018-5193-9}

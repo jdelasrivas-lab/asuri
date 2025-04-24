@@ -38,14 +38,22 @@
 #'   }
 #'
 #' @examples
-#' # Example usage
-#' cox_pred_training <- rnorm(100)
-#' mSurv <- data.frame(time = rexp(100, rate = 0.1), 
-#'                     status = sample(0:1, 100, replace = TRUE))
-#' cox_pred_test <- 0.5
-#' result <- predSurvCurve(cox_pred_training, mSurv, cox_pred_test)
-#' plot(result$eval_times, result$S_test_patient, type = "l", 
-#'      xlab = "Time", ylab = "Survival Probability")
+#' data(predSurvCurve)
+#' 
+#' # COX prediction for the training set
+#' set.seed(5)
+#' cox_pred_training <- predict.patientRisk(multivariate_risk_predictor, mExprSelectedGenes)
+#' cox_pred_training$risk_score
+#' 
+#' # COX prediction for the test patient
+#' set.seed(5)
+#' cox_pred_test <- predict.patientRisk(multivariate_risk_predictor, mExprs_testSingleData)
+#' cox_pred_test$risk_score
+#' 
+#' # Survival curve estimation
+#' eval_surv_times <- seq(0, max(mPheno$time), by = 0.1)
+#' set.seed(5)
+#' surv_curv_cox <- predSurvCurve(cox_pred_training$risk_score, mPheno[, c(2, 3)], cox_pred_test$risk_score, eval_surv_times)
 #'
 #' @export
 predSurvCurve <- function(cox_pred_training, mSurv, 

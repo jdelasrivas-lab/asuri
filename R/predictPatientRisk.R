@@ -31,12 +31,36 @@
 #' }
 #'
 #' @examples
-#' # Example usage with a pre-fitted model and gene expression data
-#' model_fit <- load_model("path_to_pretrained_model")
-#' test_data <- load_test_data("path_to_test_data")
-#' result <- predict.patientRisk(model.fit = model_fit, 
-#'                               mExpr.testData = test_data)
-#' print(result$scaled_risk_score)
+#' data(predictPatientRisk)
+#' 
+#' # Generate the validation set, mExprs_testData if necessary.
+#' # Vector of genes (same ones used in Cox model training)
+#' genes <- rownames(mExprSelectedGenes)
+#' 
+#' # Simulate expression data
+#' num_samples <- 20
+#' set.seed(5)
+#' mExprs_testData <- matrix(rnorm(length(genes) * num_samples, mean = 10, sd = 3),
+#'                           nrow = length(genes), ncol = num_samples)
+#' 
+#' # Assign row names (genes) and column names (samples)
+#' rownames(mExprs_testData) <- genes
+#' colnames(mExprs_testData) <- paste0("Sample", 1:num_samples)
+#' 
+#' set.seed(5)
+#' risk_prediction_validation_set <- predict.patientRisk(multivariate_risk_predictor, mExprs_testData)
+#' 
+#' 
+#' # Example for single patient prediction: Patient fourth is selected.
+#' mExprs_testSingleData <- data.frame(mExprs_testData[, 4])
+#' colnames(mExprs_testSingleData) <- colnames(mExprs_testData)[4]
+#' # Risk prediction for the optimal subset of genes selected by patientRisk function
+#' set.seed(5)
+#' risk_prediction_one_patient <- predict.patientRisk(multivariate_risk_predictor, mExprs_testSingleData)
+#' 
+#' # Normalized patient Risk (0 100): 27.9017675117161
+#' # The patient is classified as Low Risk 
+#' # Low Risk interval: (0, 37.0600635839135)
 #'
 #' @export
 predict.patientRisk <- function(model.fit, mExpr.testData) {

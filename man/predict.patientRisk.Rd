@@ -31,21 +31,36 @@
   }
 }
 \examples{
-data(matrixData)
-set.seed(5)
+  data(predictPatientRisk)
 
-# patientRisk function estimates the parameters of a multivariate Cox model
-multivariate_risk_predictor <- patientRisk(mExprSelectedGenes, time, status)
+  # Generate the validation set, mExprs_testData if necessary.
+  # Vector of genes (same ones used in Cox model training)
+  genes <- rownames(mExprSelectedGenes)
 
-# Risk prediction for a subset of new patients. If you don't have the multivariate_risk_predictor object, run the previous line
-# mExprs_testData is the gene expression matrix for the test samples (as columns) and the same subset 
-# of genes (as rows) considered in the training of the Cox model using patientRisk function.
-risk_prediction_validation_set <- predict.patientRisk(multivariate_risk_predictor, mExprs_testData)
+  # Simulate expression data
+  num_samples <- 20
+  set.seed(5)
+  mExprs_testData <- matrix(rnorm(length(genes) * num_samples, mean = 10, sd = 3),
+                            nrow = length(genes), ncol = num_samples)
 
-# Risk prediction for a single patient. Patient fourth is selected.
-mExprs_testSingleData <- data.frame( mExprs_testData[, 4 ] )
-colnames( mExprs_testSingleData ) <- colnames(mExprs_testData)[ 4 ]
-risk_prediction_one_patient <- predict.patientRisk(multivariate_risk_predictor, mExprs_testSingleData)
+  # Assign row names (genes) and column names (samples)
+  rownames(mExprs_testData) <- genes
+  colnames(mExprs_testData) <- paste0("Sample", 1:num_samples)
+
+  set.seed(5)
+  risk_prediction_validation_set <- predict.patientRisk(multivariate_risk_predictor, mExprs_testData)
+
+
+  # Example for single patient prediction: Patient fourth is selected.
+  mExprs_testSingleData <- data.frame(mExprs_testData[, 4])
+  colnames(mExprs_testSingleData) <- colnames(mExprs_testData)[4]
+  # Risk prediction for the optimal subset of genes selected by patientRisk function
+  set.seed(5)
+  risk_prediction_one_patient <- predict.patientRisk(multivariate_risk_predictor, mExprs_testSingleData)
+  
+  # Normalized patient Risk (0 100): 27.9017675117161
+  # The patient is classified as Low Risk 
+  # Low Risk interval: (0, 37.0600635839135)
 }
 \references{
   Martinez-Romero, J., Bueno-Fortes, S., Martín-Merino, M. \emph{et al.} (2018) \bold{Survival marker genes of colorectal cancer derived from consistent transcriptomic profiling}. \emph{BMC Genomics} 19 (Suppl 8), 857 . \doi{10.1186/s12864-018-5193-9}

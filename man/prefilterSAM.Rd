@@ -43,10 +43,11 @@
   Santiago Bueno-Fortes, Alberto Berral-Gonzalez, José Manuel Sánchez-Santos, Manuel Martin-Merino, Javier De Las Rivas (2023) \bold{Identification of a gene expression signature associated with breast cancer survival and risk that improves clinical genomic platforms}, \emph{Bioinformatics Advances}, Volume 3, Issue 1, vbad037, \doi{10.1093/bioadv/vbad037}
 }
 \examples{ 
-  data(matrixData)
-  # Bootstrapped differential expression based on SAM. Parameters: FDR = 0.05, 
-  # iter = 100, percentage filter = 80 % 
+  # Bootstrapped differential expression based on SAM.
+  # Parameters: FDR = 0.05, iter = 100, percentage filter = 80 %
   # CAUTION: if the data have a high number of genes this function will take several minutes to compute.
+  data(prefilterSAM)
+
   set.seed(5)
-  DE_list_genes <- prefilterSAM(mExprs[,], mPheno$ER.IHC) 
+  DE_list_genes <- prefilterSAM(mExprs, mPheno$ER.IHC)
 }

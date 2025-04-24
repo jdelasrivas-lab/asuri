@@ -56,29 +56,42 @@
 #' }
 #'
 #' @examples
-#' data(matrixData)
-#'
-#' set.seed(5)
+#' data(geneSurvExprs)
+#' 
+#' genExpr <- mExprs[match("ESR1", rownames(mExprs)), ]
 #' time <- mPheno$time
 #' names(time) <- rownames(mPheno)
 #' status <- mPheno$status
 #' names(status) <- rownames(mPheno)
+#' 
 #' # The TIME value must be transformed to YEARS
 #' # The gene expression vector must be provided with the NAMES of each sample,
-#' that should match with the NAMES of the time and status vectors
-#' outputKM <- geneSurv(mExprs[match("ESR1", rownames(mExprs)), ], time, 
-#'                      status, "ESR1", type = "exprs")
-#'
-#' # If we consider p53 gene instead (ENSG00000141510)
-#' outputKM.TP53 <- geneSurv(mExprs[match("TP53", rownames(mExprs)), ], 
-#'                           time, status, "TP53", type = "exprs")
-#'
+#' # that should match the time and status NAMES.
+#' set.seed(5)
+#' outputKM <- geneSurv(genExpr, time, status, "ESR1", type = "exprs")
+#' 
 #' # Generate the plots again
+#' ## Plots for c(type = exprs)
 #' asuri:::plotBoxplot(outputKM)
 #' asuri:::plotProbClass(outputKM)
 #' asuri:::plotKM(outputKM)
+#' 
+#' # If we instead consider to run the function as *type* = risk
+#' data(geneSurvRisk)
+#' 
+#' genExpr <- mExprs[match("BRCA1", rownames(mExprs)), ]
+#' time <- mPheno$time
+#' names(time) <- rownames(mPheno)
+#' status <- mPheno$status
+#' names(status) <- rownames(mPheno)
+#' set.seed(5)
+#' outputKM.TP53 <- geneSurv(genExpr, time, status, "BRCA1", type = "risk")
+#' 
+#' ## Plots for c(type = risk)
+#' asuri:::plotKM(outputKM)
 #'
 #' @export
+
 geneSurv <- function(genExpr, time, status, geneName, boxplot = TRUE, 
                      iter = 100, type = c("exprs", "risk"), cut_time = 10) {
     # Error control: Ensure vectors have the same length
