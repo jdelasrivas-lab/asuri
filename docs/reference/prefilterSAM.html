@@ -81,372 +81,14 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span>  <span class="co"># Bootstrapped differential expression based on SAM.</span></span></span>
-<span class="r-in"><span>  <span class="co"># Parameters: FDR = 0.05, iter = 100, percentage filter = 80 %</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">matrixData</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data set ‘matrixData’ not found</span>
+<span class="r-in"><span>  <span class="co"># Bootstrapped differential expression based on SAM. Parameters: FDR = 0.05, </span></span></span>
+<span class="r-in"><span>  <span class="co"># iter = 100, percentage filter = 80 % </span></span></span>
 <span class="r-in"><span>  <span class="co"># CAUTION: if the data have a high number of genes this function will take several minutes to compute.</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">prefilterSAM</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">DE_list_genes</span> <span class="op">&lt;-</span> <span class="fu">prefilterSAM</span><span class="op">(</span><span class="va">mExprs</span>, <span class="va">mPheno</span><span class="op">$</span><span class="va">ER.IHC</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-04-24 12:27:26.488704</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 1/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.882082, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 2/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.767022, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 3/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.299952, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 4/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.710353, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 5/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.747871, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 6/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.152733, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 7/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.1, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 8/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.114115, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 9/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.159556, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 10/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.917052, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 11/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.992159, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 12/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.1, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 13/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.57915, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 14/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.271571, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 15/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.186251, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 16/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.090498, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 17/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.780918, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 18/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.565798, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 19/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.499581, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 20/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.926352, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 21/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.372193, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 22/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.271911, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 23/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.288377, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 24/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.1, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 25/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.441612, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 26/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.452891, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 27/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.490172, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 28/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.751042, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 29/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.193117, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 30/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.433616, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 31/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.303926, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 32/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.1, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 33/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.136389, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 34/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 2.220244, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 35/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.634363, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 36/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.430684, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 37/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.197038, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 38/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.84943, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 39/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.456953, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 40/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.620601, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 41/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.745684, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 42/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.161207, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 43/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.97555, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 44/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.395494, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 45/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.1, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 46/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.865544, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 47/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.695939, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 48/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.329712, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 49/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.155021, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 50/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.1, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 51/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.759343, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 52/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.25334, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 53/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.604431, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 54/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.864314, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 55/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.1, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 56/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.399625, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 57/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.400041, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 58/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.293107, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 59/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.854155, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 60/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.565921, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 61/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.738672, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 62/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.607098, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 63/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.600248, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 64/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.548246, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 65/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.028952, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 66/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.145446, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 67/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.489462, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 68/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.1, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 69/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.1332, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 70/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.304696, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 71/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.511565, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 72/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.862977, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 73/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.698075, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 74/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.308615, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 75/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.423496, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 76/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.050901, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 77/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.22891, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 78/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.387276, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 79/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.110442, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 80/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.339186, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 81/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.662679, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 82/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.000853, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 83/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.105715, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 84/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.019102, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 85/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.298774, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 86/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.234585, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 87/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.951315, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 88/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.42788, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 89/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.234133, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 90/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.539187, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 91/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.28385, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 92/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.150867, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 93/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.985415, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 94/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.774216, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 95/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.466054, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 96/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.324306, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 97/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.1, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 98/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.421601, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 99/100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 0.203498, all FDRs are smaller than 0.05.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 100/100</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The spline based estimation of pi0 results in a non-positive value of pi0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Therefore, pi0 is estimated by using lambda = 0.5.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For Delta &gt;= 1.217753, all FDRs are smaller than 0.05.</span>
+<span class="r-in"><span>  <span class="va">DE_list_genes</span> <span class="op">&lt;-</span> <span class="fu">prefilterSAM</span><span class="op">(</span><span class="va">mExprs</span><span class="op">[</span>,<span class="op">]</span>, <span class="va">mPheno</span><span class="op">$</span><span class="va">ER.IHC</span><span class="op">)</span> </span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'mExprs' not found</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
