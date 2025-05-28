@@ -48,18 +48,18 @@ functionKmGroups <- function(genExpr, mSurv, geneName) {
         stop("'genExpr' must be a numeric vector with the gene expressions.")
     }
     if (!inherits(mSurv, "data.frame")) {
-        stop("'mSurv' must be a data.frame with columns “time” and “status”.")
+        stop("'mSurv' must be a data.frame with columns 'time' and 'status'.")
     }
     if (!all(c("time", "status") %in% colnames(mSurv))) {
-        stop("'mSurv' must contain the columns “time” ", 
-             "(survival time) and “status” (event).")
+        stop("'mSurv' must contain the columns 'time' ", 
+             "(survival time) and 'status' (event).")
     }
     if (!is.character(geneName)) {
         stop("'geneName' must be a character vector ",
              "with the names of the genes.")
     }
     if (length(genExpr) != nrow(mSurv)) {
-        stop("The length of “genExpr” must match ", 
+        stop("The length of 'genExpr' must match ", 
              "the number of rows in “mSurv”.")
     }
 

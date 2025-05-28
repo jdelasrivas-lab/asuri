@@ -1,6 +1,6 @@
 citHeader("To cite this package in publications, use:")
 
-citation <- bibentry(
+bibentry(
   bibtype = "Article",
   author = c(
     person("S", "Bueno-Fortes"),
@@ -19,7 +19,5 @@ citation <- bibentry(
   issn = "26350041",
   publisher = "Oxford Academic"
 )
-
-print(citation, style = "text")
 
 citFooter("For more information, see: https://doi.org/10.1093/BIOADV/VBAD037 or use citation(\"asuri\")")

@@ -27,7 +27,7 @@ plotBoxplot <- function(gs_result) {
 
     title(main = paste0("Expression plot (", geneName, ")"))
     legend("bottomright",
-        title = "Nº of samples",
+        title = "N\u00BA of samples",
         c(
             as.character(sum(patientClass == 1)),
             as.character(sum(patientClass == 2))
@@ -160,7 +160,7 @@ plotBetas <- function(pr_result) {
     } else {
         ngenes <- nrow(top25betasPlot)
     }
-    level_to_number <- c("***" = 4, "**" = 3, "*" = 2, "·" = 1, " " = 0)
+    level_to_number <- c("***" = 4, "**" = 3, "*" = 2, "\u00B7" = 1, " " = 0)
     top25betasPlot$signif_numeric <- 
       as.integer(level_to_number[top25betasPlot$signif])
     top25betasPlot <- 
@@ -249,12 +249,15 @@ plotKM <- function(result,
     par(cex.lab = 1.5) # is for y-axis
     par(cex.axis = 1.5) # is for x-axis
     
+    
     plot_values <- result$plot_values
     nbetas <- nrow(result$betasplot)
     geneName <- result$geneName
     km <- plot_values$km$fitsKM
     p.value <- plot_values$km$p.val
     h.ratio <- plot_values$km$hazardR
+    
+    xlim <- c(0, max(km$time))
 
     # Define colours based on source function
     if (is.null(col.surv)) {

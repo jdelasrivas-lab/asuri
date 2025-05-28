@@ -368,7 +368,7 @@ patientRisk <- function(mExpr,
     # Significance codes p-vals
     significance_logrank_pvalue_uni <- symnum(logrank_pvalue_genes_uni,
         cutpoints = c(0, 0.001, 0.01, 0.05, 0.1, 1),
-        symbols   = c("***", "**", "*", "·", " "),
+        symbols   = c("***", "**", "*", "\u00B7", " "),
         na        = FALSE
     )
 
