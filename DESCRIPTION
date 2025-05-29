@@ -32,10 +32,10 @@ Authors@R: c(
          role = c("aut", "ctb"),
          comment = c(ORCID = "0000-0002-0984-9946"))
   )
-License: LGPL
-Depends: R (>= 4.4.0), stats, methods, survival, glmnet, siggenes, Biobase, survcomp, scales, ROCR, gplots, ggplot2, Rdpack
-Imports: Rdpack
-Suggests: BiocStyle, knitr, rmarkdown
+License: LGPL-3 + file LICENSE
+Depends: R (>= 4.4.0), stats, methods
+Imports: Rdpack, survival, glmnet, siggenes, Biobase, survcomp, scales, ROCR, gplots, ggplot2
+Suggests: BiocStyle, knitr, formatR, rmarkdown, magick, devtools
 biocViews: Software, StatisticalMethod, WorkflowStep, GeneExpression, Microarray, DifferentialExpression, GenePrediction, Regression, Survival, ExonArray, MultipleComparison
 URL: https://github.com/jdelasrivas-lab/asuri
 BugReports: https://github.com/jdelasrivas-lab/asuri

@@ -4,41 +4,81 @@
   patientRisk
 }
 \description{
-  This function selects a subset of good risk markers and estimates a multivariate risk score based on the UNICOX algorithm. The patients are stratified into two or more prognostic groups based on the risk score. The Cox regression is trained using a ten-fold double nested crossvalidation strategy to avoid overfitting.
+  This function selects a subset of good risk markers and estimates a 
+  multivariate risk score based on the UNICOX algorithm. The patients are 
+  stratified into two or more prognostic groups based on the risk score. The 
+  Cox regression is trained using a ten-fold double nested crossvalidation 
+  strategy to avoid overfitting.
 }
 \usage{
-  patientRisk(mExpr, time, status, 
-  method = c("min.pval", "med.pval", "class.probs"), nboot = 50)
+  patientRisk(mExpr, time, status, group.vector, method = NULL, nboot = 50)
 }
 \arguments{
   \item{mExpr}{ 
-    A numeric matrix of gene expression data where each row represents a gene and each column represents a sample.  
+    A numeric matrix of gene expression data where each row represents a gene 
+    and each column represents a sample.  
   }
   \item{time}{
-    A numeric vector representing the survival time for each sample, names(time) should be defined as the sample names.
+    A numeric vector representing the survival time for each sample, 
+    names(time) should be defined as the sample names.
   }
   \item{status}{
-    A numeric vector representing the event status (1 = event, 0 = censored) for each sample, names(status) should be defined as the sample names.
+    A numeric vector representing the event status (1 = event, 0 = censored) 
+    for each sample, names(status) should be defined as the sample names.
   }
   \item{group.vector}{
-    A numeric vector specifying predefined risk groups for the patients. This is optional.
+    A numeric vector specifying predefined risk groups for the patients. 
+    This is optional.
   }
    \item{method}{
-   A character string specifying the method for defining risk groups. Possible options are:
+   A character string specifying the method for defining risk groups. 
+   Possible options are:
    \itemize{
-    \item \code{"min.pval"}: Defines risk groups based on the minimum log-rank p-value.
-    \item \code{"med.pval"}: Defines risk groups based on the median of the log-rank p-values.
-    \item \code{"class.probs"}: Defines risk groups based on the classification probabilities from the model.
+    \item \code{"min.pval"}: Defines risk groups based on the 
+    minimum log-rank p-value.
+    \item \code{"med.pval"}: Defines risk groups based on the 
+    median of the log-rank p-values.
+    \item \code{"class.probs"}: Defines risk groups based on the 
+    classification probabilities from the model.
    }
    If \code{NULL}, the default method is \code{"class.probs"}. 
   }
   \item{nboot}{
-    An integer specifying the number of bootstrap iterations for risk score calculation. Default is 50.
+    An integer specifying the number of bootstrap iterations for risk 
+    score calculation. Default is 50.
   }
 }
 \details{
-A multivariate Cox regression is trained to select a subset of genes significantly associated with the risk and to estimate a risk score based on these risk markers. 
-The algorithm considered is based on UNICOX, a regularized multivariate Cox regression model (see Tibshirani et al., 2009 for more details). In this predictor, the variables are penalized individually using an \eqn{L_1} norm term which allow us to keep more relevant genes correlated with risk than in Lasso. The Lasso model selects only one representative gene randomly from the set of correlated genes. The optimal value for the lambda parameter as well as the risk score are estimated using a double nested crossvalidation strategy. Finally, the risk score allow us to stratify the whole set of patients according to their risks. Three algorithms are implemented to estimate the optimal threshold that classifies the patients in risk groups. "min.pval" determines the optimal threshold by minimization of the log-rank p-value statistics, that is by  maximization of the separability between the K-M curves for the high and low risk groups, see  (Martinez-Romero et al., 2018). When several local minima arise this may be sample dependent and unstable. To avoid this problem, "med.pval" estimates the optimal threshold as the median of the lower 10th percentile logrank p-values. The lower 10th percentile selects the smallest values from the p-value distribution corresponding to intermediate risk patients that are on the boundary between both groups. This interval is more robust than a single minimum and provides good experimental results for a large variety of problems tested. The median threshold in this interval may change from one iteration to another because the distribution of p-values for patients with intermediate risk may change due to sample variations. Finally, "class.probs" implements a bootstrap strategy for the patients corresponding to the lower 10th percentile p-values and estimates a robust threshold to stratify the patients. It estimates also a membership probability of classification.
+A multivariate Cox regression is trained to select a subset of genes 
+significantly associated with the risk and to estimate a risk score based 
+on these risk markers. 
+The algorithm considered is based on UNICOX, a regularized multivariate Cox 
+regression model (see Tibshirani et al., 2009 for more details). 
+In this predictor, the variables are penalized individually using an 
+\eqn{L_1} norm term which allow us to keep more relevant genes correlated 
+with risk than in Lasso. The Lasso model selects only one representative gene 
+randomly from the set of correlated genes. The optimal value for the lambda 
+parameter as well as the risk score are estimated using a double nested 
+crossvalidation strategy. Finally, the risk score allow us to stratify the 
+whole set of patients according to their risks. Three algorithms are 
+implemented to estimate the optimal threshold that classifies the patients 
+in risk groups. "min.pval" determines the optimal threshold by minimization 
+of the log-rank p-value statistics, that is by  maximization of the 
+separability between the K-M curves for the high and low risk groups, see 
+(Martinez-Romero et al., 2018). When several local minima arise this may be 
+sample dependent and unstable. To avoid this problem, "med.pval" estimates 
+the optimal threshold as the median of the lower 10th percentile 
+logrank p-values. The lower 10th percentile selects the smallest values 
+from the p-value distribution corresponding to intermediate risk patients 
+that are on the boundary between both groups. This interval is more robust 
+than a single minimum and provides good experimental results for a large 
+variety of problems tested. The median threshold in this interval may change 
+from one iteration to another because the distribution of p-values for 
+patients with intermediate risk may change due to sample variations. 
+Finally, "class.probs" implements a bootstrap strategy for the patients 
+corresponding to the lower 10th percentile p-values and estimates a robust 
+threshold to stratify the patients. It estimates also a membership 
+probability of classification.
 }
 \value{
   The function generate 5 plots:

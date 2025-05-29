@@ -7,7 +7,7 @@
 This function implements robust algorithms to obtain a list of genes associated to a given clinical variable. It is based on the elastic net algorithm and the robustness and reproducibility of the subset of genes is improved using a bootstrap strategy combined with ensemble methods.
 }
 \usage{
-  genePheno(mExpr, vectorGroups, vectorSampleID, iter = 100, numberOfFolds = 10)
+  genePheno(mExpr, vectorGroups, vectorSampleID, iter = 100, numberOfFolds = 5)
 }
 \arguments{
   \item{mExpr}{
@@ -62,12 +62,20 @@ In order to improve the robustness and reproducibility of the gene signature dis
   # [1] 865  200
   tmExprsDE <- t(mExprsDE)
   # Parameters: Number of bootstrap iterations: 100.
-  # The object `tmExprsDE` is the gene expression matrix for the subset of genes tested (samples as rows and genes as columns). The object `mPheno$ER.IHC` is a vector indicating the value per-sample of ER (as a binary variable: "0" or "1").
+  # The object `tmExprsDE` is the gene expression matrix for the subset of 
+  # genes tested (samples as rows and genes as columns). The object 
+  # `mPheno$ER.IHC` is a vector indicating the value per-sample of ER 
+  # (as a binary variable: "0" or "1").
   vectorSampleID <- as.character(rownames(mPheno))
   vectorGroups <- as.numeric(mPheno$ER.IHC)
   Pred_ER.IHC <- genePheno(tmExprsDE, vectorGroups, vectorSampleID)
 
-  # Pred_ER.IHC is an output object with the list of genes that show a significant correlation with the clinical variable. Since a bootstrap is performed, the results of how many times across iterations a gene is found significant are reported as *stability* (in relative numbers 0-1, 1=100%) and the *beta values* from the regression across iterations are also provided as *betaMedian* and *betaMean* :
+  # Pred_ER.IHC is an output object with the list of genes that show a 
+  # significant correlation with the clinical variable. Since a bootstrap is 
+  # performed, the results of how many times across iterations a gene is found 
+  # significant are reported as *stability* (in relative numbers 0-1, 1=100%) 
+  # and the *beta values* from the regression across iterations are also 
+  # provided as *betaMedian* and *betaMean* :
 
   names(Pred_ER.IHC)
   # [1] "genes" "listCoeff" "stability" "betasMedian" "betasMean" "betasTable"

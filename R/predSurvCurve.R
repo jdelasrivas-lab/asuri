@@ -38,25 +38,25 @@
 #'   }
 #'
 #' @examples
-#' data(predSurvCurve)
+#' data(predict_SurvCurve)
 #' 
 #' # COX prediction for the training set
 #' set.seed(5)
-#' cox_pred_training <- predict.patientRisk(multivariate_risk_predictor, mExprSelectedGenes)
+#' cox_pred_training <- predict_PatientRisk(multivariate_risk_predictor, mExprSelectedGenes)
 #' cox_pred_training$risk_score
 #' 
 #' # COX prediction for the test patient
 #' set.seed(5)
-#' cox_pred_test <- predict.patientRisk(multivariate_risk_predictor, mExprs_testSingleData)
+#' cox_pred_test <- predict_PatientRisk(multivariate_risk_predictor, mExprs_testSingleData)
 #' cox_pred_test$risk_score
 #' 
 #' # Survival curve estimation
 #' eval_surv_times <- seq(0, max(mPheno$time), by = 0.1)
 #' set.seed(5)
-#' surv_curv_cox <- predSurvCurve(cox_pred_training$risk_score, mPheno[, c(2, 3)], cox_pred_test$risk_score, eval_surv_times)
+#' surv_curv_cox <- predict_SurvCurve(cox_pred_training$risk_score, mPheno[, c(2, 3)], cox_pred_test$risk_score, eval_surv_times)
 #'
 #' @export
-predSurvCurve <- function(cox_pred_training, mSurv, 
+predict_SurvCurve <- function(cox_pred_training, mSurv, 
                           cox_pred_test, eval_surv_times = NULL) {
     # Error control: Check if mSurv has the correct structure
     if (dim(mSurv)[[2]] != 2 || anyNA(match(c("time", "status"), 

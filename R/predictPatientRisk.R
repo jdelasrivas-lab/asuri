@@ -31,7 +31,7 @@
 #' }
 #'
 #' @examples
-#' data(predictPatientRisk)
+#' data(predict_PatientRisk)
 #' 
 #' # Generate the validation set, mExprs_testData if necessary.
 #' # Vector of genes (same ones used in Cox model training)
@@ -48,7 +48,7 @@
 #' colnames(mExprs_testData) <- paste0("Sample", 1:num_samples)
 #' 
 #' set.seed(5)
-#' risk_prediction_validation_set <- predict.patientRisk(multivariate_risk_predictor, mExprs_testData)
+#' risk_prediction_validation_set <- predict_PatientRisk(multivariate_risk_predictor, mExprs_testData)
 #' 
 #' 
 #' # Example for single patient prediction: Patient fourth is selected.
@@ -56,14 +56,14 @@
 #' colnames(mExprs_testSingleData) <- colnames(mExprs_testData)[4]
 #' # Risk prediction for the optimal subset of genes selected by patientRisk function
 #' set.seed(5)
-#' risk_prediction_one_patient <- predict.patientRisk(multivariate_risk_predictor, mExprs_testSingleData)
+#' risk_prediction_one_patient <- predict_PatientRisk(multivariate_risk_predictor, mExprs_testSingleData)
 #' 
 #' # Normalized patient Risk (0 100): 27.9017675117161
 #' # The patient is classified as Low Risk 
 #' # Low Risk interval: (0, 37.0600635839135)
 #'
 #' @export
-predict.patientRisk <- function(model.fit, mExpr.testData) {
+predict_PatientRisk <- function(model.fit, mExpr.testData) {
     mExpr.testData <- as.data.frame(mExpr.testData)
     # Error control: Check for row names in the gene expression matrix
     if (is.null(rownames(mExpr.testData))) {
@@ -76,7 +76,7 @@ predict.patientRisk <- function(model.fit, mExpr.testData) {
              "sample names")
     }
 
-    riskscore_testData <- asuri:::predict.uniCox(model.fit$model.optimalLambda, 
+    riskscore_testData <- predict.uniCox(model.fit$model.optimalLambda, 
                                                  t(mExpr.testData))
 
     plot_values <- model.fit$plot_values

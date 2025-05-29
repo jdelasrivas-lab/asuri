@@ -60,7 +60,7 @@ functionKmGroups <- function(genExpr, mSurv, geneName) {
     }
     if (length(genExpr) != nrow(mSurv)) {
         stop("The length of 'genExpr' must match ", 
-             "the number of rows in “mSurv”.")
+             "the number of rows in 'mSurv'.")
     }
 
     matrix.groups <- NULL

@@ -4,33 +4,41 @@
   prefilterSAM
 }
 \description{
-  R function to pre-filter noisy genes, keeping the most relevant ones for microarrays or RNAseq data. These genes can be used later for further analysis.
+  R function to pre-filter noisy genes, keeping the most relevant ones for 
+  microarrays or RNAseq data. These genes can be used later for further analysis.
 }
 \usage{
-  prefilterSAM(mExpr, groups_vector, FDRfilter = 0.05, percentageFilter = 80, iter = 100)
+  prefilterSAM(mExpr, groups_vector, FDRfilter = 0.05, 
+               iter = 100, percentageFilter = 80)
 }
 \arguments{
   \item{mExpr}{
-    A matrix where rows represent genes and columns represent samples. Each entry is the expression value of a gene in a sample.
+    A matrix where rows represent genes and columns represent samples. 
+    Each entry is the expression value of a gene in a sample.
   }
   \item{groups_vector}{
     A binary vector indicating the group assignment for each sample.
   }
   \item{FDRfilter}{
-    A numeric value indicating the FDR threshold for selecting significant genes. Default is 0.05.
+    A numeric value indicating the FDR threshold for selecting 
+    significant genes. Default is 0.05.
   }
   \item{iter}{
     The number of iterations for bootstrapping. Default is 100.
   }
   \item{percentageFilter}{
-    A numeric value indicating the percentage of iterations a gene must appear in to be considered significant. Default is 80.
+    A numeric value indicating the percentage of iterations a gene must appear 
+    in to be considered significant. Default is 80.
   }
   }
 \details{
-  This function implements SAM (Schwender H., 2022) robust diferential expression analysis based on bootstrap . It helps to remove noisy genes reducing the computational complexity of further analysis.
+  This function implements SAM (Schwender H., 2022) robust diferential 
+  expression analysis based on bootstrap . It helps to remove noisy genes 
+  reducing the computational complexity of further analysis.
 }
 \value{
-   An ordered vector with the names of differentially expressed genes between the categories of the grouping vector.
+   An ordered vector with the names of differentially expressed genes between 
+   the categories of the grouping vector.
   \item{result}{
     A list of DE genes ordered by SAM d.value and filtered by percentageFilter.
   }  
@@ -45,7 +53,8 @@
 \examples{ 
   # Bootstrapped differential expression based on SAM.
   # Parameters: FDR = 0.05, iter = 100, percentage filter = 80 %
-  # CAUTION: if the data have a high number of genes this function will take several minutes to compute.
+  # CAUTION: if the data have a high number of genes this function will take 
+  # several minutes to compute.
   data(prefilterSAM)
 
   set.seed(5)

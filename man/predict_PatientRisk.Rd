@@ -1,13 +1,13 @@
-\name{predict.patientRisk}
-\alias{predict.patientRisk}
+\name{predict_PatientRisk}
+\alias{predict_PatientRisk}
 \title{ 
-  predict.patientRisk
+  predict_PatientRisk
 }
 \description{
   Function to predict the risk for new patients considering the gene expression for a subset of genes and the multivariate Cox regression model trained by function patientRisk, it may be used to predict over a single patient.
 }
 \usage{
-  predict.patientRisk(model.fit, mExpr.testData)
+  predict_PatientRisk(model.fit, mExpr.testData)
 }
 \arguments{
   \item{model.fit}{ 
@@ -31,7 +31,7 @@
   }
 }
 \examples{
-  data(predictPatientRisk)
+  data(predict_PatientRisk)
 
   # Generate the validation set, mExprs_testData if necessary.
   # Vector of genes (same ones used in Cox model training)
@@ -48,7 +48,7 @@
   colnames(mExprs_testData) <- paste0("Sample", 1:num_samples)
 
   set.seed(5)
-  risk_prediction_validation_set <- predict.patientRisk(multivariate_risk_predictor, mExprs_testData)
+  risk_prediction_validation_set <- predict_PatientRisk(multivariate_risk_predictor, mExprs_testData)
 
 
   # Example for single patient prediction: Patient fourth is selected.
@@ -56,7 +56,7 @@
   colnames(mExprs_testSingleData) <- colnames(mExprs_testData)[4]
   # Risk prediction for the optimal subset of genes selected by patientRisk function
   set.seed(5)
-  risk_prediction_one_patient <- predict.patientRisk(multivariate_risk_predictor, mExprs_testSingleData)
+  risk_prediction_one_patient <- predict_PatientRisk(multivariate_risk_predictor, mExprs_testSingleData)
   
   # Normalized patient Risk (0 100): 27.9017675117161
   # The patient is classified as Low Risk 

@@ -4,41 +4,63 @@
   geneSurv
 }
 \description{ 
-This function analyzes the ability of a gene to mark survival based on a robust version of the KM curves. The robust K-M estimator is obtained by a bootstrap strategy.
+This function analyzes the ability of a gene to mark survival based on a robust 
+version of the KM curves. The robust K-M estimator is obtained by a bootstrap 
+strategy.
 }
 \usage{
-  geneSurv(genExpr, time, status, geneName, boxplot = T, iter = 100, type = c("exprs", "risk"), cut_time = 10)
+  geneSurv(genExpr, time, status, geneName, boxplot = TRUE, 
+  iter = 100, type = c("exprs", "risk"), cut_time = 10)
 }
 \arguments{
   \item{genExpr}{
-    Vector with the normalized gene expression for each sample. names(genExpr) should contains the sample names.
+    Vector with the normalized gene expression for each sample.
+    names(genExpr) should contains the sample names.
   }
   \item{time}{
-    Numeric vector containing the survival time for each sample in years, including the sample name in names(time).
+    Numeric vector containing the survival time for each sample in years, 
+    including the sample name in names(time).
   }
   \item{status}{
-    Numeric vector with the status (censored 0 and not censored 1) for each sample. names(status) shoud include the sample names.
+    Numeric vector with the status (censored 0 and not censored 1) for 
+    each sample. names(status) shoud include the sample names.
   }
   \item{geneName}{
     A character string with the name of the gene being analyzed.
   }
    \item{boxplot}{
-    A logical value indicating whether to generate a boxplot of gene expression by survival group (default = TRUE).
+    A logical value indicating whether to generate a boxplot of gene 
+    expression by survival group (default = TRUE).
   }
    \item{iter}{
-    The number of iterations (bootstrap resampling) for calculating optimal group cutoffs (default = 100).
+    The number of iterations (bootstrap resampling) for calculating optimal
+    group cutoffs (default = 100).
   }
    \item{type}{
-    Defines if the KM curve groups are computed using risk ("risk") or gene expression (default "exprs").
+    Defines if the KM curve groups are computed using risk ("risk") or gene 
+    expression (default "exprs").
   }
    \item{cut_time}{
-    A numeric value specifying the cutoff time (in years) for survival analysis. All events beyond this time are treated as censored (default = 10 years).
+    A numeric value specifying the cutoff time (in years) for survival analysis. 
+    All events beyond this time are treated as censored (default = 10 years).
     }
 }
 \details{
-This function improves the stability and robustness of the K-M estimator using a bootstrap strategy. Patients are resampled with replacement giving rise to B replicates. The K-M estimator is obtained based on the replicates as well as the confidence intervals. The patients are stratified in two risk groups by an expression threshold that optimizes the log-rank statistics, that is the separability between the Kaplan-Meier curves for each group. This function implements a novel method to find the optimal threshold avoiding the problems of instability and unbalanced classes that suffer other implementations.
-Besides, a membership probability for each risk group is estimated from the classification of each sample in the replicates. This membership probability allow us to reclassify patients around the gene expression threshold in a more robust way.
-The function provides a robust estimation of the log-rank p-value and the Hazard ratio that allow us to evaluate the ability of a given gene to mark survival.
+This function improves the stability and robustness of the K-M estimator using 
+a bootstrap strategy. Patients are resampled with replacement giving rise 
+to B replicates. The K-M estimator is obtained based on the replicates as 
+well as the confidence intervals. The patients are stratified in two risk 
+groups by an expression threshold that optimizes the log-rank statistics, 
+that is the separability between the Kaplan-Meier curves for each group. 
+This function implements a novel method to find the optimal threshold avoiding 
+the problems of instability and unbalanced classes that suffer 
+other implementations. Besides, a membership probability for each risk group 
+is estimated from the classification of each sample in the replicates. 
+This membership probability allow us to reclassify patients around the gene 
+expression threshold in a more robust way.
+The function provides a robust estimation of the log-rank p-value and the 
+Hazard ratio that allow us to evaluate the ability of a given gene 
+to mark survival.
 }
 \value{
 Depending on the type run, the output changes. 

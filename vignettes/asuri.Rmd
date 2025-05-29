@@ -48,9 +48,9 @@ abstract: |
     
     3. Build robust patient risk predictors using genes associated with survival (**patientRisk**). 
     
-    4. Predict patient risk and classify into risk groups (**predict.patientRisk**). 
+    4. Predict patient risk and classify into risk groups (**predict_PatientRisk**). 
     
-    5. Estimate survival for novel query patients (**predSurvCurve**).
+    5. Estimate survival for novel query patients (**predict_SurvCurve**).
 ---
 
 ```{r setup, include=FALSE}
@@ -71,7 +71,7 @@ In accordance with the 5 utilities of the package described above, **ASURI** is 
 knitr::include_graphics("figures/diagramaCrop.png")
 ```
 
-Next function, (3) **patientRisk()**, which accurately predicts the patient risk given a set of informative genes, provided as an input list of selected genes. The function is based on the multivariate UNICOX model proposed by [@tibshirani2009univariate]. The function provides as output the list of selected genes ranked according to their impact on patient risk along with a relevance index. It also provides a risk prediction for each one of the patients included in the training considering the gene signature obtained and an optimal stratification into two or three risk groups (i.e., poor, intermediate and good prognosis). (4) **predict.patientRisk()**, which predicts the risk for new, novel patients based on the model and the gene signature produced by the **patientRisk()** function over the training set. This function also classifies the patients in two or three risk groups. (5) **predSurvCurve()**, which estimates the survival curve for any given query patient using the patient's gene expression profile. These 5 functions included in ASURI also provide graphical output plots to help visualize and analyze survival and patient risk; and, as indicated, they are designed to work with one or more genes (i.e., features), that is, to analyze univariate and multivariate gene signatures.
+Next function, (3) **patientRisk()**, which accurately predicts the patient risk given a set of informative genes, provided as an input list of selected genes. The function is based on the multivariate UNICOX model proposed by [@tibshirani2009univariate]. The function provides as output the list of selected genes ranked according to their impact on patient risk along with a relevance index. It also provides a risk prediction for each one of the patients included in the training considering the gene signature obtained and an optimal stratification into two or three risk groups (i.e., poor, intermediate and good prognosis). (4) **predict_PatientRisk()**, which predicts the risk for new, novel patients based on the model and the gene signature produced by the **patientRisk()** function over the training set. This function also classifies the patients in two or three risk groups. (5) **predict_SurvCurve()**, which estimates the survival curve for any given query patient using the patient's gene expression profile. These 5 functions included in ASURI also provide graphical output plots to help visualize and analyze survival and patient risk; and, as indicated, they are designed to work with one or more genes (i.e., features), that is, to analyze univariate and multivariate gene signatures.
 
 
 # Package download and installation. Package dependencies.
@@ -416,15 +416,15 @@ knitr::include_graphics("figures/betas.png")
 knitr::include_graphics("figures/km.png")
 ```
 
-## Risk Prediction for an independent set of patients: **predict.patientRisk()**
+## Risk Prediction for an independent set of patients: **predict_PatientRisk()**
 
-A relevant goal for medical doctors is to predict the risk of cancer patients considering the level of certain molecular markers. This prediction is implemented by function **predict.patientRisk()** using a multivariate model that takes into account the cooperative work between the genes to carry out a biological function.
-Once the multivariate risk predictor is trained by the **patientRisk()** function (see previous section), the predict.patientRisk function may be applied to predict the risk of new patients considering the gene expression of a small subset of genes associated to risk. Moreover, the patients can be classified into low, intermediate or high risk groups considering the value of the risk score. 
+A relevant goal for medical doctors is to predict the risk of cancer patients considering the level of certain molecular markers. This prediction is implemented by function **predict_PatientRisk()** using a multivariate model that takes into account the cooperative work between the genes to carry out a biological function.
+Once the multivariate risk predictor is trained by the **patientRisk()** function (see previous section), the **predict_PatientRisk()** function may be applied to predict the risk of new patients considering the gene expression of a small subset of genes associated to risk. Moreover, the patients can be classified into low, intermediate or high risk groups considering the value of the risk score. 
 
 The following lines show how to predict the risk score for an independent set of patients. The function plots the risk score and stratifies the patients into three groups.
 
 ```{r, echo = TRUE, results = 'hide', fig.show='hide'} 
-data(predictPatientRisk)
+data(predict_PatientRisk)
 
 # Generate the validation set, mExprs_testData if necessary.
 # Vector of genes (same ones used in Cox model training)
@@ -441,15 +441,15 @@ rownames(mExprs_testData) <- genes
 colnames(mExprs_testData) <- paste0("Sample", 1:num_samples)
 
 set.seed(5)
-risk_prediction_validation_set <- predict.patientRisk(multivariate_risk_predictor, mExprs_testData)
+risk_prediction_validation_set <- predict_PatientRisk(multivariate_risk_predictor, mExprs_testData)
 ```
 
-The input parameters of the function **predict.patientRisk()** are:
+The input parameters of the function **predict_PatientRisk()** are:
 
 - `model.fit` A list containing the pre-fitted model and necessary parameters for risk prediction, including the optimal lambda value, risk thresholds, and plot values given by **patientRisk()** function.
 - `mExpr.testData` A data frame for an independent set of patients representing the gene expression data, where each row is a gene and each column is a sample. The genes must be the same subset of genes (as rows) considered in the training of the COX model using patientRisk function. *colnames(mExpr)* corresponds to the sample names and *rownames(mExpr)* to the gene names.
 
-The output of the function **predict.patientRisk()** is a risk plot and a list with two objects:
+The output of the function **predict_PatientRisk()** is a risk plot and a list with two objects:
 
 - **risk_score**: The unscaled risk score provided by the multivariate COX regression.
 - **scaled_risk_score**: The scaled risk score (0-100) for the independent set of patients.
@@ -462,13 +462,13 @@ knitr::include_graphics("figures/risk_plot_predict_patientRisk.png")
 This function can be applied also to predict the risk of a single patient given the gene expression profile. The mExprs_testData will contain now a column with the expression level for the list of genes selected.
 
 ```{r, echo = TRUE, results = 'hide'} 
-data(predictPatientRisk)
+data(predict_PatientRisk)
 # Example for single patient prediction: Patient fourth is selected.
 mExprs_testSingleData <- data.frame(mExprs_testData[, 4])
 colnames(mExprs_testSingleData) <- colnames(mExprs_testData)[4]
 # Risk prediction for the optimal subset of genes selected by patientRisk function
 set.seed(5)
-risk_prediction_one_patient <- predict.patientRisk(multivariate_risk_predictor, mExprs_testSingleData)
+risk_prediction_one_patient <- predict_PatientRisk(multivariate_risk_predictor, mExprs_testSingleData)
 ```
 
 ```{R, echo = TRUE, results = 'hide'} 
@@ -479,31 +479,31 @@ risk_prediction_one_patient <- predict.patientRisk(multivariate_risk_predictor, 
 
 When a single patient is considered, the function will print the normalized risk for the test patient and the classification into three possible groups: Low, Intermediate or High. Treatment for the intermediate group is uncertain and should be studied with care.
 
-## Survival estimation from the COX regression for a test patient: **predSurvCurve()**
+## Survival estimation from the COX regression for a test patient: **predict_SurvCurve()**
 
-The function **predSurvCurve()** will obtain the expected survival curve for a test patient estimated from the risk score predicted by a multivariate COX regression model and considering the Breslow estimator for the baseline Hazard. The function provides a plot for the expected survival curve.
+The function **predict_SurvCurve()** will obtain the expected survival curve for a test patient estimated from the risk score predicted by a multivariate COX regression model and considering the Breslow estimator for the baseline Hazard. The function provides a plot for the expected survival curve.
 
 The input parameters are:
 
-- `cox_pred_training` A numeric vector representing the predicted risk scores (or log-risk scores) from the COX model for the training set. It can be obtained from **predict.patientRisk()** function.
+- `cox_pred_training` A numeric vector representing the predicted risk scores (or log-risk scores) from the COX model for the training set. It can be obtained from **predict_PatientRisk()** function.
 - `mSurv` A data frame with two columns: "time" representing survival times, and "status" representing the event status (1 for event, 0 for censored).
-- `cox_pred_test` A numeric vector of length 1 representing the predicted risk score (or log-risk score) for the test patient. It can be obtained from **predict.patientRisk()** function.
+- `cox_pred_test` A numeric vector of length 1 representing the predicted risk score (or log-risk score) for the test patient. It can be obtained from **predict_PatientRisk()** function.
 - `eval_surv_times`  A numeric vector of times at which the survival curve should be evaluated. If NULL (default), the times will be taken from the training data up to the maximum event time. 
 
 ```{r, echo = TRUE, results = 'hide', fig.show='hide'}  
-data(predSurvCurve)
+data(predict_SurvCurve)
 # COX prediction for the training set
 set.seed(5)
-cox_pred_training <- predict.patientRisk(multivariate_risk_predictor, mExprSelectedGenes)
+cox_pred_training <- predict_PatientRisk(multivariate_risk_predictor, mExprSelectedGenes)
 cox_pred_training$risk_score
 # COX prediction for the test patient
 set.seed(5)
-cox_pred_test <- predict.patientRisk(multivariate_risk_predictor, mExprs_testSingleData)
+cox_pred_test <- predict_PatientRisk(multivariate_risk_predictor, mExprs_testSingleData)
 cox_pred_test$risk_score
 # Survival curve estimation
 eval_surv_times <- seq(0, max(mPheno$time), by = 0.1)
 set.seed(5)
-surv_curv_cox <- predSurvCurve(cox_pred_training$risk_score, mPheno[, c(2, 3)], cox_pred_test$risk_score, eval_surv_times)
+surv_curv_cox <- predict_SurvCurve(cox_pred_training$risk_score, mPheno[, c(2, 3)], cox_pred_test$risk_score, eval_surv_times)
 ```
 
 The output for this function is a list with three objects:

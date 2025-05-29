@@ -72,9 +72,9 @@
 #' 
 #' # Generate the plots again
 #' ## Plots for c(type = exprs)
-#' asuri:::plotBoxplot(outputKM)
-#' asuri:::plotProbClass(outputKM)
-#' asuri:::plotKM(outputKM)
+#' plotBoxplot(outputKM)
+#' plotProbClass(outputKM)
+#' plotKM(outputKM)
 #' 
 #' # If we instead consider to run the function as *type* = risk
 #' data(geneSurvRisk)
@@ -88,7 +88,7 @@
 #' outputKM.TP53 <- geneSurv(genExpr, time, status, "BRCA1", type = "risk")
 #' 
 #' ## Plots for c(type = risk)
-#' asuri:::plotKM(outputKM)
+#' plotKM(outputKM)
 #'
 #' @export
 

@@ -1,8 +1,8 @@
 export(genePheno)
 export(geneSurv)
 export(patientRisk)
-export(predict.patientRisk) 
-export(predSurvCurve)
+export(predict_PatientRisk) 
+export(predict_SurvCurve)
 export(prefilterSAM)
 
 import(methods)
@@ -17,7 +17,10 @@ import(Rdpack)
 import(ggplot2) 
 
 importFrom(gplots, textplot)
-importFrom("graphics", "abline", "axis", "boxplot", "hist", "image", "layout", 
-           "legend", "lines", "mtext", "par", "pie", "points", "polygon", 
-           "rect", "segments", "stripchart", "text", "title")
-importFrom("utils", "combn", "write.table")
+importFrom(graphics, abline, axis, boxplot, hist, image, layout, 
+           legend, lines, mtext, par, pie, points, polygon, 
+           rect, segments, stripchart, text, title, box, grid, strwidth)
+importFrom(utils, combn, write.table)
+importFrom(grDevices, grey)
+importFrom(stats, approx, median, na.omit, pchisq, predict, quantile, runif, supsmu, symnum, wilcox.test)
+importFrom(utils, capture.output, flush.console, head)

@@ -95,11 +95,11 @@
 #' multivariate_risk_predictor <- patientRisk(mExprSelectedGenes, time, status, method = "class.probs")
 #' 
 #' # Generate the plots again
-#' asuri:::plotLogRank(multivariate_risk_predictor)
-#' asuri:::plotSigmoid(multivariate_risk_predictor)
-#' asuri:::plotLambda(multivariate_risk_predictor)
-#' asuri:::plotBetas(multivariate_risk_predictor)
-#' asuri:::plotKM(multivariate_risk_predictor)
+#' plotLogRank(multivariate_risk_predictor)
+#' plotSigmoid(multivariate_risk_predictor)
+#' plotLambda(multivariate_risk_predictor)
+#' plotBetas(multivariate_risk_predictor)
+#' plotKM(multivariate_risk_predictor)
 #' 
 #' @export
 

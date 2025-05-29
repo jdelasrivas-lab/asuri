@@ -13,7 +13,7 @@ initcx <- function(y, ic) {
         iriskq = as.integer(iriskq),
         ddq = as.integer(ddq),
         tq = as.single(tq),
-        PACKAGE = "uniCox"
+        PACKAGE = "asuri"
     )
 
     kq <- junk$kq
@@ -33,7 +33,7 @@ calcsx <- function(x, kq, iriskq, ic) {
         as.integer(iriskq),
         as.integer(ic),
         sx = as.single(sx),
-        PACKAGE = "uniCox"
+        PACKAGE = "asuri"
     )
     return(junk2$sx[seq(1, kq)])
 }
@@ -74,7 +74,7 @@ func.scor <- function(beta, lam, x, sx, iriskq, kq, ddq, ic) {
         val = single(1),
         scrt1 = single(n),
         scrt2 = single(n),
-        PACKAGE = "uniCox"
+        PACKAGE = "asuri"
     )
     return(junk3$val)
 }
