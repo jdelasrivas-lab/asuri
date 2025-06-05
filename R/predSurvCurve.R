@@ -6,12 +6,14 @@
 #' probability for the test patient at specified times.
 #'
 #' @param cox_pred_training A numeric vector representing the predicted risk 
-#' scores (or log-risk scores) from the Cox model for the training set.
+#' scores (or log-risk scores) from the Cox model for the training set. It can 
+#' be obtained from *predict_PatientRisk* function.
 #' @param mSurv A data frame with two columns: "time" representing survival 
 #' times, and "status" representing the event status (1 for event, 0 for 
-#' censored).
+#' censored) for the training dataset.
 #' @param cox_pred_test A numeric vector of length 1 representing the predicted 
-#' risk score (or log-risk score) for the test patient.
+#' risk score (or log-risk score) for the test patient. It can be obtained 
+#' from *predict_PatientRisk* function.
 #' @param eval_surv_times A numeric vector of times at which the survival curve 
 #' should be evaluated. If NULL (default), the times will be taken from the 
 #' training data up to the maximum event time.
@@ -22,39 +24,97 @@
 #' Then, it computes the survival probability for the test patient using the 
 #' baseline survival function and the test patient's risk score.
 #' If the test patient's risk is associated with a hazard ratio greater than 1, 
-#' the survival curve will decrease more rapidly.
-#' If `eval_surv_times` is provided, the curve is evaluated at those specific 
-#' times; otherwise, the function uses the survival times from the training 
-#' data.
+#' the survival curve will decrease more rapidly. If `eval_surv_times` is 
+#' provided, the curve is evaluated at those specific times; otherwise, the 
+#' function uses the survival times from the training data.
 #'
 #' @return A list containing:
-#'   \describe{
-#'     \item{\code{eval_times}}{The times at which the survival curve is 
-#'     evaluated.}
-#'     \item{\code{S_0_t}}{The baseline survival function evaluated at the 
-#'     times in \code{eval_surv_times}.}
-#'     \item{\code{S_test_patient}}{The survival curve for the test patient at 
-#'     the times in \code{eval_surv_times}.}
-#'   }
+#'  - \code{eval_times}: The times at which the survival curve is 
+#'                       evaluated.
+#'  - \code{S_0_t}: The baseline survival function evaluated at the times 
+#'                  in \code{eval_surv_times}.
+#'  - \code{S_test_patient}: The survival curve for the test patient at the 
+#'                           times in \code{eval_surv_times}.
 #'
 #' @examples
-#' data(predict_SurvCurve)
+#' data(mExprs)
+#' data(mPheno)
+#' 
+#' # prefilterSAM
+#' set.seed(5)
+#' DE_list_genes <- prefilterSAM(mExprs, mPheno$ER.IHC)
+
+#' genePheno
+#' mExprsDE <- mExprs[match(DE_list_genes, rownames(mExprs)), ]
+#' vectorSampleID <- as.character(rownames(mPheno))
+#' vectorGroups <- as.numeric(mPheno$ER.IHC)
+#' Pred_ER.IHC <- genePheno(t(mExprsDE), vectorGroups, vectorSampleID) 
+#' geneList <- names(Pred_ER.IHC$genes)
+#' mExprSelectedGenes <- mExprs[match(geneList, rownames(mExprs)), ]
+#'
+#' # Generate the validation set, mExprs_testData if necessary.
+#' # Vector of genes (same ones used in Cox model training)
+#' genes <- rownames(mExprSelectedGenes)
+#' 
+#' time <- mPheno$time
+#' names(time) <- rownames(mPheno)
+#' status <- mPheno$status
+#' names(status) <- rownames(mPheno)
+#' 
+#' # patientRisk
+#' set.seed(5)
+#' multivariate_risk_predictor <- patientRisk(mExprSelectedGenes, time, status, 
+#'                                            method = "class.probs")
+#' 
+#' # predictPatientRisk
+#' ## Simulate expression data
+#' num_samples <- 20
+#' set.seed(5)
+#' mExprs_testData <- matrix(rnorm(length(genes) * num_samples, mean = 10, sd = 3),
+#'                           nrow = length(genes), ncol = num_samples)
+#' 
+#' ## Assign row names (genes) and column names (samples)
+#' rownames(mExprs_testData) <- genes
+#' colnames(mExprs_testData) <- paste0("Sample", 1:num_samples)
+#' 
+#' set.seed(5)
+#' risk_prediction_validation_set <- predict_PatientRisk(multivariate_risk_predictor, 
+#'                                                       mExprs_testData)
+#' 
+#' 
+#' # Example for single patient prediction: Patient fourth is selected.
+#' mExprs_testSingleData <- data.frame(mExprs_testData[, 4])
+#' colnames(mExprs_testSingleData) <- colnames(mExprs_testData)[4]
+#' # Risk prediction for the optimal subset of genes selected by patientRisk function
+#' set.seed(5)
+#' risk_prediction_one_patient <- predict_PatientRisk(multivariate_risk_predictor, 
+#'                                                    mExprs_testSingleData)
+#'
 #' 
 #' # COX prediction for the training set
 #' set.seed(5)
-#' cox_pred_training <- predict_PatientRisk(multivariate_risk_predictor, mExprSelectedGenes)
+#' cox_pred_training <- predict_PatientRisk(multivariate_risk_predictor, 
+#'                                          mExprSelectedGenes)
 #' cox_pred_training$risk_score
 #' 
 #' # COX prediction for the test patient
 #' set.seed(5)
-#' cox_pred_test <- predict_PatientRisk(multivariate_risk_predictor, mExprs_testSingleData)
+#' cox_pred_test <- predict_PatientRisk(multivariate_risk_predictor, 
+#'                                      mExprs_testSingleData)
 #' cox_pred_test$risk_score
 #' 
 #' # Survival curve estimation
 #' eval_surv_times <- seq(0, max(mPheno$time), by = 0.1)
 #' set.seed(5)
-#' surv_curv_cox <- predict_SurvCurve(cox_pred_training$risk_score, mPheno[, c(2, 3)], cox_pred_test$risk_score, eval_surv_times)
+#' surv_curv_cox <- predict_SurvCurve(cox_pred_training$risk_score, 
+#'                                    mPheno[, c(2, 3)], 
+#'                                    cox_pred_test$risk_score, 
+#'                                    eval_surv_times)
 #'
+#' @references 
+#' \insertRef{martinezromero2018}{asuri}
+#' \insertRef{BuenoFortes2023}{asuri}
+#' 
 #' @export
 predict_SurvCurve <- function(cox_pred_training, mSurv, 
                           cox_pred_test, eval_surv_times = NULL) {

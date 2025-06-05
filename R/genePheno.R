@@ -1,47 +1,65 @@
 #' Identify Predictive Genes for a Phenotype
 #'
-#' This function implements a robust elastic net algorithm to identify a 
-#' subset of genes that characterize a given phenotype. It uses bootstrap 
-#' resampling and cross-validation to ensure reliable feature selection 
-#' and avoids overfitting.
+#' This function implements robust algorithms to obtain a list of genes 
+#' associated to a given clinical variable. It is based on the elastic net 
+#' algorithm and the robustness and reproducibility of the subset of genes is 
+#' improved using a bootstrap strategy combined with ensemble methods.
 #'
 #' @param mExpr A matrix with normalized gene expression data. Rows correspond 
 #' to samples, and columns correspond to genes. `rownames(mExpr)` should be set 
 #' to sample names, and `colnames(mExpr)` should be set to gene names.
-#' @param vectorGroups A numeric vector indicating the phenotype groups. 
-#' Positive samples should be marked as `1` and negative samples as `0`.
-#' @param vectorSampleID A character vector of sample IDs corresponding 
-#' to the rows of `mExpr`.
-#' @param iter Integer. The number of bootstrap iterations for model training 
-#' and validation. Defaults to 100.
-#' @param numberOfFolds Integer. The number of folds for cross-validation 
-#' during training. Defaults to 5.
+#' @param vectorGroups Clinical variable. It must be provided as a numeric 
+#' binary vector.
+#' @param vectorSampleID Vector containing the sample names ordered as in the 
+#' expression matrix. `mExpr`.
+#' @param iter Number of bootstrap iterations (default: 100, should be 
+#' changed if the function takes too long to execute).
+#' @param numberOfFolds Number of folds to implement nested cross-validation. 
+#' By default 5.
+
 #'
 #' @details
-#' The `genePheno` function applies the elastic net regularization method to 
-#' predict genes that are significantly associated with a binary phenotype. 
-#' During each iteration, a bootstrap sample is used for training, and the 
-#' remaining samples are used for validation. The function computes stability
-#' metrics and estimates confidence intervals for selected gene coefficients.
+#' This function implements a robust version of the elastic net algorithm 
+#' proposed by Tibshirani (Tibshirani et al., 2009). This algorithm considers a 
+#' penalty term to avoid overfitting that is a convex combination of the 
+#' \out{L<sub>2</sub>} norm (ridge regression) and \out{L<sub>1</sub>} 
+#' (Lasso regression). When the alpha parameter is 1, the regularization term 
+#' perfoms similarly to Lasso and minimizes the number of non-null coefficients. 
+#' If a subset of features are slightly correlated Lasso selects only one of 
+#' them randomly. To avoid this extreme behavior the alpha parameter is set 
+#' up to 0.75 that includes more relevant variables than Lasso and improves 
+#' the prediction accuracy. Besides, this choice will help to improve the 
+#' stability and to reduce the variance in the feature selection process.
+#' In order to improve the robustness and reproducibility of the gene signature 
+#' discovered, a bootstrap strategy is implemented. The patients are resampled 
+#' with replacement giving rise to B replicates. For each replicate, a gene 
+#' signature is obtained using double nested cross-validation to avoid 
+#' overfitting. The final gene list is built as an ensemble of lists, 
+#' considereing several metrics that evaluate the stability, the robustness 
+#' and the predictive power of each gene. See (Martinez-Romero et al., 2018) 
+#' for more details.
 #'
 #' @return
 #' A list containing the following elements:
-#' \describe{
-#'   \item{\code{listCoeff}}{A list of coefficient matrices for each iteration.}
-#'   \item{\code{genes}}{A table of gene frequencies across iterations, 
-#'   filtered by a stability threshold.}
-#'   \item{\code{stability}}{A named vector indicating the stability of each 
-#'   selected gene (frequency of selection / total iterations).}
-#'   \item{\code{betasMedian}}{A vector of median beta coefficients for the 
-#'   selected genes across iterations.}
-#'   \item{\code{betasMean}}{A vector of mean beta coefficients for the 
-#'   selected genes across iterations.}
-#'   \item{\code{betasTable}}{A matrix summarizing stability, median, and mean 
-#'   beta coefficients for the selected genes, ordered by stability.}
-#' }
+#'  - \code{genes}: A list of genes ranked according to the degree of 
+#'  association with the clinical or phenotypic variable tested.
+#'  - \code{listCoeff}: A list with the beta regression coefficients and the 
+#'  AUC score for each bootstrap iteration.
+#'  - \code{stability}: Gene selection probability estimated by bootstrap 
+#'  (the number of times discovered over "n" iterations).
+#'  - \code{betasMedian}: Median of the beta coefficients over the B replicates.
+#'  - \code{betasMean}:  Mean of the beta coefficients over the B replicates.
+#'  - \code{betasTable}: Table of genes ordered by decreasing value of the 
+#'  stability coefficient. Contains several metrics: the stability index, 
+#'  the mean and the median of the beta coefficients.
 #'
 #' @examples
-#' data(genePheno)
+#' 
+#' data(mExprs)
+#' data(mPheno)
+#' 
+#' set.seed(5)
+#' DE_list_genes <- prefilterSAM(mExprs, mPheno$ER.IHC)
 #' 
 #' # Gene expression matrix filtered by SAM differential expression function
 #' mExprsDE <- mExprs[match(DE_list_genes, rownames(mExprs)), ]
@@ -49,16 +67,28 @@
 #' # [1] 865  200
 #' tmExprsDE <- t(mExprsDE)
 #' # Parameters: Number of bootstrap iterations: 100.
-#' # The object `tmExprsDE` is the gene expression matrix for the subset of genes tested (samples as rows and genes as columns). The object `mPheno$ER.IHC` is a vector indicating the value per-sample of ER (as a binary variable: "0" or "1").
+#' # The object `tmExprsDE` is the gene expression matrix for the subset of 
+#' # genes tested (samples as rows and genes as columns). The object 
+#' # `mPheno$ER.IHC` is a vector indicating the value per-sample of ER 
+#' # (as a binary variable: "0" or "1").
 #' vectorSampleID <- as.character(rownames(mPheno))
 #' vectorGroups <- as.numeric(mPheno$ER.IHC)
 #' Pred_ER.IHC <- genePheno(tmExprsDE, vectorGroups, vectorSampleID)
 #' 
-#' # Pred_ER.IHC is an output object with the list of genes that show a significant correlation with the clinical variable. Since a bootstrap is performed, the results of how many times across iterations a gene is found significant are reported as *stability* (in relative numbers 0-1, 1=100%) and the *beta values* from the regression across iterations are also provided as *betaMedian* and *betaMean* :
+#' # Pred_ER.IHC is an output object with the list of genes that show a 
+#' # significant correlation with the clinical variable. Since a bootstrap is 
+#' # performed, the results of how many times across iterations a gene is found 
+#' # significant are reported as *stability* (in relative numbers 0-1, 1=100%) 
+#' # and the *beta values* from the regression across iterations are also 
+#' # provided as *betaMedian* and *betaMean* :
 #' 
 #' names(Pred_ER.IHC)
 #' # [1] "genes" "listCoeff" "stability" "betasMedian" "betasMean" "betasTable"
 #'
+#' @references 
+#' \insertRef{martinezromero2018}{asuri}
+#' \insertRef{BuenoFortes2023}{asuri}
+#' 
 #' @export
 
 genePheno <- function(mExpr, 

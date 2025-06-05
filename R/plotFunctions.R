@@ -1,6 +1,6 @@
-#' Extra functions to graphically represent the results obtained by
-#' other functions in the package
-#'
+# Extra functions to graphically represent the results obtained by
+# other functions in the package
+#
 # Plot geneSurv() results -------------------------------------------------
 plotBoxplot <- function(gs_result) {
     patientExpr <- gs_result$patientExpr
@@ -149,7 +149,7 @@ plotLambda <- function(pr_result) {
 
 plotBetas <- function(pr_result) {
     betasPlot <- pr_result$betasplot
-
+    
     top25betasPlot <- as.data.frame(betasPlot[betasPlot$beta_value != 0, ])
     top25betasPlot$gene <- factor(top25betasPlot$gene, 
                                   levels = rev(top25betasPlot$gene))
@@ -168,6 +168,7 @@ plotBetas <- function(pr_result) {
                            abs(top25betasPlot$beta_value), decreasing = TRUE), ]
     top25betasPlot$point_size <- -log10(top25betasPlot$p_value) * 1.1
 
+    beta_value <- gene <- beta_group <- point_size <- p_value <- NULL
     h <- ggplot(top25betasPlot, aes(
         x = abs(beta_value),
         y = gene,
@@ -257,7 +258,7 @@ plotKM <- function(result,
     p.value <- plot_values$km$p.val
     h.ratio <- plot_values$km$hazardR
     
-    xlim <- c(0, max(km$time))
+    # xlim <- c(0, max(km$time))
 
     # Define colours based on source function
     if (is.null(col.surv)) {
@@ -339,9 +340,9 @@ plotKM <- function(result,
                lwd = lwd.grid, col = col.grid)
     }
     axis(side = 2, at = pretty(c(0, 1)), cex.axis = cex.axis)
-    axis(side = 1, at = xaxis.at, label = xaxis.lab, line = -0.45, 
+    axis(side = 1, at = xaxis.at, labels = xaxis.lab, line = -0.45, 
          tick = FALSE, cex.axis = cex.axis)
-    axis(side = 1, at = xaxis.at, label = rep("", length(xaxis.at)), 
+    axis(side = 1, at = xaxis.at, labels = rep("", length(xaxis.at)), 
          line = 0, tick = TRUE, cex.axis = cex.axis)
     title(xlab = paste("Overall Survival (years) and p.value: ",
                        format(p.value, 3)), line = 2, adj = .5, ...)
@@ -546,6 +547,7 @@ plotKmCustomGroups <- function(genExpr, time, status,
             rep(unique(group.assignation.vector)[2], indices[2])
         ))
 
+        group <- values <- NULL
         plot <- ggplot(data = mm, aes(x = group, y = values)) +
             stat_boxplot(geom = "errorbar") +
             geom_boxplot(aes(fill = group), coef = 1.5, alpha = .5, 

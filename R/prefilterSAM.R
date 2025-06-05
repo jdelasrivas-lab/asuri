@@ -8,7 +8,7 @@
 #'
 #' @param mExpr A matrix where rows represent genes and columns represent 
 #' samples. Each entry is the expression value of a gene in a sample.
-#' @param groups_vector A vector indicating group assignment for each sample.
+#' @param groups_vector A binary vector indicating group assignment for each sample.
 #' @param FDRfilter A numeric value indicating the FDR threshold for selecting 
 #' significant genes. Default is 0.05.
 #' @param iter The number of iterations for bootstrapping. Default is 100.
@@ -16,23 +16,36 @@
 #' iterations a gene must appear in to be considered significant. Default is 80.
 #'
 #' @details
-#' The function uses a bootstrapping approach, where in each iteration a 
-#' random sample is drawn from the input data (with replacement), and the SAM 
-#' algorithm is applied to select significant genes. The genes that appear as 
-#' significant in a specified percentage of iterations (controlled by 
-#' `percentageFilter`) are retained.
+#' This function implements SAM (Schwender H., 2022) robust diferential 
+#' expression analysis based on bootstrap . It helps to remove noisy genes 
+#' reducing the computational complexity of further analysis. The function 
+#' uses a bootstrapping approach, where in each iteration a random sample is 
+#' drawn from the input data (with replacement), and the SAM algorithm is 
+#' applied to select significant genes. The genes that appear as significant 
+#' in a specified percentage of iterations (controlled by `percentageFilter`) 
+#' are retained.
 #'
-#' @return A character vector of significant gene names.
+#' @return An ordered vector with the names of differentially expressed genes 
+#' between the categories of the grouping vector. A list of DE genes ordered 
+#' by SAM d.value and filtered by percentageFilter.
 #'
 #' @examples
 #' # Bootstrapped differential expression based on SAM.
 #' # Parameters: FDR = 0.05, iter = 100, percentage filter = 80 %
-#' # CAUTION: if the data have a high number of genes this function will take several minutes to compute.
-#' data(prefilterSAM)
+#' # CAUTION: if the data have a high number of genes this function will take 
+#' # several minutes to compute.
+#' 
+#' data(mExprs)
+#' data(mPheno)
 #' 
 #' set.seed(5)
 #' DE_list_genes <- prefilterSAM(mExprs, mPheno$ER.IHC)
-#'
+#' 
+#' @references 
+#' \insertRef{schwender2025siggenes}{asuri}
+#' \insertRef{martinezromero2018}{asuri}
+#' \insertRef{BuenoFortes2023}{asuri}
+#' 
 #' @export
 prefilterSAM <- function(mExpr, groups_vector, FDRfilter = 0.05, 
                          iter = 100, percentageFilter = 80) {

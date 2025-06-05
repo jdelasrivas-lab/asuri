@@ -1,62 +1,68 @@
 #' Kaplan-Meier Survival Analysis Based on Gene Expression or Risk Score
 #'
-#' This function performs Kaplan-Meier survival analysis to assess the survival 
-#' of samples based on their gene expression or risk score. It also calculates 
-#' hazard ratios and generates visualizations (Kaplan-Meier plot, boxplot, 
-#' and probability plots).
+#' This function analyzes the ability of a gene to mark survival based on a robust 
+#' version of the KM curves. The robust K-M estimator is obtained by a bootstrap 
+#' strategy.
 #'
-#' @param genExpr A numeric vector representing the expression levels of a 
-#' gene across samples.
-#' @param time A numeric vector representing the survival time for each sample.
-#' @param status A numeric vector representing the event status (1 = event, 
-#' 0 = censored) for each sample.
+#' @param genExpr Vector with the normalized gene expression for each sample. 
+#' names(genExpr) should contains the sample names.
+#' @param time Numeric vector containing the survival time for each sample in years, 
+#' including the sample name in names(time).
+#' @param status Numeric vector with the status (censored 0 and not censored 1) for 
+#' each sample. names(status) shoud include the sample names.
 #' @param geneName A character string with the name of the gene being analyzed.
-#' @param boxplot A logical value indicating whether to generate a boxplot of 
-#' gene expression by survival group (default = TRUE).
+#' @param boxplot A logical value indicating whether to generate a boxplot of gene 
+#' expression by survival group (default = TRUE).
 #' @param iter The number of iterations (bootstrap resampling) for calculating 
 #' optimal group cutoffs (default = 100).
-#' @param type A character string indicating the type of analysis to perform:
-#'   \itemize{
-#'     \item \code{"exprs"}: Perform survival analysis based on gene 
-#' expression values (default).
-#'     \item \code{"risk"}: Perform survival analysis based on risk scores 
-#' derived from a Cox proportional hazards model.
-#'   }
+#' @param type Defines if the KM curve groups are computed using risk ("risk") 
+#' or gene expression (default "exprs").
 #' @param cut_time A numeric value specifying the cutoff time (in years) for 
 #' survival analysis. All events beyond this time are treated as censored 
 #' (default = 10 years).
 #'
 #' @details
-#' This function supports two types of survival analysis:
-#'   \itemize{
-#'     \item Gene expression-based stratification (type = "exprs") uses 
-#' expression levels to define two groups (low/high expression).
-#'     \item Risk-based stratification (type = "risk") uses a Cox proportional 
-#' hazards model to compute risk scores and categorize samples into high or 
-#' low-risk groups.
-#'   }
-#' The function also includes options for visualizing the results through 
-#' Kaplan-Meier curves, boxplots, and probability plots. Additionally, on the 
-#' returned object of the [geneSurv()] function, you can apply different 
-#' methods ([plotBoxplot()], [plotProbClass()], [plotKM()]) to re-generate the 
-#' plots without having to run [geneSurv()] again.
+#' This function improves the stability and robustness of the K-M estimator using 
+#' a bootstrap strategy. Patients are resampled with replacement giving rise 
+#' to B replicates. The K-M estimator is obtained based on the replicates as 
+#' well as the confidence intervals. The patients are stratified in two risk 
+#' groups by an expression threshold that optimizes the log-rank statistics, 
+#' that is the separability between the Kaplan-Meier curves for each group. 
+#' This function implements a novel method to find the optimal threshold avoiding 
+#' the problems of instability and unbalanced classes that suffer 
+#' other implementations. Besides, a membership probability for each risk group 
+#' is estimated from the classification of each sample in the replicates. 
+#' This membership probability allow us to reclassify patients around the gene 
+#' expression threshold in a more robust way.
+#' The function provides a robust estimation of the log-rank p-value and the 
+#' Hazard ratio that allow us to evaluate the ability of a given gene 
+#' to mark survival.
 #'
-#' @return A list containing the following elements:
-#' \describe{
-#'   \item{\code{geneName}}{The name of the gene being analyzed.}
-#'   \item{\code{patientExpr}}{The gene expression values for the samples.}
-#'   \item{\code{patientClass}}{The assigned class for each patient (1 for the 
-#' first group, 2 for the second group).}
-#'   \item{\code{patientClassProbality}}{The probability of each sample 
-#' belonging to the assigned group.}
-#'   \item{\code{wilcox.pvalue}}{The p-value from the Wilcoxon test comparing 
-#' the two groups.}
-#'   \item{\code{plot_values}}{A list containing Kaplan-Meier fit results, 
-#' p-value, and hazard ratio.}
-#' }
+#' @return Depending on the type run, the output changes: 
+#'  - For type = exprs, a Kaplan-Meier plot based on expression groups, a 
+#'  differential expression boxplot and a plot with the membership probability 
+#'  for each risk group. Additionally, an object with the following components:
+#'    + \code{geneName}: A character string with the name of the gene being analyzed.
+#'    + \code{patientExpr}: The expression level of each patient for the given gene.
+#'    + \code{patientClass}: Vector of group classification according to the gene 
+#'    expression level: 2 = high expression and 1 = low expression level.
+#'    + \code{patientClassProbality}: Vector of membership probabilities for 
+#'    the classification.
+#'    + \code{wilcox.pvalue}: The p-value from the Wilcoxon test comparing the 
+#'    two expression groups.
+#'    + \code{plot_values}: A list containing Kaplan-Meier fit results, 
+#'    log-rank p-value, and hazard ratio .
+#'  - For type = risk, a Kaplan-Meier plot based on risk groups. Additionally, 
+#'  an object with the following components:
+#'    + \code{geneName}: A character string with the name of the gene being analyzed.
+#'    + \code{patientExpr}: The expression level of each patient for the given gene.
+#'    + \code{risk_score_predicted}: A numeric vector of predicted relative risk scores for each patient
+#'    + \code{plot_values}: A list containing Kaplan-Meier fit results, log-rank p-value, and hazard ratio
 #'
 #' @examples
-#' data(geneSurvExprs)
+#' 
+#' data(mExprs)
+#' data(mPheno)
 #' 
 #' genExpr <- mExprs[match("ESR1", rownames(mExprs)), ]
 #' time <- mPheno$time
@@ -72,12 +78,11 @@
 #' 
 #' # Generate the plots again
 #' ## Plots for c(type = exprs)
-#' plotBoxplot(outputKM)
-#' plotProbClass(outputKM)
-#' plotKM(outputKM)
+#' asuri:::plotBoxplot(outputKM)
+#' asuri:::plotProbClass(outputKM)
+#' asuri:::plotKM(outputKM)
 #' 
 #' # If we instead consider to run the function as *type* = risk
-#' data(geneSurvRisk)
 #' 
 #' genExpr <- mExprs[match("BRCA1", rownames(mExprs)), ]
 #' time <- mPheno$time
@@ -88,8 +93,12 @@
 #' outputKM.TP53 <- geneSurv(genExpr, time, status, "BRCA1", type = "risk")
 #' 
 #' ## Plots for c(type = risk)
-#' plotKM(outputKM)
+#' asuri:::plotKM(outputKM)
 #'
+#' @references 
+#' \insertRef{martinezromero2018}{asuri}
+#' \insertRef{BuenoFortes2023}{asuri}
+#' 
 #' @export
 
 geneSurv <- function(genExpr, time, status, geneName, boxplot = TRUE, 

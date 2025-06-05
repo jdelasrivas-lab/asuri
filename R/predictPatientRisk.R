@@ -1,10 +1,8 @@
 #' Predict Patient Risk Based on Gene Expression Data
 #'
-#' This function calculates the risk score for test patients based on the gene 
-#' expression data using a pre-fitted model. It scales the risk scores and 
-#' classifies patients into risk groups (low, intermediate, or high). 
-#' Additionally, it provides a visualization of the risk scores and thresholds 
-#' using a sigmoid curve.
+#' Function to predict the risk for new patients considering the gene expression 
+#' for a subset of genes and the multivariate Cox regression model trained by 
+#' function patientRisk, it may be used to predict over a single patient.
 #'
 #' @param model.fit A list containing the pre-fitted model and necessary 
 #' parameters for risk prediction, including the optimal lambda value, risk 
@@ -13,34 +11,55 @@
 #' test patients, where each row is a gene and each column is a sample.
 #'
 #' @details
-#' This function uses a pre-trained Cox model to predict the risk scores for 
-#' test patients. The risk scores are then scaled and categorized into three 
-#' risk groups: low, intermediate, and high. The thresholds for the risk groups 
-#' are based on the pre-fitted model. The function also allows visualization of 
-#' the risk scores. If only one sample is provided, it will print the 
-#' normalized risk score and classification (low, intermediate, or high).
+#' A risk score is estimated for new patients considering the optimal 
+#' regularized multivariate Cox regression model trained by the function 
+#' patientRisk. The risk score is normalized to be interpretable in the 
+#' scale (0-100). The function generates a risk plot for new patients and 
+#' stratifies them in three risk groups (low, intermediate, high) considering 
+#' the thresholds learned by function patientRisk.
 #'
 #' @return A list containing the following elements:
-#' \describe{
-#'   \item{\code{risk_score}}{The raw risk score for each sample in the 
-#'   test dataset.}
-#'   \item{\code{scaled_risk_score}}{The normalized risk score 
-#'   (scaled from 0 to 100) for each sample.}
-#'   \item{\code{plot_values}}{A list containing information for visualizing 
-#'   the sigmoid curve and risk thresholds.}
-#' }
+#'  - \code{risk_score}: A vector with the unscaled risk score for new patients 
+#'  estimated by a multivariate Cox regression model.
+#'  - \code{scaled_risk_score}:  A vector with the risk score for the new patients 
+#'  scaled to be interpretable in the range 0-100.
+#'  - \code{plot_values}: A list containing information for visualizing the 
+#'  sigmoid curve and risk thresholds.
 #'
 #' @examples
-#' data(predict_PatientRisk)
+#' data(mExprs)
+#' data(mPheno)
 #' 
+#' # prefilterSAM
+#' set.seed(5)
+#' DE_list_genes <- prefilterSAM(mExprs, mPheno$ER.IHC)
+
+#' # genePheno
+#' mExprsDE <- mExprs[match(DE_list_genes, rownames(mExprs)), ]
+#' vectorSampleID <- as.character(rownames(mPheno))
+#' vectorGroups <- as.numeric(mPheno$ER.IHC)
+#' Pred_ER.IHC <- genePheno(t(mExprsDE), vectorGroups, vectorSampleID) 
+#' geneList <- names(Pred_ER.IHC$genes)
+#' mExprSelectedGenes <- mExprs[match(geneList, rownames(mExprs)), ]
+#'
 #' # Generate the validation set, mExprs_testData if necessary.
 #' # Vector of genes (same ones used in Cox model training)
 #' genes <- rownames(mExprSelectedGenes)
+#' time <- mPheno$time
+#' names(time) <- rownames(mPheno)
+#' status <- mPheno$status
+#' names(status) <- rownames(mPheno)
+#' 
+#' # patientRisk
+#' set.seed(5)
+#' multivariate_risk_predictor <- patientRisk(mExprSelectedGenes, time, status, 
+#'                                            method = "class.probs")
 #' 
 #' # Simulate expression data
 #' num_samples <- 20
 #' set.seed(5)
-#' mExprs_testData <- matrix(rnorm(length(genes) * num_samples, mean = 10, sd = 3),
+#' mExprs_testData <- matrix(rnorm(length(genes) * num_samples, 
+#'                           mean = 10, sd = 3),
 #'                           nrow = length(genes), ncol = num_samples)
 #' 
 #' # Assign row names (genes) and column names (samples)
@@ -48,7 +67,8 @@
 #' colnames(mExprs_testData) <- paste0("Sample", 1:num_samples)
 #' 
 #' set.seed(5)
-#' risk_prediction_validation_set <- predict_PatientRisk(multivariate_risk_predictor, mExprs_testData)
+#' risk_prediction_validation_set <- predict_PatientRisk(multivariate_risk_predictor, 
+#'                                                       mExprs_testData)
 #' 
 #' 
 #' # Example for single patient prediction: Patient fourth is selected.
@@ -56,12 +76,13 @@
 #' colnames(mExprs_testSingleData) <- colnames(mExprs_testData)[4]
 #' # Risk prediction for the optimal subset of genes selected by patientRisk function
 #' set.seed(5)
-#' risk_prediction_one_patient <- predict_PatientRisk(multivariate_risk_predictor, mExprs_testSingleData)
-#' 
-#' # Normalized patient Risk (0 100): 27.9017675117161
-#' # The patient is classified as Low Risk 
-#' # Low Risk interval: (0, 37.0600635839135)
+#' risk_prediction_one_patient <- predict_PatientRisk(multivariate_risk_predictor, 
+#'                                                    mExprs_testSingleData)
 #'
+#' @references 
+#' \insertRef{martinezromero2018}{asuri}
+#' \insertRef{BuenoFortes2023}{asuri}
+#' 
 #' @export
 predict_PatientRisk <- function(model.fit, mExpr.testData) {
     mExpr.testData <- as.data.frame(mExpr.testData)
@@ -76,7 +97,7 @@ predict_PatientRisk <- function(model.fit, mExpr.testData) {
              "sample names")
     }
 
-    riskscore_testData <- predict.uniCox(model.fit$model.optimalLambda, 
+    riskscore_testData <- predict_uniCox(model.fit$model.optimalLambda, 
                                                  t(mExpr.testData))
 
     plot_values <- model.fit$plot_values
