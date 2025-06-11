@@ -6,9 +6,9 @@
 #' filtering by the percentage of times a gene is selected across multiple 
 #' iterations.
 #'
-#' @param seData SummarizedExperiment object with the normalized expression data 
-#' and the phenotypic data in colData.
-#' @param groupsVector A binary vector indicating group assignment for each sample.
+#' @param seData SummarizedExperiment object with the normalized expression 
+#' data and the phenotypic data in colData.
+#' @param groupsVector A binary vector indicating group assignment the samples.
 #' @param FDRfilter A numeric value indicating the FDR threshold for selecting 
 #' significant genes. Default is 0.05.
 #' @param iter The number of iterations for bootstrapping. Default is 100.
@@ -77,14 +77,15 @@ prefilterSAM <- function(seData, groupsVector, FDRfilter = 0.05,
         mExpr <- mExpr[!is.na(rownames(mExpr)), ]
     }
     ## bootstrap 100 samples
-    n.genes <- dim(mExpr)[1]
+    # n.genes <- dim(mExpr)[1]
     n.samples <- dim(mExpr)[2]
 
     list.genes <- NULL
     message(Sys.time())
-    lista <- NULL
+    # lista <- NULL
     #
-    pb <- txtProgressBar(min = 0, max = iter,  style = 3, width = 50, char = "=")
+    pb <- txtProgressBar(min = 0, max = iter,  style = 3, 
+                         width = 50, char = "=")
     init <- numeric(iter)
     end <- numeric(iter)
     
@@ -130,8 +131,8 @@ prefilterSAM <- function(seData, groupsVector, FDRfilter = 0.05,
       est <- iter * (mean(end[end != 0] - init[init != 0])) - time
       remainining <- round(lubridate::seconds_to_period(est), 0)
       
-      text_msg <- paste(" // Execution time:", time, " // Estimated time remaining:", 
-                        remainining)
+      text_msg <- paste(" // Execution time:", time, 
+                        " // Estimated time remaining:", remainining)
       message(text_msg, "")
     }
     close(pb)

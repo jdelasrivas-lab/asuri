@@ -1,19 +1,20 @@
 #' Kaplan-Meier Survival Analysis Based on Gene Expression or Risk Score
 #'
-#' This function analyzes the ability of a gene to mark survival based on a robust 
-#' version of the KM curves. The robust K-M estimator is obtained by a bootstrap 
-#' strategy.
+#' This function analyzes the ability of a gene to mark survival based on a 
+#' robust version of the KM curves. The robust K-M estimator is obtained by a 
+#' bootstrap strategy.
 #' 
-#' @param seData SummarizedExperiment object with the normalized expression data 
-#' and the phenotypic data in colData. Phenotypic colData must contain the samples
-#' name in the first column and two columns with the time and the status.
+#' @param seData SummarizedExperiment object with the normalized expression 
+#' data and the phenotypic data in colData. Phenotypic colData must contain 
+#' the samples name in the first column and two columns with the time and the 
+#' status.
 #' @param time SummarizedExperiment colData column name containing the survival 
 #' time in years for each sample in numeric format.
 #' @param status SummarizedExperiment colData column name containing the status 
 #' (censored 0 and not censored 1) for each sample.
 #' @param geneName A character string with the name of the gene being analyzed.
-#' @param boxplot A logical value indicating whether to generate a boxplot of gene 
-#' expression by survival group (default = TRUE).
+#' @param boxplot A logical value indicating whether to generate a boxplot of 
+#' gene expression by survival group (default = TRUE).
 #' @param iter The number of iterations (bootstrap resampling) for calculating 
 #' optimal group cutoffs (default = 100).
 #' @param type Defines if the KM curve groups are computed using risk ("risk") 
@@ -23,14 +24,14 @@
 #' (default = 10 years).
 #'
 #' @details
-#' This function improves the stability and robustness of the K-M estimator using 
-#' a bootstrap strategy. Patients are resampled with replacement giving rise 
-#' to B replicates. The K-M estimator is obtained based on the replicates as 
-#' well as the confidence intervals. The patients are stratified in two risk 
+#' This function improves the stability and robustness of the K-M estimator 
+#' using a bootstrap strategy. Patients are resampled with replacement giving 
+#' rise to B replicates. The K-M estimator is obtained based on the replicates 
+#' as well as the confidence intervals. The patients are stratified in two risk 
 #' groups by an expression threshold that optimizes the log-rank statistics, 
 #' that is the separability between the Kaplan-Meier curves for each group. 
-#' This function implements a novel method to find the optimal threshold avoiding 
-#' the problems of instability and unbalanced classes that suffer 
+#' This function implements a novel method to find the optimal threshold 
+#' avoiding the problems of instability and unbalanced classes that suffer 
 #' other implementations. Besides, a membership probability for each risk group 
 #' is estimated from the classification of each sample in the replicates. 
 #' This membership probability allow us to reclassify patients around the gene 
@@ -43,22 +44,26 @@
 #'  - For type = exprs, a Kaplan-Meier plot based on expression groups, a 
 #'  differential expression boxplot and a plot with the membership probability 
 #'  for each risk group. Additionally, an object with the following components:
-#'    + \code{geneName}: A character string with the name of the gene being analyzed.
-#'    + \code{patientExpr}: The expression level of each patient for the given gene.
-#'    + \code{patientClass}: Vector of group classification according to the gene 
-#'    expression level: 2 = high expression and 1 = low expression level.
+#'    + \code{geneName}: A character string with the selected name of the gene 
+#'    to analyze.
+#'    + \code{patientExpr}: The expression level of each patient for the gene.
+#'    + \code{patientClass}: Vector of group classification according to the 
+#'    gene expression level: 2 = high expression and 1 = low expression level.
 #'    + \code{patientClassProbality}: Vector of membership probabilities for 
 #'    the classification.
 #'    + \code{wilcox.pvalue}: The p-value from the Wilcoxon test comparing the 
 #'    two expression groups.
 #'    + \code{plot_values}: A list containing Kaplan-Meier fit results, 
-#'    log-rank p-value, and hazard ratio .
+#'    log-rank p-value, and hazard ratio.
 #'  - For type = risk, a Kaplan-Meier plot based on risk groups. Additionally, 
 #'  an object with the following components:
-#'    + \code{geneName}: A character string with the name of the gene being analyzed.
-#'    + \code{patientExpr}: The expression level of each patient for the given gene.
-#'    + \code{risk_score_predicted}: A numeric vector of predicted relative risk scores for each patient
-#'    + \code{plot_values}: A list containing Kaplan-Meier fit results, log-rank p-value, and hazard ratio
+#'    + \code{geneName}: A character string with the selected name of the gene 
+#'    to analyze.
+#'    + \code{patientExpr}: The expression level of each patient for the gene.
+#'    + \code{risk_score_predicted}: A numeric vector of predicted relative 
+#'    risk scores for each patient.
+#'    + \code{plot_values}: A list containing Kaplan-Meier fit results, 
+#'    log-rank p-value, and hazard ratio.
 #'
 #' @examples
 #' 
@@ -164,22 +169,23 @@ geneSurv <- function(seData, time, status, geneName, boxplot = TRUE,
   n.samples <- length(genExpr)
   
   if (type == "exprs") {
-    for25 <- round(n.samples * 0.25)
-    for75 <- round(n.samples * 0.75)
+    # for25 <- round(n.samples * 0.25)
+    # for75 <- round(n.samples * 0.75)
     
     vector.exprs <- as.numeric(genExpr)
-    order.vector.exprs <- order(vector.exprs)
+    # order.vector.exprs <- order(vector.exprs)
     
     # matrix to fill with results
     matrixgr <- matrix(0, nrow = n.samples, ncol = iter)
     rownames(matrixgr) <- names(genExpr)
-    pb <- txtProgressBar(min = 0, max = iter,  style = 3, width = 50, char = "=")
+    pb <- txtProgressBar(min = 0, max = iter,  style = 3, 
+                         width = 50, char = "=")
     init <- numeric(iter)
     end <- numeric(iter)
     
     for (i in seq(1, iter)) { #################
       init[i] <- Sys.time()
-      sampl <- sample(seq(1, n.samples), size = n.samples, replace = TRUE)
+      # sampl <- sample(seq(1, n.samples), size = n.samples, replace = TRUE)
       
       muestra <- sample(seq(1, n.samples),
                         size = n.samples,
@@ -203,8 +209,8 @@ geneSurv <- function(seData, time, status, geneName, boxplot = TRUE,
       est <- iter * (mean(end[end != 0] - init[init != 0])) - timer
       remainining <- round(lubridate::seconds_to_period(est), 0)
       
-      text_msg <- paste(" // Execution time:", time, " // Estimated time remaining:", 
-                        remainining)
+      text_msg <- paste(" // Execution time:", time, 
+                        " // Estimated time remaining:", remainining)
       message(text_msg, "")
     }
     close(pb)

@@ -1,7 +1,7 @@
 #' Example SummarizedExperiment object
 #'
 #' A `SummarizedExperiment` object created from gene expression and phenotypic
-#' data included in the ASURI package. The dataset included in ASURI as a study 
+#' data included in the ASURI package. The dataset included in ASURI as a stud
 #' case is intended to facilitate the use of the package. The dataset was 
 #' obtained from several GSE series from 
 #' [GEO database](http://www.ncbi.nlm.nih.gov/geo/) corresponding to breast 

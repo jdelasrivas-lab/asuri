@@ -133,7 +133,7 @@ plotLambda <- function(pr_result) {
     number.features <- plot_values$lambda$number.features
 
     pvalsByLambda <- apply(nested.p.vals$p.vals, 2, FUN = function(x) min(x))
-    ylimits <- c(0, summary(pvalsByLambda)[3])
+    # ylimits <- c(0, summary(pvalsByLambda)[3])
 
     names(pvalsByLambda) <- number.features
     graphics::plot(pvalsByLambda,
@@ -230,7 +230,7 @@ plotKM <- function(result,
                    lwd.ci = 4,
                    # lwd.grid = 6,
                    group.names = "",
-                   group.order = seq(length(km$n)),
+                   group.order = seq_along(km$n),
                    extra.left.margin = 4,
                    label.n.at.risk = FALSE,
                    draw.lines = TRUE,
@@ -308,7 +308,7 @@ plotKM <- function(result,
     }
     # to remove unwanted white spaces in group.names.
     group.names <- gsub(" *$", "", group.names) 
-    if (ng == 1 & (group.names[1] == "group.names")) {
+    if (ng == 1 && (group.names[1] == "group.names")) {
         group.names <- "N at risk"
         label.n.at.risk <- FALSE
     }
@@ -430,7 +430,7 @@ plotKM <- function(result,
         x <- this$time
         L <- this$lower
         U <- this$upper
-        S <- this$survival
+        # S <- this$survival
         naL <- which(is.na(L))
         L[naL] <- L[naL - 1]
         U[naL] <- U[naL - 1]
@@ -445,7 +445,8 @@ plotKM <- function(result,
     box(bty = par("bty"))
     # par(op)
     if (is.null(geneName)) {
-        title(main = paste0("Kaplan-Meier plot for ", nbetas, " selected genes"))
+        title(main = paste0("Kaplan-Meier plot for ", 
+                            nbetas, " selected genes"))
     } else {
         title(main = paste0("Kaplan-Meier plot (", geneName, ")"))
     }
@@ -478,9 +479,9 @@ plotKmCustomGroups <- function(genExpr, time, status,
     mSurv$status[mSurv$time > 10] <- 0
     mSurv$time[mSurv$time > 10] <- 10.1
 
-    n.genes <- 1
-    n.samples <- length(genExpr)
-    probesets.names <- names(genExpr)
+    # n.genes <- 1
+    # n.samples <- length(genExpr)
+    # probesets.names <- names(genExpr)
 
     fits1 <- survfit(Surv(time, status) ~ group.assignation.vector, 
                      data = mSurv)

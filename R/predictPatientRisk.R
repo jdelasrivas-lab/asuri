@@ -1,8 +1,9 @@
 #' Predict Patient Risk Based on Gene Expression Data
 #'
-#' Function to predict the risk for new patients considering the gene expression 
-#' for a subset of genes and the multivariate Cox regression model trained by 
-#' function patientRisk, it may be used to predict over a single patient.
+#' Function to predict the risk for new patients considering the gene 
+#' expression for a subset of genes and the multivariate Cox regression model 
+#' trained by function patientRisk, it may be used to predict over a single 
+#' patient.
 #'
 #' @param model.fit A list containing the pre-fitted model and necessary 
 #' parameters for risk prediction, including the optimal lambda value, risk 
@@ -21,8 +22,8 @@
 #' @return A list containing the following elements:
 #'  - \code{risk_score}: A vector with the unscaled risk score for new patients 
 #'  estimated by a multivariate Cox regression model.
-#'  - \code{scaled_risk_score}:  A vector with the risk score for the new patients 
-#'  scaled to be interpretable in the range 0-100.
+#'  - \code{scaled_risk_score}:  A vector with the risk score for the new 
+#'  patients scaled to be interpretable in the range 0-100.
 #'  - \code{plot_values}: A list containing information for visualizing the 
 #'  sigmoid curve and risk thresholds.
 #'
@@ -35,8 +36,8 @@
 #' DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
 #' 
 #' # genePheno ---
-#' vectorSampleID <- as.character(rownames(SummarizedExperiment::colData(seBRCA)))
-#' vectorGroups <- as.numeric(SummarizedExperiment::colData(seBRCA)$ER.IHC)
+#' vectorSampleID <- rownames(SummarizedExperiment::colData(seBRCA))
+#' vectorGroups <- SummarizedExperiment::colData(seBRCA)$ER.IHC
 #' Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID)
 #' 
 #' # Survival times should be provided in YEARS
@@ -66,17 +67,19 @@
 #' colnames(mExprs_testData) <- paste0("Sample", 1:num_samples)
 #' 
 #' set.seed(5)
-#' risk_prediction_validation_set <- predict_PatientRisk(multivariate_risk_predictor, 
-#'                                                       mExprs_testData)
+#' risk_prediction_validation_set <- predict_PatientRisk(
+#'                                                 multivariate_risk_predictor, 
+#'                                                 mExprs_testData)
 #' 
 #' 
 #' # Example for single patient prediction: Patient fourth is selected.
 #' mExprs_testSingleData <- data.frame(mExprs_testData[, 4])
 #' colnames(mExprs_testSingleData) <- colnames(mExprs_testData)[4]
-#' # Risk prediction for the optimal subset of genes selected by patientRisk function
+#' # Risk prediction for the optimal subset of genes selected by patientRisk() 
 #' set.seed(5)
-#' risk_prediction_one_patient <- predict_PatientRisk(multivariate_risk_predictor, 
-#'                                                    mExprs_testSingleData)
+#' risk_prediction_one_patient <- predict_PatientRisk(
+#'                                                 multivariate_risk_predictor, 
+#'                                                 mExprs_testSingleData)
 #'
 #' @references 
 #' \insertRef{martinezromero2018}{asuri}
@@ -149,7 +152,7 @@ predict_PatientRisk <- function(model.fit, mExpr.testData) {
     if (dim(mExpr.testData)[2] == 1) {
       message("Normalized patient Risk (0 100): ", 
               scaled_riskscore_testData, "\n")
-      if (scaled_riskscore_testData >= 0 & 
+      if (scaled_riskscore_testData >= 0 && 
           scaled_riskscore_testData < low_risk_threshold) {
         message("The patient is classified as Low Risk \n")
         message("Low Risk interval: (", 0, ", ", low_risk_threshold, ")")

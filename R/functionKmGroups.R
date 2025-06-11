@@ -52,15 +52,15 @@ functionKmGroups <- function(genExpr, mSurv, geneName) {
     }
     if (!all(c("time", "status") %in% colnames(mSurv))) {
         stop("'mSurv' must contain the columns 'time' ", 
-             "(survival time) and 'status' (event).")
+                "(survival time) and 'status' (event).")
     }
     if (!is.character(geneName)) {
         stop("'geneName' must be a character vector ",
-             "with the names of the genes.")
+                "with the names of the genes.")
     }
     if (length(genExpr) != nrow(mSurv)) {
         stop("The length of 'genExpr' must match ", 
-             "the number of rows in 'mSurv'.")
+                "the number of rows in 'mSurv'.")
     }
 
     matrix.groups <- NULL
@@ -86,10 +86,10 @@ functionKmGroups <- function(genExpr, mSurv, geneName) {
             group.assignation.vector[group1] <- 1
             group.assignation.vector[group2] <- 2
             log.rank.groups.surv <- survdiff(Surv(time, status) ~ 
-                                               group.assignation.vector, 
-                                             data = mSurv)
+                                                group.assignation.vector, 
+                                                data = mSurv)
             p.val[i] <- 1 - pchisq(log.rank.groups.surv$chisq, 
-                                   length(log.rank.groups.surv$n) - 1)
+                                    length(log.rank.groups.surv$n) - 1)
         }
 
         ordered.pval.indexes <- order(p.val)
@@ -99,7 +99,7 @@ functionKmGroups <- function(genExpr, mSurv, geneName) {
         lowest.pvalue.index <- ordered.pval.indexes[1]
         group1 <- order.vector.exprs.j[seq(1, lowest.pvalue.index)]
         group2 <- order.vector.exprs.j[seq((lowest.pvalue.index + 1), 
-                                           n.samples)]
+                                            n.samples)]
         group.assignation.vector[group1] <- 1
         group.assignation.vector[group2] <- 2
 
@@ -112,7 +112,7 @@ functionKmGroups <- function(genExpr, mSurv, geneName) {
         }
         # performing the last fit using optimised groups
         fits1 <- survfit(Surv(time, status) ~ group.assignation.vector, 
-                         data = mSurv)
+                            data = mSurv)
     }
     list(as.vector(matrix.groups), p.val[lowest.pvalue.index])
 }

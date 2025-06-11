@@ -5,9 +5,9 @@
 #' risk score. The Cox regression is trained using a ten-fold double nested 
 #' crossvalidation strategy to avoid overfitting.
 #' @export
-#' @param seData SummarizedExperiment object with the normalized expression data 
-#' and the phenotypic data in colData. Phenotypic colData must contain the samples
-#' name in the first column and two columns with the time and the status.
+#' @param seData SummarizedExperiment object with the normalized expression 
+#' data and the phenotypic data in colData. Phenotypic colData must contain 
+#' the samples name in the first column and two columns with time and status.
 #' @param selectedGenes Vector containing the genes to be used. Expected to be 
 #' in the same format as the rows of the assay(seData). Usually this vector is 
 #' the result of running prefilterSAM().
@@ -25,50 +25,78 @@
 #'  probabilities from the model.
 #' @param nboot An integer specifying the number of bootstrap iterations for 
 #' risk score calculation. Default is 50.
-#' @details A multivariate Cox regression is trained to select a subset of genes 
-#' significantly associated with the risk and to estimate a risk score based 
-#' on these risk markers. 
+#' @details A multivariate Cox regression is trained to select a subset of 
+#' genes significantly associated with the risk and to estimate a risk score 
+#' based on these risk markers. 
 #' The algorithm considered is based on UNICOX, a regularized multivariate Cox 
 #' regression model (see Tibshirani et al., 2009 for more details). 
 #' In this predictor, the variables are penalized individually using an 
 #' \eqn{L_1} norm term which allow us to keep more relevant genes correlated 
-#' with risk than in Lasso. The Lasso model selects only one representative gene 
-#' randomly from the set of correlated genes. The optimal value for the lambda 
-#' parameter as well as the risk score are estimated using a double nested 
-#' crossvalidation strategy. Finally, the risk score allow us to stratify the 
-#' whole set of patients according to their risks. Three algorithms are 
-#' implemented to estimate the optimal threshold that classifies the patients 
-#' in risk groups. "min.pval" determines the optimal threshold by minimization 
-#' of the log-rank p-value statistics, that is by  maximization of the 
-#' separability between the K-M curves for the high and low risk groups, see 
-#' (Martinez-Romero et al., 2018). When several local minima arise this may be 
-#' sample dependent and unstable. To avoid this problem, "med.pval" estimates 
-#' the optimal threshold as the median of the lower 10th percentile 
-#' logrank p-values. The lower 10th percentile selects the smallest values 
-#' from the p-value distribution corresponding to intermediate risk patients 
-#' that are on the boundary between both groups. This interval is more robust 
-#' than a single minimum and provides good experimental results for a large 
-#' variety of problems tested. The median threshold in this interval may change 
-#' from one iteration to another because the distribution of p-values for 
-#' patients with intermediate risk may change due to sample variations. 
-#' Finally, "class.probs" implements a bootstrap strategy for the patients 
-#' corresponding to the lower 10th percentile p-values and estimates a robust 
-#' threshold to stratify the patients. It estimates also a membership 
-#' probability of classification.
+#' with risk than in Lasso. The Lasso model selects only one representative 
+#' gene randomly from the set of correlated genes. The optimal value for the 
+#' lambda parameter as well as the risk score are estimated using a double 
+#' nested crossvalidation strategy. Finally, the risk score allow us to 
+#' stratify the whole set of patients according to their risks. 
+#' Three algorithms are implemented to estimate the optimal threshold that 
+#' classifies the patients in risk groups. "min.pval" determines the optimal 
+#' threshold by minimization of the log-rank p-value statistics, that is by 
+#' maximization of the separability between the K-M curves for the high and 
+#' low risk groups, see (Martinez-Romero et al., 2018). When several local 
+#' minima arise this may be sample dependent and unstable. To avoid this 
+#' problem, "med.pval" estimates the optimal threshold as the median of the 
+#' lower 10th percentile logrank p-values. The lower 10th percentile selects 
+#' the smallest values from the p-value distribution corresponding to 
+#' intermediate risk patients that are on the boundary between both groups. 
+#' This interval is more robust than a single minimum and provides good 
+#' experimental results for a large variety of problems tested. The median 
+#' threshold in this interval may change from one iteration to another because 
+#' the distribution of p-values for patients with intermediate risk may change 
+#' due to sample variations. Finally, "class.probs" implements a bootstrap 
+#' strategy for the patients corresponding to the lower 10th percentile 
+#' p-values and estimates a robust threshold to stratify the patients. 
+#' It estimates also a membership probability of classification.
 #' @return A list containing the following elements:
-#'  - \code{cv_risk_score}: Risk score prediction for the training set using a double nested crossvalidated strategy.
+#'  - \code{cv_risk_score}: Risk score prediction for the training set using a 
+#'  double nested crossvalidated strategy.
 #'  - \code{cv_normalized_risk}: Normalized risk score in the interval (0,100).
-#'  - \code{table_genes_selected}: Data frame with the following columns: The names for the genes selected by the Cox regression, the beta coefficients for the optimal multivariate Cox regression fitted to the training set, the Hazard Ratio for each gene and the p-value for the univariate log-rank statistical test. Genes are shown by descending order of the HR index.
-#'  - \code{table_genes_selected_extended}: Table with the same format as table_genes_selected. A search for local minima within a 5\% range of the selected minimum is performed. The goal is expanding the list of significant genes to improve biological interpretability, since the lasso penalty drastically reduces the number of significant genes.
-#'  - \code{model.optimalLambda}: The fitted model for the optimal regularization parameter.
-#'  - \code{groups}: Vector of classification of patients in two risk groups, high (2) or low (1).
-#'  - \code{riskThresholds}: Thresholds that allows to stratify the test patients in three groups according to the predicted risk score: low, intermediate and high risk.
+#'  - \code{table_genes_selected}: Data frame with the following columns: 
+#'  The names for the genes selected by the Cox regression, the beta 
+#'  coefficients for the optimal multivariate Cox regression fitted to the 
+#'  training set, the Hazard Ratio for each gene and the p-value for the 
+#'  univariate log-rank statistical test. Genes are shown by descending order 
+#'  of the HR index.
+#'  - \code{table_genes_selected_extended}: Table with the same format as 
+#'  table_genes_selected. A search for local minima within a 5\% range of the 
+#'  selected minimum is performed. The goal is expanding the list of 
+#'  significant genes to improve biological interpretability, since the lasso 
+#'  penalty drastically reduces the number of significant genes.
+#'  - \code{model.optimalLambda}: The fitted model for the optimal 
+#'  regularization parameter.
+#'  - \code{groups}: Vector of classification of patients in two risk groups,
+#'   high (2) or low (1).
+#'  - \code{riskThresholds}: Thresholds that allows to stratify the test 
+#'  patients in three groups according to the predicted risk score: low, 
+#'  intermediate and high risk.
 #'  - \code{range.risk}: Range of the unscaled risk score in the training set.
-#'  - \code{list.models}: List of models tested for different values of the regularization parameter.
-#'  - \code{evaluation.models}: Data frame that provides several metrics for each model evaluated. The lambda column provides the regularization parameter for the multivariate Cox regression adjusted, the number_features gives the number of genes selected by this model, c.index and se.c.index the concordance index and the standard deviation for the risk prediction and finally, the p_value_c.index and the logrank_p_value give the p-values for the the concordance index and the log-rank statistics respectively. Models are shown by ascending order of the log-rank p-value and the best one is marked with two asterisks.
-#'  - \code{betasplot}: Dataset used to create the plot of genes ranked according to the regression coefficients in the multivariate Cox model (UNICOX).
-#'  - \code{plot_values}: A list containing Kaplan-Meier fit results, logrank p-value, and hazard ratio.
-#'  - \code{membership_prob}: If method "class.probs" is selected a table with two columns is returned. The first one is the probability of classification to the low risk group while the second one is the membership probability to the high risk group.
+#'  - \code{list.models}: List of models tested for different values of the
+#'   regularization parameter.
+#'  - \code{evaluation.models}: Data frame that provides several metrics for 
+#'  each model evaluated. The lambda column provides the regularization 
+#'  parameter for the multivariate Cox regression adjusted, the number_features 
+#'  gives the number of genes selected by this model, c.index and se.c.index 
+#'  the concordance index and the standard deviation for the risk prediction 
+#'  and finally, the p_value_c.index and the logrank_p_value give the p-values 
+#'  for the the concordance index and the log-rank statistics respectively. 
+#'  Models are shown by ascending order of the log-rank p-value and the best 
+#'  one is marked with two asterisks.
+#'  - \code{betasplot}: Dataset used to create the plot of genes ranked 
+#'  according to the regression coefficients in the multivariate Cox model.
+#'  - \code{plot_values}: A list containing Kaplan-Meier fit results, 
+#'  logrank p-value, and hazard ratio.
+#'  - \code{membership_prob}: If method "class.probs" is selected a table with 
+#'  two columns is returned. The first one is the probability of classification 
+#'  to the low risk group while the second one is the membership probability to 
+#'  the high risk group.
 #'  
 #' @examples
 #' data(seBRCA)
@@ -79,8 +107,8 @@
 #' DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
 #' 
 #' # genePheno ---
-#' vectorSampleID <- as.character(rownames(SummarizedExperiment::colData(seBRCA)))
-#' vectorGroups <- as.numeric(SummarizedExperiment::colData(seBRCA)$ER.IHC)
+#' vectorSampleID <- rownames(SummarizedExperiment::colData(seBRCA))
+#' vectorGroups <- SummarizedExperiment::colData(seBRCA)$ER.IHC
 #' Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID)
 #' 
 #' # Survival times should be provided in YEARS
@@ -182,7 +210,7 @@ patientRisk <- function(seData,
                       labels = FALSE
   )) # vector is randomized with sample()
   # Perform 10 fold cross validation
-  betasMatrix <- NULL
+  # betasMatrix <- NULL
   
   riskDefinitive <- matrix(data = 0, nrow = length(mExpr[1, ]), ncol = 30)
   rownames(riskDefinitive) <- names(mExpr[1, ])
@@ -201,7 +229,8 @@ patientRisk <- function(seData,
   ### Grid of values for the regularization parameter.
   list.of.lambdas <- seq(from = 0, to = lambMax, length.out = 30)
   iter <- 10
-  #pb <- txtProgressBar(min = 0, max = iter,  style = 3, width = 50, char = "=") 
+  #pb <- txtProgressBar(min = 0, max = iter,  style = 3, 
+  #                     width = 50, char = "=") 
   #init <- numeric(iter)
   #end <- numeric(iter)
   for (i in seq(1, iter)) {
@@ -332,12 +361,13 @@ patientRisk <- function(seData,
   
   ### Computing betas for the Cox model that maximizes log-rank test
   betas <- NULL
-  capture.output(fit.optimalLambda <- uniCox(t(mExpr),
-                                             mSurv[, 1],
-                                             mSurv[, 2],
-                                             lamlist = list.of.lambdas[index.optimalLambda],
-                                             del.thres = .05,
-                                             max.iter = 20
+  capture.output(
+    fit.optimalLambda <- uniCox(t(mExpr),
+                               mSurv[, 1],
+                               mSurv[, 2],
+                               lamlist = list.of.lambdas[index.optimalLambda],
+                               del.thres = .05,
+                               max.iter = 20
   ))
   risk.predict.optimal.lambda <- predict_uniCox(fit.optimalLambda, t(mExpr))
   betas <- NULL
@@ -368,12 +398,13 @@ patientRisk <- function(seData,
   # A search for other nearby minima within 5% of the global minimum has been 
   # conducted to broaden the list of genes and improve biological 
   # interpretability.
-  capture.output(fit.optimalLambda_5 <- uniCox(t(mExpr),
-                                               mSurv[, 1],
-                                               mSurv[, 2],
-                                               lamlist = list.of.lambdas[index.optimalLambda_5],
-                                               del.thres = .05,
-                                               max.iter = 20
+  capture.output(
+    fit.optimalLambda_5 <- uniCox(t(mExpr),
+                               mSurv[, 1],
+                               mSurv[, 2],
+                               lamlist = list.of.lambdas[index.optimalLambda_5],
+                               del.thres = .05,
+                               max.iter = 20
   ))
   
   betas_5 <- NULL
@@ -403,10 +434,11 @@ patientRisk <- function(seData,
   logrank_pvalue_genes_uni_5[which_norm0] <- logrank_pvalue_genes_tested_uni_5
   
   # Significance codes p-vals
-  significance_logrank_pvalue_uni <- symnum(logrank_pvalue_genes_uni,
-                                            cutpoints = c(0, 0.001, 0.01, 0.05, 0.1, 1),
-                                            symbols   = c("***", "**", "*", "\u00B7", " "),
-                                            na        = FALSE
+  significance_logrank_pvalue_uni <- symnum(
+    logrank_pvalue_genes_uni,
+    cutpoints = c(0, 0.001, 0.01, 0.05, 0.1, 1),
+    symbols   = c("***", "**", "*", "\u00B7", " "),
+    na        = FALSE
   )
   
   table_genes_optimallambda <- data.frame(
@@ -428,8 +460,8 @@ patientRisk <- function(seData,
   
   # Optimal threshold selection
   nSamples <- dim(mExpr)[2]
-  lowIndex0.30 <- round(0.3 * nSamples)
-  highIndex0.70 <- round(0.7 * nSamples)
+  # lowIndex0.30 <- round(0.3 * nSamples)
+  # highIndex0.70 <- round(0.7 * nSamples)
   
   orderedRiskDefinitive <- riskDefinitive[order(riskDefinitive)]
   orderednormalized_risk <- rescale(as.numeric(orderedRiskDefinitive), 

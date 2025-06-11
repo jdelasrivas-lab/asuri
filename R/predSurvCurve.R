@@ -45,8 +45,8 @@
 #' DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
 #' 
 #' # genePheno ---
-#' vectorSampleID <- as.character(rownames(SummarizedExperiment::colData(seBRCA)))
-#' vectorGroups <- as.numeric(SummarizedExperiment::colData(seBRCA)$ER.IHC)
+#' vectorSampleID <- rownames(SummarizedExperiment::colData(seBRCA))
+#' vectorGroups <- SummarizedExperiment::colData(seBRCA)$ER.IHC
 #' Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID)
 #' 
 #' # Survival times should be provided in YEARS
@@ -76,17 +76,19 @@
 #' colnames(mExprs_testData) <- paste0("Sample", 1:num_samples)
 #' 
 #' set.seed(5)
-#' risk_prediction_validation_set <- predict_PatientRisk(multivariate_risk_predictor, 
-#'                                                       mExprs_testData)
+#' risk_prediction_validation_set <- predict_PatientRisk(
+#'                                                multivariate_risk_predictor, 
+#'                                                mExprs_testData)
 #' 
 #' 
 #' # Example for single patient prediction: Patient fourth is selected.
 #' mExprs_testSingleData <- data.frame(mExprs_testData[, 4])
 #' colnames(mExprs_testSingleData) <- colnames(mExprs_testData)[4]
-#' # Risk prediction for the optimal subset of genes selected by patientRisk function
+#' # Risk prediction for the optimal subset of genes selected by patientRisk()
 #' set.seed(5)
-#' risk_prediction_one_patient <- predict_PatientRisk(multivariate_risk_predictor, 
-#'                                                    mExprs_testSingleData)
+#' risk_prediction_one_patient <- predict_PatientRisk(
+#'                                                multivariate_risk_predictor, 
+#'                                                mExprs_testSingleData)
 #'                                                    
 #'                                                    
 #' #COX prediction for the training set

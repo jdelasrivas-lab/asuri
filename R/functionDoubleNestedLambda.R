@@ -39,18 +39,19 @@
 #
 # @export
 function_double_nested_lambda <- function(matrixOfRisks, 
-                                          mSurv, thresholds = NULL) {
+                                            mSurv, thresholds = NULL) {
     nLambdas <- dim(matrixOfRisks)[2]
     nSamples <- dim(matrixOfRisks)[1]
     p.vals <- NULL
-    groupsByLambda <- NULL
+    #groupsByLambda <- NULL
 
     # Optimized lambda using double nested CV
     if (is.null(thresholds)) {
         message("Nested Cross Validation: optimizing lambda...\n")
     }
 
-    #pb <- txtProgressBar(min = 0, max = nLambdas,  style = 3, width = 50, char = "=")
+    #pb <- txtProgressBar(min = 0, max = nLambdas,  style = 3, 
+    #                     width = 50, char = "=")
     #init <- numeric(nLambdas)
     #end <- numeric(nLambdas)
     for (i in seq(1, nLambdas)) {
@@ -69,23 +70,23 @@ function_double_nested_lambda <- function(matrixOfRisks,
         }
         for (j in lowIndex0.3:highIndex0.7) {
             group.assignation.vector[matrixOfRisks[, i] < 
-                                       order.riskDefinitive[j]] <- 1
+                                        order.riskDefinitive[j]] <- 1
             group.assignation.vector[matrixOfRisks[, i] >= 
-                                       order.riskDefinitive[j]] <- 2
+                                        order.riskDefinitive[j]] <- 2
             msurv_data <- mSurv[match(rownames(matrixOfRisks), 
-                                      rownames(mSurv)), ]
+                                        rownames(mSurv)), ]
             log.rank.groups.surv <- survdiff(Surv(time, status) ~ 
-                                               group.assignation.vector, 
-                                             data = msurv_data)
+                                                group.assignation.vector, 
+                                                data = msurv_data)
             
             p.val[j] <- pchisq(log.rank.groups.surv$chisq, 
-                               length(log.rank.groups.surv$n) - 1, 
-                               lower.tail = FALSE)
+                                length(log.rank.groups.surv$n) - 1, 
+                                lower.tail = FALSE)
         }
         # min p.val is restrained to 40% central interval, in order to observe 
         # relative minima (if they are near the interval limits)
         p.vals <- cbind(p.vals, p.val)
-        lowest.p.value.index <- which.min(p.val)
+        #lowest.p.value.index <- which.min(p.val)
         # cutPoint is used to create the groups
         #end[i] <- Sys.time()
         #setTxtProgressBar(pb, i)
@@ -101,7 +102,7 @@ function_double_nested_lambda <- function(matrixOfRisks,
     }
     #close(pb)
     if (is.null(thresholds)) {
-      message("\nRisk predicted!\n")
+        message("\nRisk predicted!\n")
     }
     # the function returns a vector with optimal p.values for each lambda 
     # value in order to choose a lambda

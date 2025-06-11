@@ -59,7 +59,7 @@ predict_uniCox <- function(object, x, ...) {
     s0 <- object$s0
     beta <- object$beta
     x <- scale(x, center = mx, scale = FALSE)
-    xs <- scale(x, center = FALSE, scale = sqrt(vx) + s0)
+    # xs <- scale(x, center = FALSE, scale = sqrt(vx) + s0)
     yhat <- x %*% beta
     return(yhat)
 }

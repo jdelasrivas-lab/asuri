@@ -26,6 +26,7 @@ importFrom(graphics, abline, axis, boxplot, hist, image, layout,
            rect, segments, stripchart, text, title, box, grid, strwidth)
 importFrom(utils, combn, write.table)
 importFrom(grDevices, grey)
-importFrom(stats, approx, median, na.omit, pchisq, predict, quantile, runif, supsmu, symnum, wilcox.test)
+importFrom(stats, approx, median, na.omit, pchisq, predict, quantile, runif, 
+           supsmu, symnum, wilcox.test)
 importFrom(utils, capture.output, flush.console, head)
 importFrom(Rdpack,reprompt)
