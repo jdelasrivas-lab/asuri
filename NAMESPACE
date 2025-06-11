@@ -15,7 +15,11 @@ import(survcomp)
 import(scales)
 import(Rdpack)
 import(ggplot2) 
+import(SummarizedExperiment)
 
+
+importFrom(SummarizedExperiment, assay, colData)
+importFrom(utils, setTxtProgressBar, txtProgressBar)
 importFrom(gplots, textplot)
 importFrom(graphics, abline, axis, boxplot, hist, image, layout, 
            legend, lines, mtext, par, pie, points, polygon, 

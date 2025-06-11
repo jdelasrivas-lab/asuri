@@ -57,6 +57,7 @@ abstract: |
 library(formatR)
 library(knitr)
 library(asuri)
+library(SummarizedExperiment)
 knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 65), tidy = TRUE, 
                       echo = TRUE, message = FALSE, warning = FALSE, results = "hide")
 ```
@@ -95,17 +96,19 @@ If a problem with dependencies is reported during installation, users should fir
 
 The dataset included in ASURI as a study case is intended to facilitate the use of the package. The dataset was obtained from several GSE series from [GEO database](http://www.ncbi.nlm.nih.gov/geo/) corresponding to breast cancer (BRCC) samples, where expression and survival time were reported [@Bueno2023]. Each sample corresponds to genome-wide expression profiles of BRCC primary tumor samples hybridized on the transcriptomic platform: *Affymetrix* *HGU133 Plus2.0*; which is a high-density microarray expression platform containing 594,000 oligo-nucleotide probes (organized in probe-sets) that we mapped to ENSEMBL genes using the *hgu133plus2hsensgcdf* CDF package, obtained from [BRAINARRAY](http://mbni.org/customcdf/24.0.0/ensg.download/hgu133plus2hsensgcdf_24.0.0.tar.gz). The expression signal of the samples was normalized using fRMA [@fRMA] or RMA [@RMA] and Combat [@combat], as described in [@Bueno2023]. Clinical variables and information about the tumors were collected and included in the phenodata object. More specifically, the information about the expression level of 3 key BRCC biomarkers (i.e. **ER** / ESR1, **PR** / PGR, and **HER2** / ERBB2 protein-coding genes) was included in the phenodata when available.
 
-Once this dataset is downloaded two objects are created: *mExprs*, that is the normalized gene expression data matrix; and *mPheno* that includes information about each sample (i.e. clinical physio-pathological data and other phenotypic data).
+Once this dataset is loaded the *seBRCA* object is created. This SummarizedExperiment object contains the normalized gene expression data matrix and phenotypical information about each sample (i.e. clinical physio-pathological data and other phenotypic data).
 
-```{r} 
-data(mExprs)
-# To visualize the dimensions of the ExpressionSet object
-dim(mExprs)
+```{r}
+library(asuri)
+data(seBRCA)
+# To extract the normalized expression
+mExprs <- assay(seBRCA)
+mPheno <- colData(seBRCA)
 ```
 
 ```{r} 
-data(mPheno)
-# To visualize the dimensions of the phenotypic information object
+# To visualize the dimensions of the two extracted objects
+dim(mExprs)
 dim(mPheno)
 ```
 
@@ -131,9 +134,9 @@ As an example of use, let's now analyse using the **geneSurv()** function a well
 
 The input parameters for the function are the following:
 
-- `geneExpr` Vector with the normalized gene expression for each sample. names(genExpr) should contains the sample names.
-- `time` Numeric vector containing the survival time for each sample in years, including the sample name in names(time). 
-- `status` Numeric vector with the status (censored 0 and not censored 1) for each sample, names(status) should include the sample names.
+- `seData` SummarizedExperiment object with the normalized expression data and the phenotypic data in colData. Phenotypic colData must contain the samples name in the first column and two columns with the time and the status.
+- `time` SummarizedExperiment colData column name containing the survival time in years for each sample in numeric format.
+- `status` SummarizedExperiment colData column name containing the status (censored 0 and not censored 1) for each sample..
 - `geneName` A character string with the name of the gene being analyzed.
 - `boxplot` A logical value indicating whether to generate a boxplot of gene expression by survival group (by default = TRUE).
 - `iter` The number of iterations (bootstrap resampling) for calculating optimal group cutoffs (by default = 100).
@@ -141,16 +144,15 @@ The input parameters for the function are the following:
 - `cut_time`  A numeric value specifying the cutoff time (in years) for survival analysis. All events beyond this time are treated as censored (by default = 10 years).
 
 ```{r, echo = TRUE, results = 'hide', fig.show='hide'} 
-genExpr <- mExprs[match("ESR1", rownames(mExprs)), ]
-time <- mPheno$time
-names(time) <- rownames(mPheno)
-status <- mPheno$status
-names(status) <- rownames(mPheno)
+data(seBRCA)
+time <- "time"
+status <- "status"
+geneName <- "ESR1"
 # The TIME value must be transformed to YEARS
 # The gene expression vector must be provided with the NAMES of each sample,
 # that should match the time and status NAMES.
 set.seed(5)
-outputKM <- geneSurv(genExpr, time, status, "ESR1", type = "exprs")
+outputKM <- geneSurv(seBRCA, time, status, geneName, type = "exprs")
 ```
 
 The function returns different outputs, i.e., a list with values and plots that is different depending on the specified *type* or *mode* how it is run. 
@@ -204,13 +206,9 @@ Run of the function  **geneSurv()** as `type = "risk"`:
 
 ```{r, echo = TRUE, results = 'hide', fig.show='hide'} 
 # If we instead consider to run the function as *type* = risk
-genExpr <- mExprs[match("BRCA1", rownames(mExprs)), ]
-time <- mPheno$time
-names(time) <- rownames(mPheno)
-status <- mPheno$status
-names(status) <- rownames(mPheno)
+geneName <- "BRCA1"
 set.seed(5)
-outputKM.TP53 <- geneSurv(genExpr, time, status, "BRCA1", type = "risk")
+outputKM.TP53 <- geneSurv(seBRCA, time, status, geneName, type = "risk")
 ```
 
 ```{r kmrisk, fig.cap="Kaplan Meier curves obtained after the assignment of the patients by bootstrap to high or low survival using the estimated risk based on feature BRCA1.", out.width = "80%", fig.align = "center", echo=FALSE, results="asis"}
@@ -231,19 +229,23 @@ Before running **genePheno()**, the number of input features, i.e. the number of
 
 The input parameters for the function are the following:
 
-  - `mExprs`: A data matrix where the rows are the genes and the columns are the samples. Thus, each entry is the expression value of a gene in a sample.
-  - `groups_vector`: A binary vector indicating the group to which each sample is assigned.
+  - `seData`: SummarizedExperiment object with the normalized expression data and the phenotypic data in colData.
+  - `groupsVector`: A binary vector indicating the group to which each sample is assigned.
   - `FDRfilter`: A numeric value indicating the FDR threshold for selecting significant genes. The default is FDR = 0.05.
   - `iter`: The number of iterations for the bootstrapping. Default is 100.
   - `percentageFilter`: A numeric value indicating the percentage of iterations a gene must appear in to be considered significant. Default is 80.
 
 ```{r, echo = TRUE, results = 'hide'} 
+data(seBRCA)
+
 # Bootstrapped differential expression based on SAM.
 # Parameters: FDR = 0.05, iter = 100, percentage filter = 80 %
 # CAUTION: if the data have a high number of genes this function will take several minutes to compute.
 
+groupsVector <- colData(seBRCA)$ER.IHC
+  
 set.seed(5)
-DE_list_genes <- prefilterSAM(mExprs, mPheno$ER.IHC)
+DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
 ```
 
 The output of the `DE_list_genes` function is a list with the genes obtained from the differential expression analysis ordered by the p-value (from lowest to highest p-value).
@@ -252,23 +254,17 @@ The following code illustrates the use of the **genePheno()** function to discov
 
 The input parameters are the following:
 
-- `mExpr`:  A matrix with normalized gene expression data. Rows correspond to samples, and columns correspond to genes. `rownames(mExpr)` should be set to sample names, and `colnames(mExpr)` should be set to gene names. Since we selected a subset of differentially expressed genes, the **genePheno()** function is only run with these genes. Therefore, from `mExpr` we generate a new expression matrix:`tmExprsDE`, that only includes the genes that are significant after the DE analysis.
+- `seBRCA`: SummarizedExperiment object with the normalized expression data and the phenotypic data in colData.
+- `DEgenes`: Vector containing the genes to be used. Expected to be in the same format as the rows of the **assay(seBRCA)**. Usually this vector is the result of running **prefilterSAM()** function.
 - `vectorGroups`: Clinical or phenotypic variable tested. It must be provided as a binary vector. In this particular study `vectorGroups` is `mPheno$ER.IHC`.
-- `vectorSampleID`: Vector containing the sample names ordered as in the expression matrix.
+- `vectorSampleID`: Vector containing the sample names ordered as in the **assay(seBRCA)**.
 - `iter`: Number of bootstrap iterations (default: 100). This can be changed if the function takes too long to run.
 - `numberOfFolds`: Number of folds to implement nested cross-validation (default: 10).
 
 ```{r, echo = TRUE, results = 'hide'} 
-# Gene expression matrix filtered by SAM differential expression function
-mExprsDE <- mExprs[match(DE_list_genes, rownames(mExprs)), ]
-dim(mExprsDE)
-# [1] 865  200
-tmExprsDE <- t(mExprsDE)
-# Parameters: Number of bootstrap iterations: 100.
-# The object `tmExprsDE` is the gene expression matrix for the subset of genes tested (samples as rows and genes as columns). The object `mPheno$ER.IHC` is a vector indicating the value per-sample of ER (as a binary variable: "0" or "1").
-vectorSampleID <- as.character(rownames(mPheno))
-vectorGroups <- as.numeric(mPheno$ER.IHC)
-Pred_ER.IHC <- genePheno(tmExprsDE, vectorGroups, vectorSampleID)
+vectorSampleID <- as.character(rownames(colData(seBRCA)))
+vectorGroups <- as.numeric(colData(seBRCA)$ER.IHC)
+Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID)
 
 # Pred_ER.IHC is an output object with the list of genes that show a significant correlation with the clinical variable. Since a bootstrap is performed, the results of how many times across iterations a gene is found significant are reported as *stability* (in relative numbers 0-1, 1=100%) and the *beta values* from the regression across iterations are also provided as *betaMedian* and *betaMean* :
 
@@ -322,22 +318,18 @@ The following code illustrates how to apply the **patientRisk()** function to di
 
 ```{r, echo = TRUE, results = 'hide', fig.show='hide'} 
 # Survival times should be provided in YEARS
-time <- mPheno$time
-names(time) <- rownames(mPheno)
-status <- mPheno$status
-names(status) <- rownames(mPheno)
+time <- 'time'
+status <- 'status'
 # Pred_ER.IHC$genes is the subset of genes to be tested. In our case study,
 # it is the list of genes related to the ER clinical variable that was
 # obtained using the function **genePheno()**.
 geneList <- names(Pred_ER.IHC$genes)
-# Next, the expression matrix for the list of genes selected is obtained.
-mExprSelectedGenes <- mExprs[match(geneList, rownames(mExprs)), ]
-# Training of the multivariate COX model. Provide the expression matrix
-# (genes as rows and samples as columns) for the list of genes selected,
+# Training of the multivariate COX model. Provide the SummarizedExperiment 
+# object with the normalized expression data and the phenotypic data in colData,
 # the time and the status vectors, and the method to stratify the patients
 # (select one of these methods: `min.pval`, `med.pval`, `class.probs`).
 set.seed(5)
-multivariate_risk_predictor <- patientRisk(mExprSelectedGenes, time, status, method = "class.probs")
+multivariate_risk_predictor <- patientRisk(seBRCA, geneList, time, status, method = "class.probs")
 ```
 
 The input parameters of the **patientRisk()** function are the following:
@@ -345,7 +337,7 @@ The input parameters of the **patientRisk()** function are the following:
 - `mExpr` A numeric matrix of gene expression data where each row represents a gene and each column represents a sample.
 - `time` A numeric vector representing the survival time for each sample, names(time) should be defined as the sample names.
 - `status` A numeric vector representing the event status (1 = event, 0 = censored) for each sample, names(status) should be defined as the sample names.
-- `group.vector` A numeric vector specifying predefined risk groups for the patients. This is optional.
+- `group.vector` Optional numeric vector specifying predefined risk groups for the patients.
 - `method` A string that determines the method considered to stratified the patients in two risk groups according to the risk score for the lower 10th percentile of the p-values: (1) `min.pval` Defines risk groups based on the minimum p-value. (2) `med.pval` Defines risk groups based on the median p-value. This approach can be more robust when several local minima are found. Finally, (3) `class.probs` Defines risk groups based on the classification probabilities from the model. It provides also a membership probability to each risk group. `class.probs` is selected by default.
 - `nboot` An integer specifying the number of bootstrap iterations for risk score calculation. Default is 50.
 
@@ -421,16 +413,15 @@ The following lines show how to predict the risk score for an independent set of
 ```{r, echo = TRUE, results = 'hide', fig.show='hide'} 
 # Generate the validation set, mExprs_testData if necessary.
 # Vector of genes (same ones used in Cox model training)
-genes <- rownames(mExprSelectedGenes)
 
 # Simulate expression data
 num_samples <- 20
 set.seed(5)
-mExprs_testData <- matrix(rnorm(length(genes) * num_samples, mean = 10, sd = 3),
-                          nrow = length(genes), ncol = num_samples)
+mExprs_testData <- matrix(rnorm(length(geneList) * num_samples, mean = 10, sd = 3),
+                          nrow = length(geneList), ncol = num_samples)
 
 # Assign row names (genes) and column names (samples)
-rownames(mExprs_testData) <- genes
+rownames(mExprs_testData) <- geneList
 colnames(mExprs_testData) <- paste0("Sample", 1:num_samples)
 
 set.seed(5)
@@ -483,8 +474,14 @@ The input parameters are:
 - `eval_surv_times`  A numeric vector of times at which the survival curve should be evaluated. If NULL (default), the times will be taken from the training data up to the maximum event time. 
 
 ```{r, echo = TRUE, results = 'hide', fig.show='hide'}  
+data(seBRCA)
 # COX prediction for the training set
+mPheno <- colData(seBRCA)
+mExprs <- assay(seBRCA)
+
 set.seed(5)
+mExprSelectedGenes <- mExprs[rownames(mExprs) %in% geneList,]
+
 cox_pred_training <- predict_PatientRisk(multivariate_risk_predictor, mExprSelectedGenes)
 cox_pred_training$risk_score
 # COX prediction for the test patient

@@ -4,16 +4,30 @@
 \alias{patientRisk}
 \title{patientRisk}
 \usage{
-patientRisk(mExpr, time, status, group.vector, method = NULL, nboot = 50)
+patientRisk(
+  seData,
+  selectedGenes,
+  time,
+  status,
+  group.vector,
+  method = NULL,
+  nboot = 50
+)
 }
 \arguments{
-\item{mExpr}{A numeric matrix of gene expression data where each row 
-represents a gene and each column represents a sample.}
+\item{seData}{SummarizedExperiment object with the normalized expression data 
+and the phenotypic data in colData. Phenotypic colData must contain the samples
+name in the first column and two columns with the time and the status.}
 
-\item{time}{A numeric vector representing the survival time for each sample.}
+\item{selectedGenes}{Vector containing the genes to be used. Expected to be 
+in the same format as the rows of the assay(seData). Usually this vector is 
+the result of running prefilterSAM().}
 
-\item{status}{A numeric vector representing the event status (1 = event, 
-0 = censored) for each sample.}
+\item{time}{SummarizedExperiment colData column name containing the survival 
+time in years for each sample in numeric format.}
+
+\item{status}{SummarizedExperiment colData column name containing the status 
+(censored 0 and not censored 1) for each sample.}
 
 \item{group.vector}{A numeric vector specifying predefined risk groups for 
 the patients. This is optional.}
@@ -84,45 +98,31 @@ threshold to stratify the patients. It estimates also a membership
 probability of classification.
 }
 \examples{
-data(mExprs)
-data(mPheno)
+data(seBRCA)
 
-
-# prefilterSAM
+# prefilterSAM ---
+groupsVector <- SummarizedExperiment::colData(seBRCA)$ER.IHC
 set.seed(5)
-DE_list_genes <- prefilterSAM(mExprs, mPheno$ER.IHC)
-# genePheno
-mExprsDE <- mExprs[match(DE_list_genes, rownames(mExprs)), ]
-vectorSampleID <- as.character(rownames(mPheno))
-vectorGroups <- as.numeric(mPheno$ER.IHC)
-Pred_ER.IHC <- genePheno(t(mExprsDE), vectorGroups, vectorSampleID) 
-geneList <- names(Pred_ER.IHC$genes)
-mExprSelectedGenes <- mExprs[match(geneList, rownames(mExprs)), ]
+DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
 
-# Generate the validation set, mExprs_testData if necessary.
-# Vector of genes (same ones used in Cox model training)
-genes <- rownames(mExprSelectedGenes)
+# genePheno ---
+vectorSampleID <- as.character(rownames(SummarizedExperiment::colData(seBRCA)))
+vectorGroups <- as.numeric(SummarizedExperiment::colData(seBRCA)$ER.IHC)
+Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID)
 
 # Survival times should be provided in YEARS
-time <- mPheno$time
-names(time) <- rownames(mPheno)
-status <- mPheno$status
-names(status) <- rownames(mPheno)
-
+time <- 'time'
+status <- 'status'
 # Pred_ER.IHC$genes is the subset of genes to be tested. In our case study,
 # it is the list of genes related to the ER clinical variable that was
 # obtained using the function **genePheno()**.
 geneList <- names(Pred_ER.IHC$genes)
-
-# Next, the expression matrix for the list of genes selected is obtained.
-mExprSelectedGenes <- mExprs[match(geneList, rownames(mExprs)), ]
-
 # Training of the multivariate COX model. Provide the expression matrix
 # (genes as rows and samples as columns) for the list of genes selected,
 # the time and the status vectors, and the method to stratify the patients
 # (select one of these methods: `min.pval`, `med.pval`, `class.probs`).
 set.seed(5)
-multivariate_risk_predictor <- patientRisk(mExprSelectedGenes, time, status, 
+multivariate_risk_predictor <- patientRisk(seBRCA, geneList, time, status, 
                                            method = "class.probs")
 
 # Generate the plots again

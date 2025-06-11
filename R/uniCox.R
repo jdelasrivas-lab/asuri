@@ -79,7 +79,7 @@ uniCox <- function(x, y, status, lamlist = NULL, nlam = 20,
     beta2 <- matrix(0, nrow = p, ncol = length(lamlist))
     beta0 <- rep(0, p)
     for (k in seq(1, length(lamlist))) {
-        message(c("lambda value ", k, "out of ", length(lamlist)), fill = TRUE)
+        # message(c("lambda value ", k, "out of ", length(lamlist)), fill = TRUE)
         lam <- lamlist[k]
         om <- abs(u0) > lam
         beta <- rep(0, sum(om))

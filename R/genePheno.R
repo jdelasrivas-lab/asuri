@@ -5,13 +5,15 @@
 #' algorithm and the robustness and reproducibility of the subset of genes is 
 #' improved using a bootstrap strategy combined with ensemble methods.
 #'
-#' @param mExpr A matrix with normalized gene expression data. Rows correspond 
-#' to samples, and columns correspond to genes. `rownames(mExpr)` should be set 
-#' to sample names, and `colnames(mExpr)` should be set to gene names.
-#' @param vectorGroups Clinical variable. It must be provided as a numeric 
-#' binary vector.
-#' @param vectorSampleID Vector containing the sample names ordered as in the 
-#' expression matrix. `mExpr`.
+#' @param seData SummarizedExperiment object with the normalized expression data 
+#' and the phenotypic data in colData.
+#' @param DEgenes Vector containing the genes to be used. Expected to be in the 
+#' same format as the rows of the assay(seData). Usually this vector is the 
+#' result of running prefilterSAM().
+#' @param vectorGroups Clinical variable or phenotypic variable tested. It must 
+#' be provided as a numeric binary vector.
+#' @param vectorSampleID Vector containing the sample names in the same order as
+#' in assay(seData).
 #' @param iter Number of bootstrap iterations (default: 100, should be 
 #' changed if the function takes too long to execute).
 #' @param numberOfFolds Number of folds to implement nested cross-validation. 
@@ -54,26 +56,17 @@
 #'  the mean and the median of the beta coefficients.
 #'
 #' @examples
+#' data(seBRCA)
 #' 
-#' data(mExprs)
-#' data(mPheno)
-#' 
+#' # prefilterSAM ---
+#' groupsVector <- SummarizedExperiment::colData(seBRCA)$ER.IHC
 #' set.seed(5)
-#' DE_list_genes <- prefilterSAM(mExprs, mPheno$ER.IHC)
+#' DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
 #' 
-#' # Gene expression matrix filtered by SAM differential expression function
-#' mExprsDE <- mExprs[match(DE_list_genes, rownames(mExprs)), ]
-#' dim(mExprsDE)
-#' # [1] 865  200
-#' tmExprsDE <- t(mExprsDE)
-#' # Parameters: Number of bootstrap iterations: 100.
-#' # The object `tmExprsDE` is the gene expression matrix for the subset of 
-#' # genes tested (samples as rows and genes as columns). The object 
-#' # `mPheno$ER.IHC` is a vector indicating the value per-sample of ER 
-#' # (as a binary variable: "0" or "1").
-#' vectorSampleID <- as.character(rownames(mPheno))
-#' vectorGroups <- as.numeric(mPheno$ER.IHC)
-#' Pred_ER.IHC <- genePheno(tmExprsDE, vectorGroups, vectorSampleID)
+#' # genePheno ---
+#' vectorSampleID <- as.character(rownames(SummarizedExperiment::colData(seBRCA)))
+#' vectorGroups <- as.numeric(SummarizedExperiment::colData(seBRCA)$ER.IHC)
+#' Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID)
 #' 
 #' # Pred_ER.IHC is an output object with the list of genes that show a 
 #' # significant correlation with the clinical variable. Since a bootstrap is 
@@ -91,15 +84,18 @@
 #' 
 #' @export
 
-genePheno <- function(mExpr, 
+genePheno <- function(seData,
+                      DEgenes,
                       vectorGroups, 
                       vectorSampleID, 
                       iter = 100, 
                       numberOfFolds = 5) {
     # Validating input types
-    if (!is.matrix(mExpr)) {
-        stop("'mExpr' must be a matrix with genes as columns ", 
-               "and samples as rows.")
+    if (!is(seData, "SummarizedExperiment")) {
+      stop("SEdata must be a 'SummarizedExperiment'.")
+    }
+    if (!is.character(DEgenes)) {
+      stop("'DEgenes' must be a character vector.")
     }
     if (!is.numeric(vectorGroups)) {
         stop("'vectorGroups' must be a numeric vector.")
@@ -115,6 +111,10 @@ genePheno <- function(mExpr,
       stop("'numberOfFolds' must be an integer greater than 1.")
     }
 
+    mExpr <- assay(seData)
+    mExpr <- mExpr[match(DEgenes, rownames(mExpr)), ]
+    mExpr <- t(mExpr)
+    
     # Validating dimensions and consistency
     if (nrow(mExpr) != length(vectorGroups)) {
         stop("The length of 'vectorGroups' must equal the number of rows ", 
@@ -129,70 +129,80 @@ genePheno <- function(mExpr,
              "column names (gene names).")
     }
 
+    
     n.genes <- dim(mExpr)[2]
     n.samples <- dim(mExpr)[1]
 
     list <- NULL
     outp <- NULL
-    message(Sys.time())
+    pb <- txtProgressBar(min = 0, max = iter,  style = 3, width = 50, char = "=") 
+    init <- numeric(iter)
+    end <- numeric(iter)
     for (i in seq(1, iter)) {
-        if (i %% 10 == 0) {
-            progress <- paste0("Progress: ", i, " %")
-            message("\r", progress)
-            flush.console()
-        }
-        # printing iter
-        sampl <- sample(seq(1, n.samples), size = n.samples, replace = TRUE)
-        NOsampl <- setdiff(seq(1, n.samples), unique(sampl))
-        # for each time a sample is taken
-        mExpr_i <- mExpr[sampl, ]
-        vectorGroups_i <- vectorGroups[sampl]
-        vectorSampleID_i <- vectorSampleID[sampl]
-        # outersect items
-        mExpr_o <- mExpr[NOsampl, ]
-        vectorGroups_o <- vectorGroups[NOsampl]
-        vectorSampleID_o <- vectorSampleID[NOsampl]
+      init[i] <- Sys.time()
+      sampl <- sample(seq(1, n.samples), size = n.samples, replace = TRUE)
+      NOsampl <- setdiff(seq(1, n.samples), unique(sampl))
+      # for each time a sample is taken
+      mExpr_i <- mExpr[sampl, ]
+      vectorGroups_i <- vectorGroups[sampl]
+      vectorSampleID_i <- vectorSampleID[sampl]
+      # outersect items
+      mExpr_o <- mExpr[NOsampl, ]
+      vectorGroups_o <- vectorGroups[NOsampl]
+      vectorSampleID_o <- vectorSampleID[NOsampl]
 
-        # calling predictor: training
-        object_cv_glmnet_train <- cv.glmnet(
-            x = mExpr_i,
-            y = vectorGroups_i,
-            nfolds = numberOfFolds,
-            type.measure = "auc",
-            alpha = 0.75,
-            family = "binomial"
-        )
-        # calling predictor: predicting, samples not used in bootstrap
-        object_cv_glmnet_coeff <- predict(
-            object = object_cv_glmnet_train,
-            newmat = mExpr_o,
-            type = "coeff",
-            s = object_cv_glmnet_train$lambda.1se
-        )
-        # AUC measuring predictive power
-        object_cv_glmnet_response <- predict(
-            object = object_cv_glmnet_train,
-            newx = mExpr_o,
-            type = "response",
-            s = object_cv_glmnet_train$lambda.1se
-        )
-        x <- NULL
-        # cumulative matrix of beta values picturing each probeset 
-        # predictive power. AUC value is also stored
-        x$coeff <- object_cv_glmnet_coeff[object_cv_glmnet_coeff[, 1] != 0, ]
-        x$coeff <- x$coeff[2:length(x$coeff)]
-        outp$genes <- c(outp$genes, names(x$coeff))
+      # calling predictor: training
+      object_cv_glmnet_train <- cv.glmnet(
+          x = mExpr_i,
+          y = vectorGroups_i,
+          nfolds = numberOfFolds,
+          type.measure = "auc",
+          alpha = 0.75,
+          family = "binomial"
+      )
+      # calling predictor: predicting, samples not used in bootstrap
+      object_cv_glmnet_coeff <- predict(
+          object = object_cv_glmnet_train,
+          newmat = mExpr_o,
+          type = "coeff",
+          s = object_cv_glmnet_train$lambda.1se
+      )
+      # AUC measuring predictive power
+      object_cv_glmnet_response <- predict(
+          object = object_cv_glmnet_train,
+          newx = mExpr_o,
+          type = "response",
+          s = object_cv_glmnet_train$lambda.1se
+      )
+      x <- NULL
+      # cumulative matrix of beta values picturing each probeset 
+      # predictive power. AUC value is also stored
+      x$coeff <- object_cv_glmnet_coeff[object_cv_glmnet_coeff[, 1] != 0, ]
+      x$coeff <- x$coeff[2:length(x$coeff)]
+      outp$genes <- c(outp$genes, names(x$coeff))
 
-        auc_prediction <- prediction(
-            as.double(object_cv_glmnet_response[, 1]),
-            vectorGroups[match(rownames(object_cv_glmnet_response), 
-                               as.character(vectorSampleID))]
-        )
+      auc_prediction <- prediction(
+          as.double(object_cv_glmnet_response[, 1]),
+          vectorGroups[match(rownames(object_cv_glmnet_response), 
+                             as.character(vectorSampleID))]
+      )
 
-        x$auc <- as.numeric((performance(auc_prediction, "auc"))@y.values)
-        list[[i]] <- x
+      x$auc <- as.numeric((performance(auc_prediction, "auc"))@y.values)
+      list[[i]] <- x
+      end[i] <- Sys.time()
+      setTxtProgressBar(pb, i)
+      time <- round(lubridate::seconds_to_period(sum(end - init)), 0)
+      
+      # Estimated remaining time based on the
+      # mean time that took to run the previous iterations
+      est <- iter * (mean(end[end != 0] - init[init != 0])) - time
+      remainining <- round(lubridate::seconds_to_period(est), 0)
+      text_msg <- paste(" // Execution time:", time, " // Estimated time remaining:", 
+                        remainining)
+      message(text_msg, "")
     }
-
+    close(pb)
+    
     outp$listCoeff <- list
     outp$genes <- table(outp$genes)
     outp$genes <- outp$genes[outp$genes > 0.1 * iter]

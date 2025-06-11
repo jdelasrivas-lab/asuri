@@ -37,42 +37,42 @@ stratifies them in three risk groups (low, intermediate, high) considering
 the thresholds learned by function patientRisk.
 }
 \examples{
-data(mExprs)
-data(mPheno)
+data(seBRCA)
 
-# prefilterSAM
+# prefilterSAM ---
+groupsVector <- SummarizedExperiment::colData(seBRCA)$ER.IHC
 set.seed(5)
-DE_list_genes <- prefilterSAM(mExprs, mPheno$ER.IHC)
-# genePheno
-mExprsDE <- mExprs[match(DE_list_genes, rownames(mExprs)), ]
-vectorSampleID <- as.character(rownames(mPheno))
-vectorGroups <- as.numeric(mPheno$ER.IHC)
-Pred_ER.IHC <- genePheno(t(mExprsDE), vectorGroups, vectorSampleID) 
+DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
+
+# genePheno ---
+vectorSampleID <- as.character(rownames(SummarizedExperiment::colData(seBRCA)))
+vectorGroups <- as.numeric(SummarizedExperiment::colData(seBRCA)$ER.IHC)
+Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID)
+
+# Survival times should be provided in YEARS
+time <- 'time'
+status <- 'status'
+# Pred_ER.IHC$genes is the subset of genes to be tested. In our case study,
+# it is the list of genes related to the ER clinical variable that was
+# obtained using the function **genePheno()**.
 geneList <- names(Pred_ER.IHC$genes)
-mExprSelectedGenes <- mExprs[match(geneList, rownames(mExprs)), ]
-
-# Generate the validation set, mExprs_testData if necessary.
-# Vector of genes (same ones used in Cox model training)
-genes <- rownames(mExprSelectedGenes)
-time <- mPheno$time
-names(time) <- rownames(mPheno)
-status <- mPheno$status
-names(status) <- rownames(mPheno)
-
-# patientRisk
+# Training of the multivariate COX model. Provide the expression matrix
+# (genes as rows and samples as columns) for the list of genes selected,
+# the time and the status vectors, and the method to stratify the patients
+# (select one of these methods: `min.pval`, `med.pval`, `class.probs`).
 set.seed(5)
-multivariate_risk_predictor <- patientRisk(mExprSelectedGenes, time, status, 
+multivariate_risk_predictor <- patientRisk(seBRCA, geneList, time, status, 
                                            method = "class.probs")
-
+                                           
 # Simulate expression data
 num_samples <- 20
 set.seed(5)
-mExprs_testData <- matrix(rnorm(length(genes) * num_samples, 
+mExprs_testData <- matrix(rnorm(length(geneList) * num_samples, 
                           mean = 10, sd = 3),
-                          nrow = length(genes), ncol = num_samples)
+                          nrow = length(geneList), ncol = num_samples)
 
 # Assign row names (genes) and column names (samples)
-rownames(mExprs_testData) <- genes
+rownames(mExprs_testData) <- geneList
 colnames(mExprs_testData) <- paste0("Sample", 1:num_samples)
 
 set.seed(5)

@@ -5,7 +5,7 @@
 \title{Kaplan-Meier Survival Analysis Based on Gene Expression or Risk Score}
 \usage{
 geneSurv(
-  genExpr,
+  seData,
   time,
   status,
   geneName,
@@ -16,14 +16,15 @@ geneSurv(
 )
 }
 \arguments{
-\item{genExpr}{Vector with the normalized gene expression for each sample. 
-names(genExpr) should contains the sample names.}
+\item{seData}{SummarizedExperiment object with the normalized expression data 
+and the phenotypic data in colData. Phenotypic colData must contain the samples
+name in the first column and two columns with the time and the status.}
 
-\item{time}{Numeric vector containing the survival time for each sample in years, 
-including the sample name in names(time).}
+\item{time}{SummarizedExperiment colData column name containing the survival 
+time in years for each sample in numeric format.}
 
-\item{status}{Numeric vector with the status (censored 0 and not censored 1) for 
-each sample. names(status) shoud include the sample names.}
+\item{status}{SummarizedExperiment colData column name containing the status 
+(censored 0 and not censored 1) for each sample.}
 
 \item{geneName}{A character string with the name of the gene being analyzed.}
 
@@ -86,20 +87,15 @@ to mark survival.
 }
 \examples{
 
-data(mExprs)
-data(mPheno)
-
-genExpr <- mExprs[match("ESR1", rownames(mExprs)), ]
-time <- mPheno$time
-names(time) <- rownames(mPheno)
-status <- mPheno$status
-names(status) <- rownames(mPheno)
-
+data(seBRCA)
+time <- "time"
+status <- "status"
+geneName <- "ESR1"
 # The TIME value must be transformed to YEARS
 # The gene expression vector must be provided with the NAMES of each sample,
 # that should match the time and status NAMES.
 set.seed(5)
-outputKM <- geneSurv(genExpr, time, status, "ESR1", type = "exprs")
+outputKM <- geneSurv(seBRCA, time, status, geneName, type = "exprs")
 
 # Generate the plots again
 ## Plots for c(type = exprs)
@@ -109,13 +105,9 @@ asuri:::plotKM(outputKM)
 
 # If we instead consider to run the function as *type* = risk
 
-genExpr <- mExprs[match("BRCA1", rownames(mExprs)), ]
-time <- mPheno$time
-names(time) <- rownames(mPheno)
-status <- mPheno$status
-names(status) <- rownames(mPheno)
+geneName <- "BRCA1"
 set.seed(5)
-outputKM.TP53 <- geneSurv(genExpr, time, status, "BRCA1", type = "risk")
+outputKM.TP53 <- geneSurv(seBRCA, time, status, geneName, type = "risk")
 
 ## Plots for c(type = risk)
 asuri:::plotKM(outputKM)

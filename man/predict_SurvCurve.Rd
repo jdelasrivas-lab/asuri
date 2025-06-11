@@ -54,43 +54,42 @@ provided, the curve is evaluated at those specific times; otherwise, the
 function uses the survival times from the training data.
 }
 \examples{
-data(mExprs)
-data(mPheno)
+data(seBRCA)
 
-# prefilterSAM
+# prefilterSAM ---
+groupsVector <- SummarizedExperiment::colData(seBRCA)$ER.IHC
 set.seed(5)
-DE_list_genes <- prefilterSAM(mExprs, mPheno$ER.IHC)
-genePheno
-mExprsDE <- mExprs[match(DE_list_genes, rownames(mExprs)), ]
-vectorSampleID <- as.character(rownames(mPheno))
-vectorGroups <- as.numeric(mPheno$ER.IHC)
-Pred_ER.IHC <- genePheno(t(mExprsDE), vectorGroups, vectorSampleID) 
+DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
+
+# genePheno ---
+vectorSampleID <- as.character(rownames(SummarizedExperiment::colData(seBRCA)))
+vectorGroups <- as.numeric(SummarizedExperiment::colData(seBRCA)$ER.IHC)
+Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID)
+
+# Survival times should be provided in YEARS
+time <- 'time'
+status <- 'status'
+# Pred_ER.IHC$genes is the subset of genes to be tested. In our case study,
+# it is the list of genes related to the ER clinical variable that was
+# obtained using the function **genePheno()**.
 geneList <- names(Pred_ER.IHC$genes)
-mExprSelectedGenes <- mExprs[match(geneList, rownames(mExprs)), ]
-
-# Generate the validation set, mExprs_testData if necessary.
-# Vector of genes (same ones used in Cox model training)
-genes <- rownames(mExprSelectedGenes)
-
-time <- mPheno$time
-names(time) <- rownames(mPheno)
-status <- mPheno$status
-names(status) <- rownames(mPheno)
-
-# patientRisk
+# Training of the multivariate COX model. Provide the expression matrix
+# (genes as rows and samples as columns) for the list of genes selected,
+# the time and the status vectors, and the method to stratify the patients
+# (select one of these methods: `min.pval`, `med.pval`, `class.probs`).
 set.seed(5)
-multivariate_risk_predictor <- patientRisk(mExprSelectedGenes, time, status, 
+multivariate_risk_predictor <- patientRisk(seBRCA, geneList, time, status, 
                                            method = "class.probs")
-
-# predictPatientRisk
-## Simulate expression data
+                                           
+# Simulate expression data
 num_samples <- 20
 set.seed(5)
-mExprs_testData <- matrix(rnorm(length(genes) * num_samples, mean = 10, sd = 3),
-                          nrow = length(genes), ncol = num_samples)
+mExprs_testData <- matrix(rnorm(length(geneList) * num_samples, 
+                          mean = 10, sd = 3),
+                          nrow = length(geneList), ncol = num_samples)
 
-## Assign row names (genes) and column names (samples)
-rownames(mExprs_testData) <- genes
+# Assign row names (genes) and column names (samples)
+rownames(mExprs_testData) <- geneList
 colnames(mExprs_testData) <- paste0("Sample", 1:num_samples)
 
 set.seed(5)
@@ -105,27 +104,31 @@ colnames(mExprs_testSingleData) <- colnames(mExprs_testData)[4]
 set.seed(5)
 risk_prediction_one_patient <- predict_PatientRisk(multivariate_risk_predictor, 
                                                    mExprs_testSingleData)
+                                                   
+                                                   
+#COX prediction for the training set
+mPheno <- SummarizedExperiment::colData(seBRCA)
+mExprs <- SummarizedExperiment::assay(seBRCA)
 
-
-# COX prediction for the training set
 set.seed(5)
+mExprSelectedGenes <- mExprs[rownames(mExprs) \%in\% geneList,]
+
 cox_pred_training <- predict_PatientRisk(multivariate_risk_predictor, 
                                          mExprSelectedGenes)
 cox_pred_training$risk_score
-
-# COX prediction for the test patient
+#COX prediction for the test patient
 set.seed(5)
 cox_pred_test <- predict_PatientRisk(multivariate_risk_predictor, 
                                      mExprs_testSingleData)
 cox_pred_test$risk_score
-
-# Survival curve estimation
+#Survival curve estimation
 eval_surv_times <- seq(0, max(mPheno$time), by = 0.1)
 set.seed(5)
 surv_curv_cox <- predict_SurvCurve(cox_pred_training$risk_score, 
                                    mPheno[, c(2, 3)], 
                                    cox_pred_test$risk_score, 
                                    eval_surv_times)
+
 
 }
 \references{

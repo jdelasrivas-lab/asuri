@@ -27,43 +27,42 @@
 #'  sigmoid curve and risk thresholds.
 #'
 #' @examples
-#' data(mExprs)
-#' data(mPheno)
+#' data(seBRCA)
 #' 
-#' # prefilterSAM
+#' # prefilterSAM ---
+#' groupsVector <- SummarizedExperiment::colData(seBRCA)$ER.IHC
 #' set.seed(5)
-#' DE_list_genes <- prefilterSAM(mExprs, mPheno$ER.IHC)
-
-#' # genePheno
-#' mExprsDE <- mExprs[match(DE_list_genes, rownames(mExprs)), ]
-#' vectorSampleID <- as.character(rownames(mPheno))
-#' vectorGroups <- as.numeric(mPheno$ER.IHC)
-#' Pred_ER.IHC <- genePheno(t(mExprsDE), vectorGroups, vectorSampleID) 
+#' DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
+#' 
+#' # genePheno ---
+#' vectorSampleID <- as.character(rownames(SummarizedExperiment::colData(seBRCA)))
+#' vectorGroups <- as.numeric(SummarizedExperiment::colData(seBRCA)$ER.IHC)
+#' Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID)
+#' 
+#' # Survival times should be provided in YEARS
+#' time <- 'time'
+#' status <- 'status'
+#' # Pred_ER.IHC$genes is the subset of genes to be tested. In our case study,
+#' # it is the list of genes related to the ER clinical variable that was
+#' # obtained using the function **genePheno()**.
 #' geneList <- names(Pred_ER.IHC$genes)
-#' mExprSelectedGenes <- mExprs[match(geneList, rownames(mExprs)), ]
-#'
-#' # Generate the validation set, mExprs_testData if necessary.
-#' # Vector of genes (same ones used in Cox model training)
-#' genes <- rownames(mExprSelectedGenes)
-#' time <- mPheno$time
-#' names(time) <- rownames(mPheno)
-#' status <- mPheno$status
-#' names(status) <- rownames(mPheno)
-#' 
-#' # patientRisk
+#' # Training of the multivariate COX model. Provide the expression matrix
+#' # (genes as rows and samples as columns) for the list of genes selected,
+#' # the time and the status vectors, and the method to stratify the patients
+#' # (select one of these methods: `min.pval`, `med.pval`, `class.probs`).
 #' set.seed(5)
-#' multivariate_risk_predictor <- patientRisk(mExprSelectedGenes, time, status, 
+#' multivariate_risk_predictor <- patientRisk(seBRCA, geneList, time, status, 
 #'                                            method = "class.probs")
-#' 
+#'                                            
 #' # Simulate expression data
 #' num_samples <- 20
 #' set.seed(5)
-#' mExprs_testData <- matrix(rnorm(length(genes) * num_samples, 
+#' mExprs_testData <- matrix(rnorm(length(geneList) * num_samples, 
 #'                           mean = 10, sd = 3),
-#'                           nrow = length(genes), ncol = num_samples)
+#'                           nrow = length(geneList), ncol = num_samples)
 #' 
 #' # Assign row names (genes) and column names (samples)
-#' rownames(mExprs_testData) <- genes
+#' rownames(mExprs_testData) <- geneList
 #' colnames(mExprs_testData) <- paste0("Sample", 1:num_samples)
 #' 
 #' set.seed(5)
@@ -98,10 +97,10 @@ predict_PatientRisk <- function(model.fit, mExpr.testData) {
     }
 
     riskscore_testData <- predict_uniCox(model.fit$model.optimalLambda, 
-                                                 t(mExpr.testData))
-
+                                         t(mExpr.testData))
+    
     plot_values <- model.fit$plot_values
-
+    
     scaled_riskscore_testData <- 
       ((riskscore_testData - model.fit$range.risk[1]) / abs(
         model.fit$range.risk[2] - model.fit$range.risk[1])) * 100
@@ -110,22 +109,22 @@ predict_PatientRisk <- function(model.fit, mExpr.testData) {
       scaled_riskscore_testData[order(scaled_riskscore_testData)]
     min_value <- min(ordered_scaled_riskscore_testData)
     ordered_scaled_riskscore_testData <- if (min_value < 0) {
-        ordered_scaled_riskscore_testData + abs(min_value)
+      ordered_scaled_riskscore_testData + abs(min_value)
     } else {
-        ordered_scaled_riskscore_testData
+      ordered_scaled_riskscore_testData
     }
-
+    
     low_risk_threshold <- model.fit$riskThresholds[1, 1]
     high_risk_threshold <- model.fit$riskThresholds[3, 1]
     cutpoint_risk_threshold <- model.fit$riskThresholds[2, 1]
-
+    
     cutpoints <- c(low_risk_threshold, 
                    high_risk_threshold, 
                    cutpoint_risk_threshold)
     names(cutpoints) <- c("low.cutpoint", 
                           "high.cutpoint", 
                           "cutpoint")
-
+    
     cutpoints_check <- 
       cutpoints[!cutpoints %in% ordered_scaled_riskscore_testData]
     
@@ -134,7 +133,7 @@ predict_PatientRisk <- function(model.fit, mExpr.testData) {
     ordered_scaled_riskscore_testData <- 
       ordered_scaled_riskscore_testData[
         order(ordered_scaled_riskscore_testData)]
-
+    
     plot_values$sigmoid_logrank$orderednormalized_risk <- 
       ordered_scaled_riskscore_testData
     
@@ -146,45 +145,45 @@ predict_PatientRisk <- function(model.fit, mExpr.testData) {
     
     plot_values$sigmoid_logrank$cutPoint <- 
       which(ordered_scaled_riskscore_testData == cutpoint_risk_threshold)
-
+    
     if (dim(mExpr.testData)[2] == 1) {
-        message("Normalized patient Risk (0 100): ", 
-                scaled_riskscore_testData, "\n")
-        if (scaled_riskscore_testData >= 0 & 
-            scaled_riskscore_testData < low_risk_threshold) {
-            message("The patient is classified as Low Risk \n")
-            message("Low Risk interval: (", 0, ", ", low_risk_threshold, ")")
-        } else if (scaled_riskscore_testData < high_risk_threshold) {
-            message("The patient is categorized as Intermediate Risk", "\n")
-            message("Medium Risk interval (", 
-                    c(low_risk_threshold, 
-                      high_risk_threshold), ")")
-        } else if (scaled_riskscore_testData <= 100) {
-            message("The patient is categorized as High Risk \n")
-            message("High Risk interval (", 
-                    c(high_risk_threshold, 100), ")", "\n")
-        } else {
-            stop("Risk score is outside the accepted range \n")
-        }
+      message("Normalized patient Risk (0 100): ", 
+              scaled_riskscore_testData, "\n")
+      if (scaled_riskscore_testData >= 0 & 
+          scaled_riskscore_testData < low_risk_threshold) {
+        message("The patient is classified as Low Risk \n")
+        message("Low Risk interval: (", 0, ", ", low_risk_threshold, ")")
+      } else if (scaled_riskscore_testData < high_risk_threshold) {
+        message("The patient is categorized as Intermediate Risk", "\n")
+        message("Medium Risk interval (", 
+                c(low_risk_threshold, 
+                  high_risk_threshold), ")")
+      } else if (scaled_riskscore_testData <= 100) {
+        message("The patient is categorized as High Risk \n")
+        message("High Risk interval (", 
+                c(high_risk_threshold, 100), ")", "\n")
+      } else {
+        stop("Risk score is outside the accepted range \n")
+      }
     } else {
-        # Plot risk score for test patients
-        model.fit$plot_values <- plot_values
-        plotSigmoid(model.fit)
+      # Plot risk score for test patients
+      model.fit$plot_values <- plot_values
+      plotSigmoid(model.fit)
     }
-
+    
     riskscore_testData <- t(riskscore_testData)
     scaled_riskscore_testData <- t(scaled_riskscore_testData)
     samplenames <- colnames(riskscore_testData)
-
+    
     riskscore_testData <- as.vector(riskscore_testData)
     scaled_riskscore_testData <- as.vector(scaled_riskscore_testData)
-
+    
     names(riskscore_testData) <- samplenames
     names(scaled_riskscore_testData) <- samplenames
-
+    
     predicted.riskscore <- list(
-        risk_score = riskscore_testData,
-        scaled_risk_score = scaled_riskscore_testData,
-        plot_values = plot_values
+      risk_score = riskscore_testData,
+      scaled_risk_score = scaled_riskscore_testData,
+      plot_values = plot_values
     )
 }

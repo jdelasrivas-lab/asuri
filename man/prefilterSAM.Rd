@@ -5,18 +5,18 @@
 \title{Pre-filter Genes using SAM (Significance Analysis of Microarrays)}
 \usage{
 prefilterSAM(
-  mExpr,
-  groups_vector,
+  seData,
+  groupsVector,
   FDRfilter = 0.05,
   iter = 100,
   percentageFilter = 80
 )
 }
 \arguments{
-\item{mExpr}{A matrix where rows represent genes and columns represent 
-samples. Each entry is the expression value of a gene in a sample.}
+\item{seData}{SummarizedExperiment object with the normalized expression data 
+and the phenotypic data in colData.}
 
-\item{groups_vector}{A binary vector indicating group assignment for each sample.}
+\item{groupsVector}{A binary vector indicating group assignment for each sample.}
 
 \item{FDRfilter}{A numeric value indicating the FDR threshold for selecting 
 significant genes. Default is 0.05.}
@@ -49,16 +49,17 @@ in a specified percentage of iterations (controlled by `percentageFilter`)
 are retained.
 }
 \examples{
+data(seBRCA)
+
 # Bootstrapped differential expression based on SAM.
 # Parameters: FDR = 0.05, iter = 100, percentage filter = 80 \%
 # CAUTION: if the data have a high number of genes this function will take 
 # several minutes to compute.
 
-data(mExprs)
-data(mPheno)
+groupsVector <- SummarizedExperiment::colData(seBRCA)$ER.IHC
 
 set.seed(5)
-DE_list_genes <- prefilterSAM(mExprs, mPheno$ER.IHC)
+DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
 
 }
 \references{

@@ -4,18 +4,28 @@
 \alias{genePheno}
 \title{Identify Predictive Genes for a Phenotype}
 \usage{
-genePheno(mExpr, vectorGroups, vectorSampleID, iter = 100, numberOfFolds = 5)
+genePheno(
+  seData,
+  DEgenes,
+  vectorGroups,
+  vectorSampleID,
+  iter = 100,
+  numberOfFolds = 5
+)
 }
 \arguments{
-\item{mExpr}{A matrix with normalized gene expression data. Rows correspond 
-to samples, and columns correspond to genes. `rownames(mExpr)` should be set 
-to sample names, and `colnames(mExpr)` should be set to gene names.}
+\item{seData}{SummarizedExperiment object with the normalized expression data 
+and the phenotypic data in colData.}
 
-\item{vectorGroups}{Clinical variable. It must be provided as a numeric 
-binary vector.}
+\item{DEgenes}{Vector containing the genes to be used. Expected to be in the 
+same format as the rows of the assay(seData). Usually this vector is the 
+result of running prefilterSAM().}
 
-\item{vectorSampleID}{Vector containing the sample names ordered as in the 
-expression matrix. `mExpr`.}
+\item{vectorGroups}{Clinical variable or phenotypic variable tested. It must 
+be provided as a numeric binary vector.}
+
+\item{vectorSampleID}{Vector containing the sample names in the same order as
+in assay(seData).}
 
 \item{iter}{Number of bootstrap iterations (default: 100, should be 
 changed if the function takes too long to execute).}
@@ -65,26 +75,17 @@ and the predictive power of each gene. See (Martinez-Romero et al., 2018)
 for more details.
 }
 \examples{
+data(seBRCA)
 
-data(mExprs)
-data(mPheno)
-
+# prefilterSAM ---
+groupsVector <- SummarizedExperiment::colData(seBRCA)$ER.IHC
 set.seed(5)
-DE_list_genes <- prefilterSAM(mExprs, mPheno$ER.IHC)
+DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
 
-# Gene expression matrix filtered by SAM differential expression function
-mExprsDE <- mExprs[match(DE_list_genes, rownames(mExprs)), ]
-dim(mExprsDE)
-# [1] 865  200
-tmExprsDE <- t(mExprsDE)
-# Parameters: Number of bootstrap iterations: 100.
-# The object `tmExprsDE` is the gene expression matrix for the subset of 
-# genes tested (samples as rows and genes as columns). The object 
-# `mPheno$ER.IHC` is a vector indicating the value per-sample of ER 
-# (as a binary variable: "0" or "1").
-vectorSampleID <- as.character(rownames(mPheno))
-vectorGroups <- as.numeric(mPheno$ER.IHC)
-Pred_ER.IHC <- genePheno(tmExprsDE, vectorGroups, vectorSampleID)
+# genePheno ---
+vectorSampleID <- as.character(rownames(SummarizedExperiment::colData(seBRCA)))
+vectorGroups <- as.numeric(SummarizedExperiment::colData(seBRCA)$ER.IHC)
+Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID)
 
 # Pred_ER.IHC is an output object with the list of genes that show a 
 # significant correlation with the clinical variable. Since a bootstrap is 

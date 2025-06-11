@@ -34,8 +34,8 @@ Authors@R: c(
   )
 License: LGPL-3 + file LICENSE
 Depends: R (>= 4.4.0), stats, methods
-Imports: Rdpack, survival, glmnet, siggenes, Biobase, survcomp, scales, ROCR, gplots, ggplot2
-Suggests: BiocStyle, knitr, formatR, rmarkdown, magick, devtools
+Imports: SummarizedExperiment, spsUtil, lubridate, Rdpack, survival, glmnet, siggenes, Biobase, survcomp, scales, ROCR, gplots, ggplot2
+Suggests: BiocStyle, knitr, formatR, rmarkdown, magick, devtools, 
 biocViews: Software, StatisticalMethod, WorkflowStep, GeneExpression, Microarray, DifferentialExpression, GenePrediction, Regression, Survival, ExonArray, MultipleComparison
 URL: https://github.com/jdelasrivas-lab/asuri
 BugReports: https://github.com/jdelasrivas-lab/asuri
@@ -46,3 +46,4 @@ NeedsCompilation: no
 RdMacros: Rdpack
 Encoding: UTF-8
 VignetteBuilder: knitr
+LazyData: false

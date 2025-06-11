@@ -6,9 +6,9 @@
 #' filtering by the percentage of times a gene is selected across multiple 
 #' iterations.
 #'
-#' @param mExpr A matrix where rows represent genes and columns represent 
-#' samples. Each entry is the expression value of a gene in a sample.
-#' @param groups_vector A binary vector indicating group assignment for each sample.
+#' @param seData SummarizedExperiment object with the normalized expression data 
+#' and the phenotypic data in colData.
+#' @param groupsVector A binary vector indicating group assignment for each sample.
 #' @param FDRfilter A numeric value indicating the FDR threshold for selecting 
 #' significant genes. Default is 0.05.
 #' @param iter The number of iterations for bootstrapping. Default is 100.
@@ -30,16 +30,17 @@
 #' by SAM d.value and filtered by percentageFilter.
 #'
 #' @examples
+#' data(seBRCA)
+#' 
 #' # Bootstrapped differential expression based on SAM.
 #' # Parameters: FDR = 0.05, iter = 100, percentage filter = 80 %
 #' # CAUTION: if the data have a high number of genes this function will take 
 #' # several minutes to compute.
 #' 
-#' data(mExprs)
-#' data(mPheno)
+#' groupsVector <- SummarizedExperiment::colData(seBRCA)$ER.IHC
 #' 
 #' set.seed(5)
-#' DE_list_genes <- prefilterSAM(mExprs, mPheno$ER.IHC)
+#' DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
 #' 
 #' @references 
 #' \insertRef{schwender2025siggenes}{asuri}
@@ -47,22 +48,25 @@
 #' \insertRef{BuenoFortes2023}{asuri}
 #' 
 #' @export
-prefilterSAM <- function(mExpr, groups_vector, FDRfilter = 0.05, 
+prefilterSAM <- function(seData, groupsVector, FDRfilter = 0.05, 
                          iter = 100, percentageFilter = 80) {
-  
+    if (!is(seData, "SummarizedExperiment")) {
+      stop("SEdata must be a 'SummarizedExperiment'.")
+    }
+    mExpr <- assay(seData)  
+    
     # Error control: Ensure matrix dimensions match the group vector length
-    if (dim(mExpr)[2] != length(groups_vector)) {
-        stop("The number of columns in mExpr (samples) must match the length ",
-             "of the groups_vector.")
+    if (dim(mExpr)[2] != length(groupsVector)) {
+        stop("Different number of samples in SummarizedExperiment object and",
+             "groupsVector. Please check their lengths.")
     }
 
     # Error control: Check for presence of column and row names in mExpr
     if (is.null(colnames(mExpr))) {
-        stop("The matrix should have sample (columns) names in ",
-             "colnames(mExpr).")
+        stop("The SummarizedExperiment does not have column names.")
     }
     if (is.null(rownames(mExpr))) {
-        stop("The matrix should have gene names in rownames(mExpr).")
+        stop("The SummarizedExperiment does not have row names.")
     }
 
     # Warning if any rownames are NA, and remove rows with NA gene names
@@ -80,42 +84,57 @@ prefilterSAM <- function(mExpr, groups_vector, FDRfilter = 0.05,
     message(Sys.time())
     lista <- NULL
     #
-    for (i in seq(1, iter)) { ##########
-        progress <- paste0("Progress: ", i, "/", iter)
-        message("\r", progress)
-        flush.console()
-        sampl <- sample(seq(1, n.samples), size = n.samples, replace = TRUE)
-        # checking iterations
-        # list of 500 vectors with relevant names
-        # using a restrictive delta
-        mExpr2 <- mExpr[, sampl]
-        groups_vector2 <- groups_vector[sampl]
+    pb <- txtProgressBar(min = 0, max = iter,  style = 3, width = 50, char = "=")
+    init <- numeric(iter)
+    end <- numeric(iter)
+    
+    for (i in seq(1, iter)) {
+      init[i] <- Sys.time()
+      sampl <- sample(seq(1, n.samples), size = n.samples, replace = TRUE)
+      # checking iterations
+      # list of 500 vectors with relevant names
+      # using a restrictive delta
+      mExpr2 <- mExpr[, sampl]
+      groupsVector2 <- groupsVector[sampl]
 
-        samR <- try(
-            sam(mExpr2, groups_vector2, method = d.stat, var.equal = FALSE),
-            silent = TRUE
-        )
-        if (inherits(samR, "try-error")) next
-        
-        # extracting best genes by FDR
-        delta <- try(
-            findDelta(samR, fdr = FDRfilter),
-            silent = TRUE
-        )
-        if (inherits(delta, "try-error")) next
-        
-        delta <- unlist(delta)[1]
+      samR <- try(
+        sam(mExpr2, groupsVector2, method = d.stat, var.equal = FALSE),
+        silent = TRUE
+      )
+      if (inherits(samR, "try-error")) next
+      
+      # extracting best genes by FDR
+      delta <- try(
+        spsUtil::quiet(findDelta(samR, fdr = FDRfilter)),
+        silent = TRUE
+      )
+      if (inherits(delta, "try-error")) next
+      
+      delta <- unlist(delta)[1]
 
-        new_genes <- try(
-            siggenes::list.siggenes(samR, delta),
-            silent = TRUE
-        )
-        
-        if (inherits(new_genes, "try-error")) next
-        list.genes <- c(list.genes, new_genes)
-        # incidence as number of times it shows as significative value, 
-        # is what it's retourned as a table
+      new_genes <- try(
+        siggenes::list.siggenes(samR, delta),
+        silent = TRUE
+      )
+      
+      if (inherits(new_genes, "try-error")) next
+      list.genes <- c(list.genes, new_genes)
+      # incidence as number of times it shows as significative value, 
+      # is what it's retourned as a table
+      end[i] <- Sys.time()
+      setTxtProgressBar(pb, i)
+      time <- round(lubridate::seconds_to_period(sum(end - init)), 0)
+      
+      # Estimated remaining time based on the
+      # mean time that took to run the previous iterations
+      est <- iter * (mean(end[end != 0] - init[init != 0])) - time
+      remainining <- round(lubridate::seconds_to_period(est), 0)
+      
+      text_msg <- paste(" // Execution time:", time, " // Estimated time remaining:", 
+                        remainining)
+      message(text_msg, "")
     }
+    close(pb)
     list.genes <- factor(list.genes, levels = unique(list.genes))
     result <- 
       names(table(list.genes)[table(list.genes) >= 

@@ -50,11 +50,11 @@ function_double_nested_lambda <- function(matrixOfRisks,
         message("Nested Cross Validation: optimizing lambda...\n")
     }
 
-    # for (i in 1:nLambdas) {
+    #pb <- txtProgressBar(min = 0, max = nLambdas,  style = 3, width = 50, char = "=")
+    #init <- numeric(nLambdas)
+    #end <- numeric(nLambdas)
     for (i in seq(1, nLambdas)) {
-        progress <- paste0("Progress: ", round(i * 100 / nLambdas), "%")
-        message("\r", progress)
-        flush.console()
+        #init[i] <- Sys.time()
         # in each iteration (by lambdas) the risk score is used to optimize
         # separability of KM curves and thus obtain the optimal logrank p.val
         order.riskDefinitive <- matrixOfRisks[, i][order(matrixOfRisks[, i])]
@@ -86,15 +86,25 @@ function_double_nested_lambda <- function(matrixOfRisks,
         # relative minima (if they are near the interval limits)
         p.vals <- cbind(p.vals, p.val)
         lowest.p.value.index <- which.min(p.val)
-
         # cutPoint is used to create the groups
+        #end[i] <- Sys.time()
+        #setTxtProgressBar(pb, i)
+        #timer <- round(lubridate::seconds_to_period(sum(end - init)), 0)
+        
+        # Estimated remaining time based on the
+        # mean time that took to run the previous iterations
+        #est <- nLambdas * (mean(end[end != 0] - init[init != 0])) - timer
+        #remainining <- round(lubridate::seconds_to_period(est), 0)
+        
+        #message(paste(" // Execution time:", timer,
+        #          " // Estimated time remaining:", remainining), "")
     }
-
+    #close(pb)
     if (is.null(thresholds)) {
-        message("\nRisk predicted!\n")
+      message("\nRisk predicted!\n")
     }
     # the function returns a vector with optimal p.values for each lambda 
     # value in order to choose a lambda
-  rList <- list("p.vals" = p.vals)
-  return(rList)
+    rList <- list("p.vals" = p.vals)
+    return(rList)
 }
