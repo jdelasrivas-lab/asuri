@@ -183,7 +183,7 @@ patientRisk <- function(seData,
   # Set the method for risk analysis (default if not provided)
   if (is.null(method)) {
     warning("No method selected for risk group division. ",
-            "'class.probs' has been selected as the default method.\n")
+            "'class.probs' has been selected as the default method.")
     method <- "class.probs"
   } else {
     if (!method %in% c("min.pval", "med.pval", "class.probs")) {
@@ -224,7 +224,7 @@ patientRisk <- function(seData,
   # lambMax is the limit to perform the lambda optimal net of values
   listFits <- NULL
   message(c("Nested ten fold cross validation: Predicting the risk for ", 
-            "each lambda...\n"))
+            "each lambda..."))
   
   ### Grid of values for the regularization parameter.
   list.of.lambdas <- seq(from = 0, to = lambMax, length.out = 30)

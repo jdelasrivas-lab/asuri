@@ -189,15 +189,15 @@ genePheno <- function(seData, DEgenes, vectorGroups, vectorSampleID,
       list[[i]] <- x
       end[i] <- Sys.time()
       setTxtProgressBar(pb, i)
-      time <- round(lubridate::seconds_to_period(sum(end - init)), 0)
-      
-      # Estimated remaining time based on the
-      # mean time that took to run the previous iterations
-      est <- iter * (mean(end[end != 0] - init[init != 0])) - time
-      remainining <- round(lubridate::seconds_to_period(est), 0)
-      text_msg <- paste(" // Execution time:", time, 
-                        " // Estimated time remaining:", remainining)
-      message(text_msg, "")
+      # time <- round(lubridate::seconds_to_period(sum(end - init)), 0)
+      # 
+      # # Estimated remaining time based on the
+      # # mean time that took to run the previous iterations
+      # est <- iter * (mean(end[end != 0] - init[init != 0])) - time
+      # remainining <- round(lubridate::seconds_to_period(est), 0)
+      # text_msg <- paste(" // Execution time:", time, 
+      #                   " // Estimated time remaining:", remainining)
+      # message(text_msg, "")
     }
     close(pb)
     

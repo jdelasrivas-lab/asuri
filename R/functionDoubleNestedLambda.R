@@ -47,7 +47,7 @@ function_double_nested_lambda <- function(matrixOfRisks,
 
     # Optimized lambda using double nested CV
     if (is.null(thresholds)) {
-        message("Nested Cross Validation: optimizing lambda...\n")
+        message("Nested Cross Validation: optimizing lambda...")
     }
 
     #pb <- txtProgressBar(min = 0, max = nLambdas,  style = 3, 
@@ -102,7 +102,7 @@ function_double_nested_lambda <- function(matrixOfRisks,
     }
     #close(pb)
     if (is.null(thresholds)) {
-        message("\nRisk predicted!\n")
+        message("Risk predicted!")
     }
     # the function returns a vector with optimal p.values for each lambda 
     # value in order to choose a lambda

@@ -258,8 +258,10 @@ plotKM <- function(result,
     p.value <- plot_values$km$p.val
     h.ratio <- plot_values$km$hazardR
     
-    # xlim <- c(0, max(km$time))
-
+    xlim <- c(0, max(km$time))
+    xaxis.at = c(0: max(km$time))
+    xaxis.lab = xaxis.at
+    
     # Define colours based on source function
     if (is.null(col.surv)) {
         if (plot_values$source == "geneSurv-exprs") {

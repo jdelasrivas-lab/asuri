@@ -202,16 +202,16 @@ geneSurv <- function(seData, time, status, geneName, boxplot = TRUE,
       matrixgr[match(names(g), rownames(matrixgr)), i] <- as.vector(g)
       end[i] <- Sys.time()
       setTxtProgressBar(pb, i)
-      timer <- round(lubridate::seconds_to_period(sum(end - init)), 0)
-      
-      # Estimated remaining time based on the
-      # mean time that took to run the previous iterations
-      est <- iter * (mean(end[end != 0] - init[init != 0])) - timer
-      remainining <- round(lubridate::seconds_to_period(est), 0)
-      
-      text_msg <- paste(" // Execution time:", time, 
-                        " // Estimated time remaining:", remainining)
-      message(text_msg, "")
+      # timer <- round(lubridate::seconds_to_period(sum(end - init)), 0)
+      # 
+      # # Estimated remaining time based on the
+      # # mean time that took to run the previous iterations
+      # est <- iter * (mean(end[end != 0] - init[init != 0])) - timer
+      # remainining <- round(lubridate::seconds_to_period(est), 0)
+      # 
+      # text_msg <- paste(" // Execution time:", time, 
+      #                   " // Estimated time remaining:", remainining)
+      # message(text_msg, "")
     }
     close(pb)
     group.assignation.vector <- NULL
