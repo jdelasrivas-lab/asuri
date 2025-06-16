@@ -101,9 +101,10 @@
 geneSurv <- function(seData, time, status, geneName, boxplot = TRUE, 
                      iter = 100, type = c("exprs", "risk"), cut_time = 10) {
   
-    if (!is(seData, "SummarizedExperiment")) {
-      stop("SEdata must be a 'SummarizedExperiment'.")
-    }
+  if (!is(seData, "SummarizedExperiment")) {
+    stop("SEdata must be a 'SummarizedExperiment'.")
+  }
+  
   
   genExpr <- assay(seData)
   genExpr <- genExpr[rownames(genExpr) %in% geneName,]
@@ -165,7 +166,7 @@ geneSurv <- function(seData, time, status, geneName, boxplot = TRUE,
   rownames(mSurv) <- names(time)
   
   mSurv$status[mSurv$time > cut_time] <- 0
-  mSurv$time[mSurv$time > cut_time] <- 10.1
+  mSurv$time[mSurv$time > cut_time] <- cut_time + 0.1
   n.samples <- length(genExpr)
   
   if (type == "exprs") {

@@ -13,10 +13,10 @@ prefilterSAM(
 )
 }
 \arguments{
-\item{seData}{SummarizedExperiment object with the normalized expression data 
-and the phenotypic data in colData.}
+\item{seData}{SummarizedExperiment object with the normalized expression 
+data and the phenotypic data in colData.}
 
-\item{groupsVector}{A binary vector indicating group assignment for each sample.}
+\item{groupsVector}{A binary vector indicating group assignment the samples.}
 
 \item{FDRfilter}{A numeric value indicating the FDR threshold for selecting 
 significant genes. Default is 0.05.}

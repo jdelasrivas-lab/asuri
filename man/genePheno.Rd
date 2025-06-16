@@ -14,8 +14,8 @@ genePheno(
 )
 }
 \arguments{
-\item{seData}{SummarizedExperiment object with the normalized expression data 
-and the phenotypic data in colData.}
+\item{seData}{SummarizedExperiment object with the normalized expression 
+data and the phenotypic data in colData.}
 
 \item{DEgenes}{Vector containing the genes to be used. Expected to be in the 
 same format as the rows of the assay(seData). Usually this vector is the 
@@ -24,8 +24,8 @@ result of running prefilterSAM().}
 \item{vectorGroups}{Clinical variable or phenotypic variable tested. It must 
 be provided as a numeric binary vector.}
 
-\item{vectorSampleID}{Vector containing the sample names in the same order as
-in assay(seData).}
+\item{vectorSampleID}{Vector containing the sample names in the same order 
+as in assay(seData).}
 
 \item{iter}{Number of bootstrap iterations (default: 100, should be 
 changed if the function takes too long to execute).}
@@ -59,16 +59,16 @@ proposed by Tibshirani (Tibshirani et al., 2009). This algorithm considers a
 penalty term to avoid overfitting that is a convex combination of the 
 \out{L<sub>2</sub>} norm (ridge regression) and \out{L<sub>1</sub>} 
 (Lasso regression). When the alpha parameter is 1, the regularization term 
-perfoms similarly to Lasso and minimizes the number of non-null coefficients. 
-If a subset of features are slightly correlated Lasso selects only one of 
-them randomly. To avoid this extreme behavior the alpha parameter is set 
-up to 0.75 that includes more relevant variables than Lasso and improves 
-the prediction accuracy. Besides, this choice will help to improve the 
-stability and to reduce the variance in the feature selection process.
-In order to improve the robustness and reproducibility of the gene signature 
-discovered, a bootstrap strategy is implemented. The patients are resampled 
-with replacement giving rise to B replicates. For each replicate, a gene 
-signature is obtained using double nested cross-validation to avoid 
+perfoms similarly to Lasso and minimizes the number of non-null 
+coefficients. If a subset of features are slightly correlated Lasso selects 
+only one of them randomly. To avoid this extreme behavior the alpha 
+parameter is set up to 0.75 that includes more relevant variables than 
+Lasso and improves the prediction accuracy. Besides, this choice will help 
+to improve the stability and to reduce the variance in the feature selection 
+process. In order to improve the robustness and reproducibility of the gene 
+signature discovered, a bootstrap strategy is implemented. The patients are 
+resampled with replacement giving rise to B replicates. For each replicate, 
+a gene signature is obtained using double nested cross-validation to avoid 
 overfitting. The final gene list is built as an ensemble of lists, 
 considereing several metrics that evaluate the stability, the robustness 
 and the predictive power of each gene. See (Martinez-Romero et al., 2018) 
@@ -83,8 +83,9 @@ set.seed(5)
 DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
 
 # genePheno ---
-vectorSampleID <- as.character(rownames(SummarizedExperiment::colData(seBRCA)))
-vectorGroups <- as.numeric(SummarizedExperiment::colData(seBRCA)$ER.IHC)
+vectorSampleID <- rownames(SummarizedExperiment::colData(seBRCA))
+vectorGroups <- SummarizedExperiment::colData(seBRCA)$ER.IHC
+
 Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID)
 
 # Pred_ER.IHC is an output object with the list of genes that show a 

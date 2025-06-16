@@ -20,7 +20,7 @@ data(seBRCA)
 }
 \description{
 A `SummarizedExperiment` object created from gene expression and phenotypic
-data included in the ASURI package. The dataset included in ASURI as a study 
+data included in the ASURI package. The dataset included in ASURI as a stud
 case is intended to facilitate the use of the package. The dataset was 
 obtained from several GSE series from 
 [GEO database](http://www.ncbi.nlm.nih.gov/geo/) corresponding to breast 
@@ -30,12 +30,11 @@ profiles of BRCC primary tumor samples hybridized on the transcriptomic
 platform: *Affymetrix* *HGU133 Plus2.0*; which is a high-density microarray 
 expression platform containing 594,000 oligo-nucleotide probes (organized 
 in probe-sets) that we mapped to ENSEMBL genes using the 
-*hgu133plus2hsensgcdf* CDF package, obtained from 
-[BRAINARRAY](http://mbni.org/customcdf/24.0.0/ensg.download/hgu133plus2hsensgcdf_24.0.0.tar.gz). 
-The expression signal of the samples was normalized using fRMA [@fRMA] 
-or RMA [@RMA] and Combat [@combat], as described in [@Bueno2023].
-It integrates 1070 genes measured across 200 breast cancer samples with 
-associated clinical annotations.
+*hgu133plus2hsensgcdf* CDF package, obtained from BRAINARRAY( 
+hgu133plus2hsensgcdf_24.0.0.tar.gz.) The expression signal of the samples 
+was normalized using fRMA [@fRMA] or RMA [@RMA] and Combat [@combat], 
+as described in [@Bueno2023]. It integrates 1070 genes measured across 200 
+breast cancer samples with associated clinical annotations.
 }
 \seealso{
 \code{\link[SummarizedExperiment]{SummarizedExperiment}}

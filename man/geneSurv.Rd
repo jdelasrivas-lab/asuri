@@ -16,9 +16,10 @@ geneSurv(
 )
 }
 \arguments{
-\item{seData}{SummarizedExperiment object with the normalized expression data 
-and the phenotypic data in colData. Phenotypic colData must contain the samples
-name in the first column and two columns with the time and the status.}
+\item{seData}{SummarizedExperiment object with the normalized expression 
+data and the phenotypic data in colData. Phenotypic colData must contain 
+the samples name in the first column and two columns with the time and the 
+status.}
 
 \item{time}{SummarizedExperiment colData column name containing the survival 
 time in years for each sample in numeric format.}
@@ -28,8 +29,8 @@ time in years for each sample in numeric format.}
 
 \item{geneName}{A character string with the name of the gene being analyzed.}
 
-\item{boxplot}{A logical value indicating whether to generate a boxplot of gene 
-expression by survival group (default = TRUE).}
+\item{boxplot}{A logical value indicating whether to generate a boxplot of 
+gene expression by survival group (default = TRUE).}
 
 \item{iter}{The number of iterations (bootstrap resampling) for calculating 
 optimal group cutoffs (default = 100).}
@@ -46,37 +47,41 @@ Depending on the type run, the output changes:
  - For type = exprs, a Kaplan-Meier plot based on expression groups, a 
  differential expression boxplot and a plot with the membership probability 
  for each risk group. Additionally, an object with the following components:
-   + \code{geneName}: A character string with the name of the gene being analyzed.
-   + \code{patientExpr}: The expression level of each patient for the given gene.
-   + \code{patientClass}: Vector of group classification according to the gene 
-   expression level: 2 = high expression and 1 = low expression level.
+   + \code{geneName}: A character string with the selected name of the gene 
+   to analyze.
+   + \code{patientExpr}: The expression level of each patient for the gene.
+   + \code{patientClass}: Vector of group classification according to the 
+   gene expression level: 2 = high expression and 1 = low expression level.
    + \code{patientClassProbality}: Vector of membership probabilities for 
    the classification.
    + \code{wilcox.pvalue}: The p-value from the Wilcoxon test comparing the 
    two expression groups.
    + \code{plot_values}: A list containing Kaplan-Meier fit results, 
-   log-rank p-value, and hazard ratio .
+   log-rank p-value, and hazard ratio.
  - For type = risk, a Kaplan-Meier plot based on risk groups. Additionally, 
  an object with the following components:
-   + \code{geneName}: A character string with the name of the gene being analyzed.
-   + \code{patientExpr}: The expression level of each patient for the given gene.
-   + \code{risk_score_predicted}: A numeric vector of predicted relative risk scores for each patient
-   + \code{plot_values}: A list containing Kaplan-Meier fit results, log-rank p-value, and hazard ratio
+   + \code{geneName}: A character string with the selected name of the gene 
+   to analyze.
+   + \code{patientExpr}: The expression level of each patient for the gene.
+   + \code{risk_score_predicted}: A numeric vector of predicted relative 
+   risk scores for each patient.
+   + \code{plot_values}: A list containing Kaplan-Meier fit results, 
+   log-rank p-value, and hazard ratio.
 }
 \description{
-This function analyzes the ability of a gene to mark survival based on a robust 
-version of the KM curves. The robust K-M estimator is obtained by a bootstrap 
-strategy.
+This function analyzes the ability of a gene to mark survival based on a 
+robust version of the KM curves. The robust K-M estimator is obtained by a 
+bootstrap strategy.
 }
 \details{
-This function improves the stability and robustness of the K-M estimator using 
-a bootstrap strategy. Patients are resampled with replacement giving rise 
-to B replicates. The K-M estimator is obtained based on the replicates as 
-well as the confidence intervals. The patients are stratified in two risk 
+This function improves the stability and robustness of the K-M estimator 
+using a bootstrap strategy. Patients are resampled with replacement giving 
+rise to B replicates. The K-M estimator is obtained based on the replicates 
+as well as the confidence intervals. The patients are stratified in two risk 
 groups by an expression threshold that optimizes the log-rank statistics, 
 that is the separability between the Kaplan-Meier curves for each group. 
-This function implements a novel method to find the optimal threshold avoiding 
-the problems of instability and unbalanced classes that suffer 
+This function implements a novel method to find the optimal threshold 
+avoiding the problems of instability and unbalanced classes that suffer 
 other implementations. Besides, a membership probability for each risk group 
 is estimated from the classification of each sample in the replicates. 
 This membership probability allow us to reclassify patients around the gene 

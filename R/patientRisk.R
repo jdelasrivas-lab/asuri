@@ -25,6 +25,9 @@
 #'  probabilities from the model.
 #' @param nboot An integer specifying the number of bootstrap iterations for 
 #' risk score calculation. Default is 50.
+#' @param cut_time A numeric value specifying the cutoff time (in years) for 
+#' survival analysis. All events beyond this time are treated as censored 
+#' (default = 10 years).
 #' @details A multivariate Cox regression is trained to select a subset of 
 #' genes significantly associated with the risk and to estimate a risk score 
 #' based on these risk markers. 
@@ -145,7 +148,8 @@ patientRisk <- function(seData,
                         status,
                         group.vector,
                         method = NULL,
-                        nboot = 50) {
+                        nboot = 50,
+                        cut_time = 10) {
   
   if (!is(seData, "SummarizedExperiment")) {
     stop("SEdata must be a 'SummarizedExperiment'.")
@@ -204,6 +208,9 @@ patientRisk <- function(seData,
     row.names = names(time),
     stringsAsFactors = FALSE
   )
+  
+  mSurv$status[mSurv$time > cut_time] <- 0
+  mSurv$time[mSurv$time > cut_time] <- cut_time + 0.1
   
   folds <- sample(cut(seq(1, length(mExpr[1, ])),
                       breaks = 10,
