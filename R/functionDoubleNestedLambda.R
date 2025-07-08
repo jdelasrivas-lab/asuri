@@ -27,6 +27,7 @@
 #  obtained for each lambda value across different cutoffs.
 #
 # @examples
+# \dontrun{
 # # Simulated data example
 # set.seed(123)
 # matrixOfRisks <- matrix(rnorm(1000), ncol = 10)
@@ -36,7 +37,7 @@
 # )
 # result <- function_double_nested_lambda(matrixOfRisks, mSurv)
 # print(result$p.vals)
-#
+# }
 # @export
 function_double_nested_lambda <- function(matrixOfRisks, 
                                             mSurv, thresholds = NULL) {

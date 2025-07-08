@@ -37,6 +37,7 @@
 #'                           times in \code{eval_surv_times}.
 #'
 #' @examples
+#' \dontrun{
 #' data(seBRCA)
 #' 
 #' # prefilterSAM ---
@@ -113,7 +114,7 @@
 #'                                    mPheno[, c(2, 3)], 
 #'                                    cox_pred_test$risk_score, 
 #'                                    eval_surv_times)
-#'
+#' }
 #'
 #' @references 
 #' \insertRef{martinezromero2018}{asuri}

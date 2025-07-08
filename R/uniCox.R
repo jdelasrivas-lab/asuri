@@ -31,6 +31,7 @@
 # \item{call}{The original function call.}
 #
 # @examples
+# \dontrun{
 # # Example usage
 # # x: Gene expression matrix (samples x genes)
 # # y: Survival times
@@ -38,6 +39,7 @@
 # fit <- uniCox(x, y, status)
 # print(fit$beta) # Coefficients for each lambda value
 # print(fit$nfeatures) # Number of selected features for each lambda
+# }
 #
 # @importFrom stats scale
 # @export

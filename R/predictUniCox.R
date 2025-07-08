@@ -34,12 +34,14 @@
 # input data.
 #
 # @examples
+# \dontrun{
 # # Example usage with a pre-trained model and input data
 # model <- list(mx = rep(0, 10), vx = rep(1, 10), s0 = 1, beta = rnorm(10))
 # input_data <- matrix(rnorm(100), nrow = 10, ncol = 10)
 # predicted_risk <- predict_uniCox(model, input_data)
 # print(predicted_risk)
-#
+# }
+# 
 # @export
 predict_uniCox <- function(object, x, ...) {
     # Error control: Check if object contains required elements

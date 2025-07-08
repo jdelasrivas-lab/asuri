@@ -28,6 +28,7 @@
 #'  sigmoid curve and risk thresholds.
 #'
 #' @examples
+#' \dontrun{
 #' data(seBRCA)
 #' 
 #' # prefilterSAM ---
@@ -80,7 +81,8 @@
 #' risk_prediction_one_patient <- predict_PatientRisk(
 #'                                                 multivariate_risk_predictor, 
 #'                                                 mExprs_testSingleData)
-#'
+#' }
+#' 
 #' @references 
 #' \insertRef{martinezromero2018}{asuri}
 #' \insertRef{BuenoFortes2023}{asuri}

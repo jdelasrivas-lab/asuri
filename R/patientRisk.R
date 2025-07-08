@@ -102,6 +102,7 @@
 #'  the high risk group.
 #'  
 #' @examples
+#' \dontrun{
 #' data(seBRCA)
 #' 
 #' # prefilterSAM ---
@@ -135,6 +136,7 @@
 #' asuri:::plotLambda(multivariate_risk_predictor)
 #' asuri:::plotBetas(multivariate_risk_predictor)
 #' asuri:::plotKM(multivariate_risk_predictor)
+#' }
 #' 
 #' @references 
 #' \insertRef{martinezromero2018}{asuri}

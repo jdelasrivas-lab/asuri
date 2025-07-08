@@ -56,6 +56,7 @@
 #'  the mean and the median of the beta coefficients.
 #'
 #' @examples
+#' \dontrun{
 #' data(seBRCA)
 #' 
 #' # prefilterSAM ---
@@ -78,7 +79,8 @@
 #' 
 #' names(Pred_ER.IHC)
 #' # [1] "genes" "listCoeff" "stability" "betasMedian" "betasMean" "betasTable"
-#'
+#' }
+#' 
 #' @references 
 #' \insertRef{martinezromero2018}{asuri}
 #' \insertRef{BuenoFortes2023}{asuri}

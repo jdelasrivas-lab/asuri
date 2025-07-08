@@ -5,7 +5,6 @@ export(predict_PatientRisk)
 export(predict_SurvCurve)
 export(prefilterSAM)
 
-import(lubridate)
 import(methods)
 import(ROCR)
 import(siggenes)
@@ -19,6 +18,7 @@ import(ggplot2)
 import(SummarizedExperiment)
 
 
+importFrom(lubridate, seconds_to_period)
 importFrom(SummarizedExperiment, assay, colData)
 importFrom(utils, setTxtProgressBar, txtProgressBar)
 importFrom(gplots, textplot)

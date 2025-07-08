@@ -30,6 +30,7 @@
 # }
 #
 # @examples
+# \dontrun{
 # # Simulated data example
 # set.seed(123)
 # genExpr <- rnorm(100)
@@ -40,7 +41,8 @@
 # geneName <- c("Gene1")
 # result <- functionKmGroups(genExpr, mSurv, geneName)
 # print(result$best_pvalue)
-#
+# }
+# 
 # @export
 
 functionKmGroups <- function(genExpr, mSurv, geneName) {

@@ -17,9 +17,11 @@
 # @return This function prints a summary to the console.
 #
 # @examples
+# \dontrun{
 # # Example usage after running the uniCox model
 # fit <- uniCox(X, y) # X is the predictor matrix, y is the survival outcome
 # print(fit)
+# }
 #
 # @export
 print.uniCoxFit <- function(x, ...) {

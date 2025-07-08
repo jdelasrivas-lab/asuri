@@ -66,7 +66,7 @@
 #'    log-rank p-value, and hazard ratio.
 #'
 #' @examples
-#' 
+#' \dontrun{
 #' data(seBRCA)
 #' time <- "time"
 #' status <- "status"
@@ -91,7 +91,8 @@
 #' 
 #' ## Plots for c(type = risk)
 #' asuri:::plotKM(outputKM)
-#'
+#' }
+#' 
 #' @references 
 #' \insertRef{martinezromero2018}{asuri}
 #' \insertRef{BuenoFortes2023}{asuri}

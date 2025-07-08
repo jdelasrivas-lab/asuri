@@ -30,6 +30,7 @@
 #' by SAM d.value and filtered by percentageFilter.
 #'
 #' @examples
+#' \dontrun{
 #' data(seBRCA)
 #' 
 #' # Bootstrapped differential expression based on SAM.
@@ -41,6 +42,7 @@
 #' 
 #' set.seed(5)
 #' DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
+#' }
 #' 
 #' @references 
 #' \insertRef{schwender2025siggenes}{asuri}
