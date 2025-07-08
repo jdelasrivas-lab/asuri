@@ -5,6 +5,7 @@ export(predict_PatientRisk)
 export(predict_SurvCurve)
 export(prefilterSAM)
 
+import(lubridate)
 import(methods)
 import(ROCR)
 import(siggenes)

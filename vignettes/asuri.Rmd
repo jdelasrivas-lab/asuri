@@ -340,6 +340,7 @@ The input parameters of the **patientRisk()** function are the following:
 - `group.vector` Optional numeric vector specifying predefined risk groups for the patients.
 - `method` A string that determines the method considered to stratified the patients in two risk groups according to the risk score for the lower 10th percentile of the p-values: (1) `min.pval` Defines risk groups based on the minimum p-value. (2) `med.pval` Defines risk groups based on the median p-value. This approach can be more robust when several local minima are found. Finally, (3) `class.probs` Defines risk groups based on the classification probabilities from the model. It provides also a membership probability to each risk group. `class.probs` is selected by default.
 - `nboot` An integer specifying the number of bootstrap iterations for risk score calculation. Default is 50.
+- `cut_time`  A numeric value specifying the cutoff time (in years) for survival analysis. All events beyond this time are treated as censored (by default = 10 years).
 
 The **patientRisk()** function returns a list containing the following objects:
 
@@ -505,6 +506,9 @@ It provides also a plot with the expected survival curve estimation for the test
 knitr::include_graphics("figures/surv_plot_breslow.png")
 ```
 
+
+# Brief comparison of ASURI and other related R tools
+ASURI is related to several packages available in CRAN or Bioconductor: Biospear (Ternès _et al._, 2018), Biomarker Selection in Penalized Regression Models, CRAN; which provides a framework for biomarker selection based on multivariate penalized Cox regression models; CPSM (Kaur H. _et al._, 2024), Cancer Patient Survival Model, Bioconductor; which enables us to identify a set of biomarkers using univariate or multivariate Lasso Cox regression and to predict the survival probability of individual patients; and RTNsurvival (Groeneveld C. S. _et al._, 2019), Regulatory Network Survival Analysis, Bioconductor; that focuses on multivariate survival analysis of regulons obtained from transcriptional regulatory networks. However, ASURI has several advantages over these and other packages: First, it incorporates a pipeline to obtain survival genes that can be related to the standard clinical features and pathophysiological markers considered by oncologists. Second, the stability and robustness of the markers selected as well as the risk prediction is significantly improved by a boostrapping and resampling strategy. Finally, ASURI implements advanced methods to stratify the patients into risk groups and to perform a fuzzy classification of intermediate-risk patients.
 
 # Session Info
 ```{r, echo = TRUE, results = 'hide'}  

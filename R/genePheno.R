@@ -65,7 +65,7 @@
 #' 
 #' # genePheno ---
 #' vectorSampleID <- rownames(SummarizedExperiment::colData(seBRCA))
-#' vectorGroups <- SummarizedExperiment::colData(seBRCA)$ER.IHC
+#' vectorGroups <- SummarizedExperiment::colData(seBRCA)$ER.IHC |> as.numeric()
 #' 
 #' Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID)
 #' 
