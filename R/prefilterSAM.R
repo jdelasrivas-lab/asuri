@@ -30,7 +30,6 @@
 #' by SAM d.value and filtered by percentageFilter.
 #'
 #' @examples
-#' \dontrun{
 #' data(seBRCA)
 #' 
 #' # Bootstrapped differential expression based on SAM.
@@ -41,8 +40,10 @@
 #' groupsVector <- SummarizedExperiment::colData(seBRCA)$ER.IHC
 #' 
 #' set.seed(5)
-#' DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
-#' }
+#' DE_list_genes <- prefilterSAM(seBRCA, groupsVector, iter = 25)
+#' 
+#' # NOTE: For consistent results with the vignettes and example data, use 
+#' # default parameters (e.g., iter = 100).
 #' 
 #' @references 
 #' \insertRef{schwender2025siggenes}{asuri}

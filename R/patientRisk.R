@@ -102,35 +102,26 @@
 #'  the high risk group.
 #'  
 #' @examples
-#' \dontrun{
 #' data(seBRCA)
 #' 
-#' # prefilterSAM ---
-#' groupsVector <- SummarizedExperiment::colData(seBRCA)$ER.IHC
-#' set.seed(5)
-#' DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
-#' 
 #' # genePheno ---
-#' vectorSampleID <- rownames(SummarizedExperiment::colData(seBRCA))
-#' vectorGroups <- SummarizedExperiment::colData(seBRCA)$ER.IHC |> as.numeric()
-#' Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID)
+#' data(genePheno)
 #' 
 #' # Survival times should be provided in YEARS
 #' time <- 'time'
 #' status <- 'status'
-#' # Pred_ER.IHC$genes is the subset of genes to be tested. In our case study,
-#' # it is the list of genes related to the ER clinical variable that was
-#' # obtained using the function **genePheno()**.
 #' geneList <- names(Pred_ER.IHC$genes)
-#' # Training of the multivariate COX model. Provide the expression matrix
-#' # (genes as rows and samples as columns) for the list of genes selected,
-#' # the time and the status vectors, and the method to stratify the patients
-#' # (select one of these methods: `min.pval`, `med.pval`, `class.probs`).
+#' 
 #' set.seed(5)
 #' multivariate_risk_predictor <- patientRisk(seBRCA, geneList, time, status, 
-#'                                            method = "class.probs")
+#'                                            method = "class.probs", 
+#'                                            nboot = 10)
+#' 
+#' # NOTE: For consistent results with the vignettes and example data, use 
+#' # default parameters (e.g., nboot = 50).
 #' 
 #' # Generate the plots again
+#' \dontrun{
 #' asuri:::plotLogRank(multivariate_risk_predictor)
 #' asuri:::plotSigmoid(multivariate_risk_predictor)
 #' asuri:::plotLambda(multivariate_risk_predictor)

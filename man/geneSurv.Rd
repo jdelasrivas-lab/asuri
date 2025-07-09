@@ -91,7 +91,6 @@ Hazard ratio that allow us to evaluate the ability of a given gene
 to mark survival.
 }
 \examples{
-\dontrun{
 data(seBRCA)
 time <- "time"
 status <- "status"
@@ -116,7 +115,6 @@ outputKM.TP53 <- geneSurv(seBRCA, time, status, geneName, type = "risk")
 
 ## Plots for c(type = risk)
 asuri:::plotKM(outputKM)
-}
 
 }
 \references{

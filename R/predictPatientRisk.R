@@ -28,36 +28,20 @@
 #'  sigmoid curve and risk thresholds.
 #'
 #' @examples
-#' \dontrun{
 #' data(seBRCA)
 #' 
 #' # prefilterSAM ---
-#' groupsVector <- SummarizedExperiment::colData(seBRCA)$ER.IHC
-#' set.seed(5)
-#' DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
+#' data(prefilterSAM)
 #' 
 #' # genePheno ---
-#' vectorSampleID <- rownames(SummarizedExperiment::colData(seBRCA))
-#' vectorGroups <- SummarizedExperiment::colData(seBRCA)$ER.IHC |> as.numeric()
-#' Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID)
+#' data(genePheno)
 #' 
-#' # Survival times should be provided in YEARS
-#' time <- 'time'
-#' status <- 'status'
-#' # Pred_ER.IHC$genes is the subset of genes to be tested. In our case study,
-#' # it is the list of genes related to the ER clinical variable that was
-#' # obtained using the function **genePheno()**.
-#' geneList <- names(Pred_ER.IHC$genes)
-#' # Training of the multivariate COX model. Provide the expression matrix
-#' # (genes as rows and samples as columns) for the list of genes selected,
-#' # the time and the status vectors, and the method to stratify the patients
-#' # (select one of these methods: `min.pval`, `med.pval`, `class.probs`).
-#' set.seed(5)
-#' multivariate_risk_predictor <- patientRisk(seBRCA, geneList, time, status, 
-#'                                            method = "class.probs")
+#' # patientRisk ---
+#' data(patientRisk)
 #'                                            
 #' # Simulate expression data
 #' num_samples <- 20
+#' geneList <- names(Pred_ER.IHC$genes)
 #' set.seed(5)
 #' mExprs_testData <- matrix(rnorm(length(geneList) * num_samples, 
 #'                           mean = 10, sd = 3),
@@ -81,7 +65,6 @@
 #' risk_prediction_one_patient <- predict_PatientRisk(
 #'                                                 multivariate_risk_predictor, 
 #'                                                 mExprs_testSingleData)
-#' }
 #' 
 #' @references 
 #' \insertRef{martinezromero2018}{asuri}

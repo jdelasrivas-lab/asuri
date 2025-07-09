@@ -54,84 +54,44 @@ provided, the curve is evaluated at those specific times; otherwise, the
 function uses the survival times from the training data.
 }
 \examples{
-\dontrun{
 data(seBRCA)
 
 # prefilterSAM ---
-groupsVector <- SummarizedExperiment::colData(seBRCA)$ER.IHC
-set.seed(5)
-DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
+data(prefilterSAM)
 
 # genePheno ---
-vectorSampleID <- rownames(SummarizedExperiment::colData(seBRCA))
-vectorGroups <- SummarizedExperiment::colData(seBRCA)$ER.IHC |> as.numeric()
-Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID)
+data(genePheno)
 
-# Survival times should be provided in YEARS
-time <- 'time'
-status <- 'status'
-# Pred_ER.IHC$genes is the subset of genes to be tested. In our case study,
-# it is the list of genes related to the ER clinical variable that was
-# obtained using the function **genePheno()**.
-geneList <- names(Pred_ER.IHC$genes)
-# Training of the multivariate COX model. Provide the expression matrix
-# (genes as rows and samples as columns) for the list of genes selected,
-# the time and the status vectors, and the method to stratify the patients
-# (select one of these methods: `min.pval`, `med.pval`, `class.probs`).
-set.seed(5)
-multivariate_risk_predictor <- patientRisk(seBRCA, geneList, time, status, 
-                                           method = "class.probs")
-                                           
-# Simulate expression data
-num_samples <- 20
-set.seed(5)
-mExprs_testData <- matrix(rnorm(length(geneList) * num_samples, 
-                          mean = 10, sd = 3),
-                          nrow = length(geneList), ncol = num_samples)
+# patientRisk ---
+data(patientRisk)
 
-# Assign row names (genes) and column names (samples)
-rownames(mExprs_testData) <- geneList
-colnames(mExprs_testData) <- paste0("Sample", 1:num_samples)
+# predictPatientRisk ---
+data(predictPatientRisk)
 
-set.seed(5)
-risk_prediction_validation_set <- predict_PatientRisk(
-                                               multivariate_risk_predictor, 
-                                               mExprs_testData)
-
-
-# Example for single patient prediction: Patient fourth is selected.
-mExprs_testSingleData <- data.frame(mExprs_testData[, 4])
-colnames(mExprs_testSingleData) <- colnames(mExprs_testData)[4]
-# Risk prediction for the optimal subset of genes selected by patientRisk()
-set.seed(5)
-risk_prediction_one_patient <- predict_PatientRisk(
-                                               multivariate_risk_predictor, 
-                                               mExprs_testSingleData)
-                                                   
-                                                   
+ 
 #COX prediction for the training set
 mPheno <- SummarizedExperiment::colData(seBRCA)
 mExprs <- SummarizedExperiment::assay(seBRCA)
+geneList <- names(Pred_ER.IHC$genes)
 
 set.seed(5)
 mExprSelectedGenes <- mExprs[rownames(mExprs) \%in\% geneList,]
 
-cox_pred_training <- predict_PatientRisk(multivariate_risk_predictor, 
+cox_pred_training <- predict_PatientRisk(multivariate_risk_predictor,
                                          mExprSelectedGenes)
 cox_pred_training$risk_score
 #COX prediction for the test patient
 set.seed(5)
-cox_pred_test <- predict_PatientRisk(multivariate_risk_predictor, 
+cox_pred_test <- predict_PatientRisk(multivariate_risk_predictor,
                                      mExprs_testSingleData)
 cox_pred_test$risk_score
 #Survival curve estimation
 eval_surv_times <- seq(0, max(mPheno$time), by = 0.1)
 set.seed(5)
-surv_curv_cox <- predict_SurvCurve(cox_pred_training$risk_score, 
-                                   mPheno[, c(2, 3)], 
-                                   cox_pred_test$risk_score, 
+surv_curv_cox <- predict_SurvCurve(cox_pred_training$risk_score,
+                                   mPheno[, c(2, 3)],
+                                   cox_pred_test$risk_score,
                                    eval_surv_times)
-}
 
 }
 \references{

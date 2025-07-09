@@ -56,30 +56,20 @@
 #'  the mean and the median of the beta coefficients.
 #'
 #' @examples
-#' \dontrun{
 #' data(seBRCA)
 #' 
 #' # prefilterSAM ---
-#' groupsVector <- SummarizedExperiment::colData(seBRCA)$ER.IHC
-#' set.seed(5)
-#' DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
+#' data(prefilterSAM)
 #' 
 #' # genePheno ---
 #' vectorSampleID <- rownames(SummarizedExperiment::colData(seBRCA))
 #' vectorGroups <- SummarizedExperiment::colData(seBRCA)$ER.IHC |> as.numeric()
 #' 
-#' Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID)
+#' Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID,
+#'                          iter = 25)
 #' 
-#' # Pred_ER.IHC is an output object with the list of genes that show a 
-#' # significant correlation with the clinical variable. Since a bootstrap is 
-#' # performed, the results of how many times across iterations a gene is found 
-#' # significant are reported as *stability* (in relative numbers 0-1, 1=100%) 
-#' # and the *beta values* from the regression across iterations are also 
-#' # provided as *betaMedian* and *betaMean* :
-#' 
-#' names(Pred_ER.IHC)
-#' # [1] "genes" "listCoeff" "stability" "betasMedian" "betasMean" "betasTable"
-#' }
+#' # NOTE: For consistent results with the vignettes and example data, use 
+#' # default parameters (e.g., iter = 100).
 #' 
 #' @references 
 #' \insertRef{martinezromero2018}{asuri}
