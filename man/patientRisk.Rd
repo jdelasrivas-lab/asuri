@@ -150,13 +150,12 @@ multivariate_risk_predictor <- patientRisk(seBRCA, geneList, time, status,
 # default parameters (e.g., nboot = 50).
 
 # Generate the plots again
-\dontrun{
-asuri:::plotLogRank(multivariate_risk_predictor)
-asuri:::plotSigmoid(multivariate_risk_predictor)
-asuri:::plotLambda(multivariate_risk_predictor)
-asuri:::plotBetas(multivariate_risk_predictor)
-asuri:::plotKM(multivariate_risk_predictor)
-}
+# asuri:::plotLogRank(multivariate_risk_predictor)
+# asuri:::plotSigmoid(multivariate_risk_predictor)
+# asuri:::plotLambda(multivariate_risk_predictor)
+# asuri:::plotBetas(multivariate_risk_predictor)
+# asuri:::plotKM(multivariate_risk_predictor)
+
 
 }
 \references{
