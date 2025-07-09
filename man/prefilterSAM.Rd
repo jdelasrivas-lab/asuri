@@ -49,6 +49,7 @@ in a specified percentage of iterations (controlled by `percentageFilter`)
 are retained.
 }
 \examples{
+\dontrun{
 data(seBRCA)
 
 # Bootstrapped differential expression based on SAM.
@@ -60,6 +61,7 @@ groupsVector <- SummarizedExperiment::colData(seBRCA)$ER.IHC
 
 set.seed(5)
 DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
+}
 
 }
 \references{

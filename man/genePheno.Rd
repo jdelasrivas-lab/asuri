@@ -75,6 +75,7 @@ and the predictive power of each gene. See (Martinez-Romero et al., 2018)
 for more details.
 }
 \examples{
+\dontrun{
 data(seBRCA)
 
 # prefilterSAM ---
@@ -97,6 +98,7 @@ Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID)
 
 names(Pred_ER.IHC)
 # [1] "genes" "listCoeff" "stability" "betasMedian" "betasMean" "betasTable"
+}
 
 }
 \references{

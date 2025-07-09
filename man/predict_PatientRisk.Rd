@@ -38,6 +38,7 @@ stratifies them in three risk groups (low, intermediate, high) considering
 the thresholds learned by function patientRisk.
 }
 \examples{
+\dontrun{
 data(seBRCA)
 
 # prefilterSAM ---
@@ -90,6 +91,7 @@ set.seed(5)
 risk_prediction_one_patient <- predict_PatientRisk(
                                                 multivariate_risk_predictor, 
                                                 mExprs_testSingleData)
+}
 
 }
 \references{

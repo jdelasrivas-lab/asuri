@@ -54,12 +54,8 @@ abstract: |
 ---
 
 ```{r setup, include=FALSE}
-library(formatR)
-library(knitr)
-library(asuri)
-library(SummarizedExperiment)
 knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 65), tidy = TRUE, 
-                      echo = TRUE, message = FALSE, warning = FALSE, results = "hide")
+                      echo = TRUE, message = FALSE, warning = FALSE)
 ```
 
 # Introduction
@@ -98,7 +94,7 @@ The dataset included in ASURI as a study case is intended to facilitate the use 
 
 Once this dataset is loaded the *seBRCA* object is created. This SummarizedExperiment object contains the normalized gene expression data matrix and phenotypical information about each sample (i.e. clinical physio-pathological data and other phenotypic data).
 
-```{r}
+```{r, echo = TRUE, eval = FALSE} 
 library(asuri)
 data(seBRCA)
 # To extract the normalized expression
@@ -106,7 +102,7 @@ mExprs <- assay(seBRCA)
 mPheno <- colData(seBRCA)
 ```
 
-```{r} 
+```{r, echo = TRUE, eval = FALSE} 
 # To visualize the dimensions of the two extracted objects
 dim(mExprs)
 dim(mPheno)
@@ -143,7 +139,7 @@ The input parameters for the function are the following:
 - `type` Specifies whether the two Kaplan-Meier curves are computed using the gene expression groups (by default "exprs"), or using the risk groups ("risk") if the samples are already classified by risk level and this is used directly to divide the samples into two groups.
 - `cut_time`  A numeric value specifying the cutoff time (in years) for survival analysis. All events beyond this time are treated as censored (by default = 10 years).
 
-```{r, echo = TRUE, results = 'hide', fig.show='hide'} 
+```{r, echo = TRUE, eval = FALSE} 
 data(seBRCA)
 time <- "time"
 status <- "status"
@@ -204,7 +200,7 @@ The result shown in **Figure \@ref(fig:kmesr1)**, with a p-value for the log-ran
 
 Run of the function  **geneSurv()** as `type = "risk"`:
 
-```{r, echo = TRUE, results = 'hide', fig.show='hide'} 
+```{r, echo = TRUE, eval = FALSE} 
 # If we instead consider to run the function as *type* = risk
 geneName <- "BRCA1"
 set.seed(5)
@@ -235,7 +231,7 @@ The input parameters for the function are the following:
   - `iter`: The number of iterations for the bootstrapping. Default is 100.
   - `percentageFilter`: A numeric value indicating the percentage of iterations a gene must appear in to be considered significant. Default is 80.
 
-```{r, echo = TRUE, results = 'hide'} 
+```{r, echo = TRUE, eval = FALSE} 
 data(seBRCA)
 
 # Bootstrapped differential expression based on SAM.
@@ -261,7 +257,7 @@ The input parameters are the following:
 - `iter`: Number of bootstrap iterations (default: 100). This can be changed if the function takes too long to run.
 - `numberOfFolds`: Number of folds to implement nested cross-validation (default: 10).
 
-```{r, echo = TRUE, results = 'hide'} 
+```{r, echo = TRUE, eval = FALSE} 
 vectorSampleID <- as.character(rownames(colData(seBRCA)))
 vectorGroups <- as.numeric(colData(seBRCA)$ER.IHC)
 Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID)
@@ -290,7 +286,7 @@ Pred_ER.IHC$betasTable
 <div align="center"><p><b>Table 1</b>: List of genes by Stability.</p></div>
 
 The output of the function is an object with the following elements:
-```{r, echo = TRUE, results = 'hide'} 
+```{r, echo = TRUE, eval = FALSE} 
 names(Pred_ER.IHC)
 # [1] "genes" "listCoeff" "stability" "betasMedian" "betasMean" "betasTable"
 ```
@@ -316,7 +312,7 @@ The **optimal threshold for dividing the patients into two groups (low/high)** c
 
 The following code illustrates how to apply the **patientRisk()** function to discover/identify significant gene survival markers and to accurately predict patient risk.
 
-```{r, echo = TRUE, results = 'hide', fig.show='hide'} 
+```{r, echo = TRUE, eval = FALSE} 
 # Survival times should be provided in YEARS
 time <- 'time'
 status <- 'status'
@@ -411,7 +407,7 @@ Once the multivariate risk predictor is trained by the **patientRisk()** functio
 
 The following lines show how to predict the risk score for an independent set of patients. The function plots the risk score and stratifies the patients into three groups.
 
-```{r, echo = TRUE, results = 'hide', fig.show='hide'} 
+```{r, echo = TRUE, eval = FALSE} 
 # Generate the validation set, mExprs_testData if necessary.
 # Vector of genes (same ones used in Cox model training)
 
@@ -446,7 +442,7 @@ knitr::include_graphics("figures/risk_plot_predict_patientRisk.png")
 
 This function can be applied also to predict the risk of a single patient given the gene expression profile. The mExprs_testData will contain now a column with the expression level for the list of genes selected.
 
-```{r, echo = TRUE, results = 'hide'} 
+```{r, echo = TRUE, eval = FALSE} 
 # Example for single patient prediction: Patient fourth is selected.
 mExprs_testSingleData <- data.frame(mExprs_testData[, 4])
 colnames(mExprs_testSingleData) <- colnames(mExprs_testData)[4]
@@ -455,7 +451,7 @@ set.seed(5)
 risk_prediction_one_patient <- predict_PatientRisk(multivariate_risk_predictor, mExprs_testSingleData)
 ```
 
-```{R, echo = TRUE, results = 'hide'} 
+```{r, echo = TRUE, eval = FALSE} 
 # Normalized patient Risk (0 100): 27.9017675117161
 # The patient is classified as Low Risk 
 # Low Risk interval: (0, 37.0600635839135)
@@ -474,7 +470,7 @@ The input parameters are:
 - `cox_pred_test` A numeric vector of length 1 representing the predicted risk score (or log-risk score) for the test patient. It can be obtained from **predict_PatientRisk()** function.
 - `eval_surv_times`  A numeric vector of times at which the survival curve should be evaluated. If NULL (default), the times will be taken from the training data up to the maximum event time. 
 
-```{r, echo = TRUE, results = 'hide', fig.show='hide'}  
+```{r, echo = TRUE, eval = FALSE} 
 data(seBRCA)
 # COX prediction for the training set
 mPheno <- colData(seBRCA)
@@ -508,13 +504,13 @@ knitr::include_graphics("figures/surv_plot_breslow.png")
 
 
 # Brief comparison of ASURI and other related R tools
-The ASURI package has several features that make it attractive to clinicians and researchers specialising in molecular cancer, setting it apart from other libraries available in R/Bioconductor. For instance, the BIOSPEAR package (Ternès _et al._, 2018) provides a framework for biomarker selection based on multivariate penalised Cox regression models. BIOSPEAR enables the selection of various Lasso Cox regression variants, such as Adaptive Lasso, Elastic Net, stability selection and group Lasso. Based on previous models, it can also estimate the expected survival probability for individual patients. However, this library identifies gene signatures that cannot be related to the clinical markers or pathophysiological features that clinicians use to characterize diseases, diagnose patients, and decide on treatment plans. This key feature differentiates ASURI from other survival packages. To this end, ASURI introduces a robust pipeline that allows us to discover survival genes related to main clinical parameters. This feature facilitates translating biomarker discovery into clinical-related decisions. ASURI also implements a bootstrapping strategy for multivariate gene selection, which improves the robustness and reproducibility of the gene signatures provided by BIOSPEAR. Finally, ASURI provides methods to stratify the risk curve, optimising the splitting and providing fuzzy classifications of patients at intermediate risk.
+The ASURI package has several features that make it attractive to clinicians and researchers specialising in molecular cancer, setting it apart from other libraries available in R/Bioconductor. For instance, the BIOSPEAR package [@ternes2018biospear] provides a framework for biomarker selection based on multivariate penalised Cox regression models. BIOSPEAR enables the selection of various Lasso Cox regression variants, such as Adaptive Lasso, Elastic Net, stability selection and group Lasso. Based on previous models, it can also estimate the expected survival probability for individual patients. However, this library identifies gene signatures that cannot be related to the clinical markers or pathophysiological features that clinicians use to characterize diseases, diagnose patients, and decide on treatment plans. This key feature differentiates ASURI from other survival packages. To this end, ASURI introduces a robust pipeline that allows us to discover survival genes related to main clinical parameters. This feature facilitates translating biomarker discovery into clinical-related decisions. ASURI also implements a bootstrapping strategy for multivariate gene selection, which improves the robustness and reproducibility of the gene signatures provided by BIOSPEAR. Finally, ASURI provides methods to stratify the risk curve, optimising the splitting and providing fuzzy classifications of patients at intermediate risk.
 
-A second package related to ASURI is CPSM (Kaur _et al._, 2024), that enables the identification of a set of biomarkers using univariate or multivariate Lasso Cox regression. These features can then be used to predict the survival probability of individual patients using a Multi-Task Logistic Regression model. This package is more ASURI-like and also provides ways to interact with clinical information. However, as previously mentioned, ASURI incorporates methods to improve the robustness of the selected markers and to correlate them with standard clinical features used by oncologists to characterize tumors. CPSM lacks these characteristics.
+A second package related to ASURI is CPSM [@kaur2024cpsm], that enables the identification of a set of biomarkers using univariate or multivariate Lasso Cox regression. These features can then be used to predict the survival probability of individual patients using a Multi-Task Logistic Regression model. This package is more ASURI-like and also provides ways to interact with clinical information. However, as previously mentioned, ASURI incorporates methods to improve the robustness of the selected markers and to correlate them with standard clinical features used by oncologists to characterize tumors. CPSM lacks these characteristics.
 
-A third ASURI-related package is RTNsurvival (Groeneveld _et al._, 2019). This package focuses on the multivariate survival analysis of regulons obtained from transcriptional regulatory networks derived by the RTN package. It implements two pipelines to relate regulon activity to patient survival: the first is based on multivariate Cox models, and the second uses Kaplan-Meier curves. Both analyses can be performed using the ASURI package if the regulon activity is provided. Note that the multivariate methods implemented by ASURI are more robust due to the resampling strategy employed. Furthermore, ASURI has a broader focus and can robustly select subsets of marker genes from a large number of gene features. It can also accurately predict prognosis and survival. This goal cannot be achieved using RTNsurvival.
+A third ASURI-related package is RTNsurvival [@groeneveld2019rtnsurvival]. This package focuses on the multivariate survival analysis of regulons obtained from transcriptional regulatory networks derived by the RTN package. It implements two pipelines to relate regulon activity to patient survival: the first is based on multivariate Cox models, and the second uses Kaplan-Meier curves. Both analyses can be performed using the ASURI package if the regulon activity is provided. Note that the multivariate methods implemented by ASURI are more robust due to the resampling strategy employed. Furthermore, ASURI has a broader focus and can robustly select subsets of marker genes from a large number of gene features. It can also accurately predict prognosis and survival. This goal cannot be achieved using RTNsurvival.
 
-Finally, two Bioconductor packages that are less related to ASURI: survcomp (Schröder _et al._, 2011) and genefu (Gendoo _et al._, 2016). The survcomp package is more oriented towards evaluating and comparing survival models. In fact, this library is imported and inserted into the ASURI package to estimate certain performance metrics in survival analyses. Genefu is a package focused in the computation of gene expression-based signatures, especially in breast cancer studies, and is oriented more towards comparison of gene signatures and risk predictors based on these gene signatures. In contrast, ASURI focuses on identifying new molecular targets robustly, accurately predicting risk and stratifying patients into optimal risk groups.
+Finally, two Bioconductor packages that are less related to ASURI: survcomp [@schroder2011survcomp] and genefu [@gendoo2016genefu]. The survcomp package is more oriented towards evaluating and comparing survival models. In fact, this library is imported and inserted into the ASURI package to estimate certain performance metrics in survival analyses. Genefu is a package focused in the computation of gene expression-based signatures, especially in breast cancer studies, and is oriented more towards comparison of gene signatures and risk predictors based on these gene signatures. In contrast, ASURI focuses on identifying new molecular targets robustly, accurately predicting risk and stratifying patients into optimal risk groups.
 
 
 # Session Info

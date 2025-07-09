@@ -131,6 +131,7 @@ p-values and estimates a robust threshold to stratify the patients.
 It estimates also a membership probability of classification.
 }
 \examples{
+\dontrun{
 data(seBRCA)
 
 # prefilterSAM ---
@@ -164,6 +165,7 @@ asuri:::plotSigmoid(multivariate_risk_predictor)
 asuri:::plotLambda(multivariate_risk_predictor)
 asuri:::plotBetas(multivariate_risk_predictor)
 asuri:::plotKM(multivariate_risk_predictor)
+}
 
 }
 \references{

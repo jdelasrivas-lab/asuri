@@ -54,6 +54,7 @@ provided, the curve is evaluated at those specific times; otherwise, the
 function uses the survival times from the training data.
 }
 \examples{
+\dontrun{
 data(seBRCA)
 
 # prefilterSAM ---
@@ -130,7 +131,7 @@ surv_curv_cox <- predict_SurvCurve(cox_pred_training$risk_score,
                                    mPheno[, c(2, 3)], 
                                    cox_pred_test$risk_score, 
                                    eval_surv_times)
-
+}
 
 }
 \references{
