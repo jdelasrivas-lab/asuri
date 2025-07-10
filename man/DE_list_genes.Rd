@@ -13,4 +13,7 @@ data(prefilterSAM)
 \description{
 Result of running the prefilterSAM function.
 }
+\seealso{
+\code{\link[prefilterSAM]{asuri}}
+}
 \keyword{datasets}

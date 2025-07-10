@@ -28,4 +28,7 @@ data(genePheno)
 \description{
 Result of running the genePheno function.
 }
+\seealso{
+\code{\link[genePheno]{asuri}}
+}
 \keyword{datasets}

@@ -18,7 +18,11 @@
 #' Combat (McCall,MN \emph{et al.}, 2010), as described in 
 #' Bueno \emph{et al.}, 2023. It integrates 1070 genes measured across 200 
 #' breast cancer samples with associated clinical annotations.
-#'
+#' 
+#' @docType data
+#' @keywords datasets
+#' @name seBRCA
+#' @usage data(seBRCA)
 #' @format A `SummarizedExperiment` object with:
 #' \describe{
 #'   \item{assay:}{A matrix of normalized gene expression 
@@ -35,24 +39,30 @@
 #'   \item{\insertRef{RMA}{asuri}}
 #'   \item{\insertRef{combat}{asuri}}
 #' } 
-#' @usage data(seBRCA)
 #' @seealso \code{\link[SummarizedExperiment]{SummarizedExperiment}}
-#' @source Derived from GEO datasets as described in [@Bueno2023].
+#' @source Derived from GEO datasets as described in Bueno \emph{et al.}, 2023].
 "seBRCA"
 
 #' DE_list_genes
 #'
 #' Result of running the prefilterSAM function.
 #' 
-#' @format A `character` vector object with the list of obtained genes.
-#'
+#' @docType data
+#' @keywords datasets
+#' @name DE_list_genes
 #' @usage data(prefilterSAM)
+#' @format A `character` vector object with the list of obtained genes.
+#' @seealso \code{\link[prefilterSAM]{asuri}}
 "DE_list_genes"
 
 #' Pred_ER.IHC
 #'
 #' Result of running the genePheno function.
 #'   
+#' @docType data
+#' @keywords datasets
+#' @name Pred_ER.IHC
+#' @usage data(genePheno)
 #' @format A `List` object with:
 #' \itemize{
 #'  \item{\code{genes}: A list of genes ranked according to the degree of 
@@ -69,16 +79,18 @@
 #'  stability coefficient. Contains several metrics: the stability index, 
 #'  the mean and the median of the beta coefficients.}
 #'  }
-#'  
-#' @usage data(genePheno)
-#' 
+#' @seealso \code{\link[genePheno]{asuri}}  
 "Pred_ER.IHC"
 
 #' multivariate_risk_predictor
 #'
 #' Result of running the patientRisk function.
 #'
-#' @format A `List` containing the following elements:
+#' @docType data
+#' @keywords datasets
+#' @name multivariate_risk_predictor
+#' @usage data(patientRisk)
+#' @format  A `List` containing the following elements:
 #' \itemize{
 #'  \item{\code{cv_risk_score}: Risk score prediction for the training set 
 #'  using a double nested crossvalidated strategy.}
@@ -124,19 +136,21 @@
 #'  classification to the low risk group while the second one is the 
 #'  membership probability to the high risk group.}
 #'  }
-#'  
-#' @usage data(patientRisk)
-#' 
+#' @seealso \code{\link[patientRisk]{asuri}}  
 "multivariate_risk_predictor"
 
 #' mExprs_testSingleData
 #'
 #' Test matrix created in the PredictPatientRisk example
 #' 
+#' @docType data
+#' @keywords datasets
+#' @name mExprs_testSingleData
+#' @usage data(predictPatientRisk)
 #' @format A `data.frame` object with:
 #' \describe{
 #'   \item{data:}{A matrix of normalized gene expression 
 #'   values (77 genes × 1 samples).}
 #' }
-#' @usage data(predictPatientRisk)
+#' @seealso \code{\link[genePheno]{asuri}}  
 "mExprs_testSingleData"

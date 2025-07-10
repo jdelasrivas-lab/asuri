@@ -13,7 +13,7 @@ A `SummarizedExperiment` object with:
 }
 }
 \source{
-Derived from GEO datasets as described in [@Bueno2023].
+Derived from GEO datasets as described in Bueno \emph{et al.}, 2023].
 }
 \usage{
 data(seBRCA)

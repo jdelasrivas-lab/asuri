@@ -17,4 +17,7 @@ data(predictPatientRisk)
 \description{
 Test matrix created in the PredictPatientRisk example
 }
+\seealso{
+\code{\link[genePheno]{asuri}}
+}
 \keyword{datasets}

@@ -58,4 +58,7 @@ data(patientRisk)
 \description{
 Result of running the patientRisk function.
 }
+\seealso{
+\code{\link[patientRisk]{asuri}}
+}
 \keyword{datasets}
