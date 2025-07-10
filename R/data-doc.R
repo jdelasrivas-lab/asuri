@@ -45,7 +45,7 @@
 #' Result of running the prefilterSAM function.
 #' 
 #' @format A `character` vector object with the list of obtained genes.
-
+#'
 #' @usage data(prefilterSAM)
 "DE_list_genes"
 
