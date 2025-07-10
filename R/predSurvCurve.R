@@ -29,13 +29,15 @@
 #' function uses the survival times from the training data.
 #'
 #' @return A list containing:
-#'  - \code{eval_times}: The times at which the survival curve is 
-#'                       evaluated.
-#'  - \code{S_0_t}: The baseline survival function evaluated at the times 
-#'                  in \code{eval_surv_times}.
-#'  - \code{S_test_patient}: The survival curve for the test patient at the 
-#'                           times in \code{eval_surv_times}.
-#'
+#' \itemize{
+#'  \item{\code{eval_times}: The times at which the survival curve is 
+#'                       evaluated.}
+#'  \item{\code{S_0_t}: The baseline survival function evaluated at the times 
+#'                  in \code{eval_surv_times}.}
+#'  \item{\code{S_test_patient}: The survival curve for the test patient at the 
+#'                           times in \code{eval_surv_times}.}
+#'  }
+#'  
 #' @examples
 #' data(seBRCA)
 #' 
@@ -76,9 +78,11 @@
 #'                                    cox_pred_test$risk_score,
 #'                                    eval_surv_times)
 #'
-#' @references 
-#' \insertRef{martinezromero2018}{asuri}
-#' \insertRef{BuenoFortes2023}{asuri}
+#' @references
+#' \itemize{
+#'   \item{\insertRef{martinezromero2018}{asuri}} 
+#'   \item{\insertRef{BuenoFortes2023}{asuri}}
+#' } 
 #' 
 #' @export
 predict_SurvCurve <- function(cox_pred_training, mSurv,

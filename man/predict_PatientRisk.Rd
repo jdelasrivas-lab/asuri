@@ -16,12 +16,14 @@ test patients, where each row is a gene and each column is a sample.}
 }
 \value{
 A list containing the following elements:
- - \code{risk_score}: A vector with the unscaled risk score for new patients 
- estimated by a multivariate Cox regression model.
- - \code{scaled_risk_score}:  A vector with the risk score for the new 
- patients scaled to be interpretable in the range 0-100.
- - \code{plot_values}: A list containing information for visualizing the 
- sigmoid curve and risk thresholds.
+\itemize{
+ \item{\code{risk_score}: A vector with the unscaled risk score for new 
+ patients estimated by a multivariate Cox regression model.}
+ \item{\code{scaled_risk_score}:  A vector with the risk score for the new 
+ patients scaled to be interpretable in the range 0-100.}
+ \item{\code{plot_values}: A list containing information for visualizing the 
+ sigmoid curve and risk thresholds.}
+ }
 }
 \description{
 Function to predict the risk for new patients considering the gene 
@@ -78,6 +80,8 @@ risk_prediction_one_patient <- predict_PatientRisk(
 
 }
 \references{
-\insertRef{martinezromero2018}{asuri}
-\insertRef{BuenoFortes2023}{asuri}
+\itemize{
+  \item{\insertRef{martinezromero2018}{asuri}} 
+  \item{\insertRef{BuenoFortes2023}{asuri}}
+}
 }

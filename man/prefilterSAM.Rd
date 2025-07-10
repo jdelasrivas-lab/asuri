@@ -66,7 +66,9 @@ DE_list_genes <- prefilterSAM(seBRCA, groupsVector, iter = 25)
 
 }
 \references{
-\insertRef{schwender2025siggenes}{asuri}
-\insertRef{martinezromero2018}{asuri}
-\insertRef{BuenoFortes2023}{asuri}
+\itemize{
+  \item{\insertRef{schwender2025siggenes}{asuri}}
+  \item{\insertRef{martinezromero2018}{asuri}} 
+  \item{\insertRef{BuenoFortes2023}{asuri}}
+}
 }

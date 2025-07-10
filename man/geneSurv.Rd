@@ -43,30 +43,40 @@ survival analysis. All events beyond this time are treated as censored
 (default = 10 years).}
 }
 \value{
-Depending on the type run, the output changes: 
- - For type = exprs, a Kaplan-Meier plot based on expression groups, a 
+Depending on the type run, the output changes:
+\itemize{ 
+ \item{For \code{type = exprs}, a Kaplan-Meier plot based on expression groups, a 
  differential expression boxplot and a plot with the membership probability 
- for each risk group. Additionally, an object with the following components:
-   + \code{geneName}: A character string with the selected name of the gene 
-   to analyze.
-   + \code{patientExpr}: The expression level of each patient for the gene.
-   + \code{patientClass}: Vector of group classification according to the 
-   gene expression level: 2 = high expression and 1 = low expression level.
-   + \code{patientClassProbality}: Vector of membership probabilities for 
-   the classification.
-   + \code{wilcox.pvalue}: The p-value from the Wilcoxon test comparing the 
-   two expression groups.
-   + \code{plot_values}: A list containing Kaplan-Meier fit results, 
-   log-rank p-value, and hazard ratio.
- - For type = risk, a Kaplan-Meier plot based on risk groups. Additionally, 
- an object with the following components:
-   + \code{geneName}: A character string with the selected name of the gene 
-   to analyze.
-   + \code{patientExpr}: The expression level of each patient for the gene.
-   + \code{risk_score_predicted}: A numeric vector of predicted relative 
-   risk scores for each patient.
-   + \code{plot_values}: A list containing Kaplan-Meier fit results, 
-   log-rank p-value, and hazard ratio.
+ for each risk group.
+ Additionally, an object with the following components:}
+ \itemize{
+   \item{\code{geneName}: A character string with the selected name of 
+   the gene to analyze.}
+   \item{\code{patientExpr}: The expression level of each patient for 
+   the gene.}
+   \item{\code{patientClass}: Vector of group classification according 
+   to the gene expression level: 2 = high expression, 
+   and 1 = low expression level.}
+   \item{\code{patientClassProbality}: Vector of membership probabilities 
+   for the classification.}
+   \item{\code{wilcox.pvalue}: The p-value from the Wilcoxon test comparing 
+   the two expression groups.}
+   \item{\code{plot_values}: A list containing Kaplan-Meier fit results, 
+   log-rank p-value, and hazard ratio.}
+   }
+ \item{For \code{type = risk}, a Kaplan-Meier plot based on risk groups. 
+ Additionally, an object with the following components:}
+ \itemize{
+   \item{\code{geneName}: A character string with the selected name of the 
+   gene to analyze.}
+   \item{\code{patientExpr}: The expression level of each patient 
+   for the gene.}
+   \item{\code{risk_score_predicted}: A numeric vector of predicted relative 
+   risk scores for each patient.}
+   \item{\code{plot_values}: A list containing Kaplan-Meier fit results,
+   log-rank p-value, and hazard ratio.}
+   }
+ }
 }
 \description{
 This function analyzes the ability of a gene to mark survival based on a 
@@ -118,6 +128,8 @@ asuri:::plotKM(outputKM)
 
 }
 \references{
-\insertRef{martinezromero2018}{asuri}
-\insertRef{BuenoFortes2023}{asuri}
+\itemize{
+  \item{\insertRef{martinezromero2018}{asuri}} 
+  \item{\insertRef{BuenoFortes2023}{asuri}}
+}
 }

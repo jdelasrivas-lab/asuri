@@ -2,7 +2,7 @@ Package: asuri
 Date: 2024-04-03
 Type: Package
 Title: Analysis of SUrvival and RIsk prediction in patients based on gene signatures
-Version: 0.99.7
+Version: 0.99.9
 Description: ASURI package (Analysis of SUrvival and patients RIsk prediction based on gene signatures) discovers marker genes that are both related with Risk prediction capabilities and a clinical variable of interest. It uses two main steps, including subsampling glmnet and unicox. This package implements robust functions to discover survival markers related to a clinical phenotype and to predict a risk score that allow us to study the patient's risk based on the gene signatures. Several plots are provided to visualize the relevance of the genes, the risk score, the patient stratification and a robust version of the Kaplan-Meier curves.
 Authors@R: c(
   person(given = "Alberto",
@@ -34,8 +34,8 @@ Authors@R: c(
   )
 License: LGPL-3 + file LICENSE
 Depends: R (>= 4.4.0), stats, methods
-Imports: SummarizedExperiment, spsUtil, lubridate, Rdpack, survival, glmnet, siggenes, Biobase, survcomp, scales, ROCR, gplots, ggplot2
-Suggests: BiocStyle, knitr, formatR, rmarkdown, magick, devtools, 
+Imports: Rdpack, SummarizedExperiment, spsUtil, lubridate, survival, glmnet, siggenes, Biobase, survcomp, scales, ROCR, gplots, ggplot2
+Suggests: BiocStyle, knitr, formatR, rmarkdown, magick, devtools
 biocViews: Software, StatisticalMethod, WorkflowStep, GeneExpression, Microarray, DifferentialExpression, GenePrediction, Regression, Survival, ExonArray, MultipleComparison
 URL: https://github.com/jdelasrivas-lab/asuri
 BugReports: https://github.com/jdelasrivas-lab/asuri

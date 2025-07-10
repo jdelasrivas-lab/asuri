@@ -30,12 +30,14 @@ training data up to the maximum event time.}
 }
 \value{
 A list containing:
- - \code{eval_times}: The times at which the survival curve is 
-                      evaluated.
- - \code{S_0_t}: The baseline survival function evaluated at the times 
-                 in \code{eval_surv_times}.
- - \code{S_test_patient}: The survival curve for the test patient at the 
-                          times in \code{eval_surv_times}.
+\itemize{
+ \item{\code{eval_times}: The times at which the survival curve is 
+                      evaluated.}
+ \item{\code{S_0_t}: The baseline survival function evaluated at the times 
+                 in \code{eval_surv_times}.}
+ \item{\code{S_test_patient}: The survival curve for the test patient at the 
+                          times in \code{eval_surv_times}.}
+ }
 }
 \description{
 This function computes the survival curve for a test patient based on their 
@@ -95,6 +97,8 @@ surv_curv_cox <- predict_SurvCurve(cox_pred_training$risk_score,
 
 }
 \references{
-\insertRef{martinezromero2018}{asuri}
-\insertRef{BuenoFortes2023}{asuri}
+\itemize{
+  \item{\insertRef{martinezromero2018}{asuri}} 
+  \item{\insertRef{BuenoFortes2023}{asuri}}
+}
 }

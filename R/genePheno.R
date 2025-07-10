@@ -43,17 +43,21 @@
 #'
 #' @return
 #' A list containing the following elements:
-#'  - \code{genes}: A list of genes ranked according to the degree of 
-#'  association with the clinical or phenotypic variable tested.
-#'  - \code{listCoeff}: A list with the beta regression coefficients and the 
-#'  AUC score for each bootstrap iteration.
-#'  - \code{stability}: Gene selection probability estimated by bootstrap 
-#'  (the number of times discovered over "n" iterations).
-#'  - \code{betasMedian}: Median of the beta coefficients over the B replicates.
-#'  - \code{betasMean}:  Mean of the beta coefficients over the B replicates.
-#'  - \code{betasTable}: Table of genes ordered by decreasing value of the 
+#' \itemize{
+#'  \item{\code{genes}: A list of genes ranked according to the degree of 
+#'  association with the clinical or phenotypic variable tested.}
+#'  \item{\code{listCoeff}: A list with the beta regression coefficients and 
+#'  the AUC score for each bootstrap iteration.}
+#'  \item{\code{stability}: Gene selection probability estimated by bootstrap 
+#'  (the number of times discovered over "n" iterations).}
+#'  \item{\code{betasMedian}: Median of the beta coefficients over the B 
+#'  replicates.}
+#'  \item{\code{betasMean}:  Mean of the beta coefficients over the B 
+#'  replicates.}
+#'  \item{\code{betasTable}: Table of genes ordered by decreasing value of the 
 #'  stability coefficient. Contains several metrics: the stability index, 
-#'  the mean and the median of the beta coefficients.
+#'  the mean and the median of the beta coefficients.}
+#'  }
 #'
 #' @examples
 #' data(seBRCA)
@@ -71,9 +75,11 @@
 #' # NOTE: For consistent results with the vignettes and example data, use 
 #' # default parameters (e.g., iter = 100).
 #' 
-#' @references 
-#' \insertRef{martinezromero2018}{asuri}
-#' \insertRef{BuenoFortes2023}{asuri}
+#' @references
+#' \itemize{
+#'   \item{\insertRef{martinezromero2018}{asuri}} 
+#'   \item{\insertRef{BuenoFortes2023}{asuri}}
+#' } 
 #' 
 #' @export
 

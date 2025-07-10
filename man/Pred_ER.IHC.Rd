@@ -6,19 +6,21 @@
 \title{Pred_ER.IHC}
 \format{
 A `List` object with:
-\describe{
- - \item{genes}{A list of genes ranked according to the degree of 
+\itemize{
+ \item{\code{genes}: A list of genes ranked according to the degree of 
  association with the clinical or phenotypic variable tested.}
- - \item{listCoeff}{A list with the beta regression coefficients and the 
- AUC score for each bootstrap iteration.}
- - \item{stability}{Gene selection probability estimated by bootstrap 
+ \item{\code{listCoeff}: A list with the beta regression coefficients and 
+ the AUC score for each bootstrap iteration.}
+ \item{\code{stability}: Gene selection probability estimated by bootstrap 
  (the number of times discovered over "n" iterations).}
- - \item{betasMedian}{Median of the beta coefficients over the B replicates.}
- - \item{betasMean}{Mean of the beta coefficients over the B replicates.}
- - \item{betasTable}{Table of genes ordered by decreasing value of the 
+ \item{\code{betasMedian}: Median of the beta coefficients over the B 
+ replicates.}
+ \item{\code{betasMean}:  Mean of the beta coefficients over the B 
+ replicates.}
+ \item{\code{betasTable}: Table of genes ordered by decreasing value of the 
  stability coefficient. Contains several metrics: the stability index, 
  the mean and the median of the beta coefficients.}
-}
+ }
 }
 \usage{
 data(genePheno)

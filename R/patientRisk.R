@@ -59,47 +59,51 @@
 #' p-values and estimates a robust threshold to stratify the patients. 
 #' It estimates also a membership probability of classification.
 #' @return A list containing the following elements:
-#'  - \code{cv_risk_score}: Risk score prediction for the training set using a 
-#'  double nested crossvalidated strategy.
-#'  - \code{cv_normalized_risk}: Normalized risk score in the interval (0,100).
-#'  - \code{table_genes_selected}: Data frame with the following columns: 
+#' \itemize{
+#'  \item{\code{cv_risk_score}: Risk score prediction for the training set 
+#'  using a double nested crossvalidated strategy.}
+#'  \item{\code{cv_normalized_risk}: Normalized risk score in the 
+#'  interval (0,100).}
+#'  \item{\code{table_genes_selected}: Data frame with the following columns: 
 #'  The names for the genes selected by the Cox regression, the beta 
 #'  coefficients for the optimal multivariate Cox regression fitted to the 
 #'  training set, the Hazard Ratio for each gene and the p-value for the 
 #'  univariate log-rank statistical test. Genes are shown by descending order 
-#'  of the HR index.
-#'  - \code{table_genes_selected_extended}: Table with the same format as 
+#'  of the HR index.}
+#'  \item{\code{table_genes_selected_extended}: Table with the same format as 
 #'  table_genes_selected. A search for local minima within a 5\% range of the 
 #'  selected minimum is performed. The goal is expanding the list of 
 #'  significant genes to improve biological interpretability, since the lasso 
-#'  penalty drastically reduces the number of significant genes.
-#'  - \code{model.optimalLambda}: The fitted model for the optimal 
-#'  regularization parameter.
-#'  - \code{groups}: Vector of classification of patients in two risk groups,
-#'   high (2) or low (1).
-#'  - \code{riskThresholds}: Thresholds that allows to stratify the test 
+#'  penalty drastically reduces the number of significant genes.}
+#'  \item{\code{model.optimalLambda}: The fitted model for the optimal 
+#'  regularization parameter.}
+#'  \item{\code{groups}: Vector of classification of patients in two risk 
+#'  groups, high (2) or low (1).}
+#'  \item{\code{riskThresholds}: Thresholds that allows to stratify the test 
 #'  patients in three groups according to the predicted risk score: low, 
-#'  intermediate and high risk.
-#'  - \code{range.risk}: Range of the unscaled risk score in the training set.
-#'  - \code{list.models}: List of models tested for different values of the
-#'   regularization parameter.
-#'  - \code{evaluation.models}: Data frame that provides several metrics for 
-#'  each model evaluated. The lambda column provides the regularization 
+#'  intermediate and high risk.}
+#'  \item{\code{range.risk}: Range of the unscaled risk score in the 
+#'  training set.}
+#'  \item{\code{list.models}: List of models tested for different values of the
+#'   regularization parameter.}
+#'  \item{\code{evaluation.models}: Data frame that provides several metrics 
+#'  for each model evaluated. The lambda column provides the regularization 
 #'  parameter for the multivariate Cox regression adjusted, the number_features 
 #'  gives the number of genes selected by this model, c.index and se.c.index 
 #'  the concordance index and the standard deviation for the risk prediction 
 #'  and finally, the p_value_c.index and the logrank_p_value give the p-values 
 #'  for the the concordance index and the log-rank statistics respectively. 
 #'  Models are shown by ascending order of the log-rank p-value and the best 
-#'  one is marked with two asterisks.
-#'  - \code{betasplot}: Dataset used to create the plot of genes ranked 
-#'  according to the regression coefficients in the multivariate Cox model.
-#'  - \code{plot_values}: A list containing Kaplan-Meier fit results, 
-#'  logrank p-value, and hazard ratio.
-#'  - \code{membership_prob}: If method "class.probs" is selected a table with 
-#'  two columns is returned. The first one is the probability of classification 
-#'  to the low risk group while the second one is the membership probability to 
-#'  the high risk group.
+#'  one is marked with two asterisks.}
+#'  \item{\code{betasplot}: Dataset used to create the plot of genes ranked 
+#'  according to the regression coefficients in the multivariate Cox model.}
+#'  \item{\code{plot_values}: A list containing Kaplan-Meier fit results, 
+#'  logrank p-value, and hazard ratio.}
+#'  \item{\code{membership_prob}: If method "class.probs" is selected a table 
+#'  with two columns is returned. The first one is the probability of 
+#'  classification to the low risk group while the second one is the 
+#'  membership probability to the high risk group.}
+#'  }
 #'  
 #' @examples
 #' data(seBRCA)
@@ -128,9 +132,11 @@
 #' # asuri:::plotKM(multivariate_risk_predictor)
 #' 
 #' 
-#' @references 
-#' \insertRef{martinezromero2018}{asuri}
-#' \insertRef{BuenoFortes2023}{asuri}
+#' @references
+#' \itemize{
+#'   \item{\insertRef{martinezromero2018}{asuri}} 
+#'   \item{\insertRef{BuenoFortes2023}{asuri}}
+#' } 
 #' 
 #' @export
 

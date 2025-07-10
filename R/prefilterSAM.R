@@ -45,10 +45,12 @@
 #' # NOTE: For consistent results with the vignettes and example data, use 
 #' # default parameters (e.g., iter = 100).
 #' 
-#' @references 
-#' \insertRef{schwender2025siggenes}{asuri}
-#' \insertRef{martinezromero2018}{asuri}
-#' \insertRef{BuenoFortes2023}{asuri}
+#' @references
+#' \itemize{
+#'   \item{\insertRef{schwender2025siggenes}{asuri}}
+#'   \item{\insertRef{martinezromero2018}{asuri}} 
+#'   \item{\insertRef{BuenoFortes2023}{asuri}}
+#' } 
 #' 
 #' @export
 prefilterSAM <- function(seData, groupsVector, FDRfilter = 0.05, 
