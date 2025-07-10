@@ -25,6 +25,9 @@ A `List` object with:
 \usage{
 data(genePheno)
 }
+\value{
+Load a `List` object.
+}
 \description{
 Result of running the genePheno function.
 }

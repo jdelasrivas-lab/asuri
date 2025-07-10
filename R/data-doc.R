@@ -23,6 +23,7 @@
 #' @keywords datasets
 #' @name seBRCA
 #' @usage data(seBRCA)
+#' @return Load a `SummarizedExperiment` object.
 #' @format A `SummarizedExperiment` object with:
 #' \describe{
 #'   \item{assay:}{A matrix of normalized gene expression 
@@ -51,6 +52,7 @@
 #' @keywords datasets
 #' @name DE_list_genes
 #' @usage data(prefilterSAM)
+#' @return Load a `character` vector object.
 #' @format A `character` vector object with the list of obtained genes.
 #' @seealso \code{\link[prefilterSAM]{asuri}}
 "DE_list_genes"
@@ -63,6 +65,7 @@
 #' @keywords datasets
 #' @name Pred_ER.IHC
 #' @usage data(genePheno)
+#' @return Load a `List` object.
 #' @format A `List` object with:
 #' \itemize{
 #'  \item{\code{genes}: A list of genes ranked according to the degree of 
@@ -90,6 +93,7 @@
 #' @keywords datasets
 #' @name multivariate_risk_predictor
 #' @usage data(patientRisk)
+#' @return Load a `List` object.
 #' @format  A `List` containing the following elements:
 #' \itemize{
 #'  \item{\code{cv_risk_score}: Risk score prediction for the training set 
@@ -147,6 +151,7 @@
 #' @keywords datasets
 #' @name mExprs_testSingleData
 #' @usage data(predictPatientRisk)
+#' @return Load a `data.frame` object.
 #' @format A `data.frame` object with:
 #' \describe{
 #'   \item{data:}{A matrix of normalized gene expression 

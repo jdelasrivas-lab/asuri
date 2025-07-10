@@ -55,6 +55,9 @@ A `List` containing the following elements:
 \usage{
 data(patientRisk)
 }
+\value{
+Load a `List` object.
+}
 \description{
 Result of running the patientRisk function.
 }

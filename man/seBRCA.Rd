@@ -18,6 +18,9 @@ Derived from GEO datasets as described in Bueno \emph{et al.}, 2023].
 \usage{
 data(seBRCA)
 }
+\value{
+Load a `SummarizedExperiment` object.
+}
 \description{
 A `SummarizedExperiment` object created from gene expression and phenotypic
 data included in the ASURI package. The dataset included in ASURI as a stud

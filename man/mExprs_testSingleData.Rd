@@ -14,6 +14,9 @@ A `data.frame` object with:
 \usage{
 data(predictPatientRisk)
 }
+\value{
+Load a `data.frame` object.
+}
 \description{
 Test matrix created in the PredictPatientRisk example
 }

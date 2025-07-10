@@ -10,6 +10,9 @@ A `character` vector object with the list of obtained genes.
 \usage{
 data(prefilterSAM)
 }
+\value{
+Load a `character` vector object.
+}
 \description{
 Result of running the prefilterSAM function.
 }
