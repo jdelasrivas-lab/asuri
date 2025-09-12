@@ -1,48 +1,58 @@
-# uniCox: Fit a Penalized Cox Proportional Hazards Model
-#
-# This function fits a Cox proportional hazards model with L1 regularization 
-# (Lasso) for survival analysis. The regularization parameter, lambda, is 
-# chosen through an iterative procedure using coordinate descent.
-#
-# @param x A numeric matrix of size n by p (n samples, p features). 
-# The input gene expression matrix.
-# @param y A numeric vector of length n. Survival times corresponding to the 
-# n samples.
-# @param status A numeric vector of length n. Binary vector where 1 indicates 
-# the event (death) occurred, and 0 indicates censored data.
-# @param lamlist A numeric vector of lambda values for regularization. 
-# If NULL, a sequence of values is generated.
-# @param nlam The number of lambda values to consider. Default is 20.
-# @param del.thres Convergence threshold for the coefficient update step. 
-# Default is 0.01.
-# @param max.iter Maximum number of iterations for each lambda value. 
-# Default is 5.
-#
-# @return A list of class "uniCoxFit" containing the following components:
-# \item{lamlist}{The list of lambda values used for regularization.}
-# \item{beta}{A matrix of size p by nlam, where each column contains the 
-# coefficients for a different lambda value.}
-# \item{nfeatures}{A vector of length nlam, where each element indicates 
-# the number of non-zero features selected for each lambda value.}
-# \item{mx}{The mean of each feature in the input matrix x.}
-# \item{vx}{The variance of each feature in the input matrix x.}
-# \item{s0}{The scaling parameter, which is the median of the square root of 
-# the variances.}
-# \item{call}{The original function call.}
-#
-# @examples
-# \dontrun{
-# # Example usage
-# # x: Gene expression matrix (samples x genes)
-# # y: Survival times
-# # status: Censoring status (0 = censored, 1 = event)
-# fit <- uniCox(x, y, status)
-# print(fit$beta) # Coefficients for each lambda value
-# print(fit$nfeatures) # Number of selected features for each lambda
-# }
-#
-# @importFrom stats scale
-# @export
+#' uniCox: Fit a Penalized Cox Proportional Hazards Model
+#'
+#' This function fits a Cox proportional hazards model with L1 regularization 
+#' (Lasso) for survival analysis. The regularization parameter, lambda, is 
+#' chosen through an iterative procedure using coordinate descent.
+#'
+#' @description
+#' DISCLAIMER: This is an internal function adapted from the original 
+#' \code{uniCox} package, which was removed from CRAN (archived on 2019-01-26). 
+#' The function has been updated to run on current versions of R.
+#' Users do **not** call this function directly; it is used internally by the 
+#' package. For original usage, please consult the documentation of the 
+#' original \code{uniCox} package or the original article.
+#'
+#' @noRd
+#'
+#' @param x A numeric matrix of size n by p (n samples, p features). 
+#' The input gene expression matrix.
+#' @param y A numeric vector of length n. Survival times corresponding to the 
+#' n samples.
+#' @param status A numeric vector of length n. Binary vector where 1 indicates 
+#' the event (death) occurred, and 0 indicates censored data.
+#' @param lamlist A numeric vector of lambda values for regularization. 
+#' If NULL, a sequence of values is generated.
+#' @param nlam The number of lambda values to consider. Default is 20.
+#' @param del.thres Convergence threshold for the coefficient update step. 
+#' Default is 0.01.
+#' @param max.iter Maximum number of iterations for each lambda value. 
+#' Default is 5.
+#'
+#' @return A list of class "uniCoxFit" containing the following components:
+#' \item{lamlist}{The list of lambda values used for regularization.}
+#' \item{beta}{A matrix of size p by nlam, where each column contains the 
+#' coefficients for a different lambda value.}
+#' \item{nfeatures}{A vector of length nlam, where each element indicates 
+#' the number of non-zero features selected for each lambda value.}
+#' \item{mx}{The mean of each feature in the input matrix x.}
+#' \item{vx}{The variance of each feature in the input matrix x.}
+#' \item{s0}{The scaling parameter, which is the median of the square root of 
+#' the variances.}
+#' \item{call}{The original function call.}
+#'
+#' @examples
+#' \dontrun{
+#' # Example usage
+#' # x: Gene expression matrix (samples x genes)
+#' # y: Survival times
+#' # status: Censoring status (0 = censored, 1 = event)
+#' fit <- uniCox(x, y, status)
+#' print(fit$beta) # Coefficients for each lambda value
+#' print(fit$nfeatures) # Number of selected features for each lambda
+#' }
+#'
+#' @importFrom stats quantile
+#' 
 uniCox <- function(x, y, status, lamlist = NULL, nlam = 20, 
                    del.thres = .01, max.iter = 5) {
     # x is n by p

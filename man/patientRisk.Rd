@@ -138,27 +138,27 @@ It estimates also a membership probability of classification.
 data(seBRCA)
 
 # genePheno ---
-data(genePheno)
+data(ex_genePheno)
 
 # Survival times should be provided in YEARS
 time <- 'time'
 status <- 'status'
-geneList <- names(Pred_ER.IHC$genes)
+geneList <- names(ex_genePheno$genes)
 
 set.seed(5)
-multivariate_risk_predictor <- patientRisk(seBRCA, geneList, time, status, 
-                                           method = "class.probs", 
-                                           nboot = 10)
+ex_patientRisk <- patientRisk(seBRCA, geneList, time, status, 
+                              method = "class.probs", 
+                              nboot = 10)
 
 # NOTE: For consistent results with the vignettes and example data, use 
 # default parameters (e.g., nboot = 50).
 
 # Generate the plots again
-# asuri:::plotLogRank(multivariate_risk_predictor)
-# asuri:::plotSigmoid(multivariate_risk_predictor)
-# asuri:::plotLambda(multivariate_risk_predictor)
-# asuri:::plotBetas(multivariate_risk_predictor)
-# asuri:::plotKM(multivariate_risk_predictor)
+# plotLogRank(multivariate_risk_predictor)
+# plotSigmoid(multivariate_risk_predictor)
+# plotLambda(multivariate_risk_predictor)
+# plotBetas(multivariate_risk_predictor)
+# plotKM(multivariate_risk_predictor)
 
 
 }

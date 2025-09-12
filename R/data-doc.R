@@ -44,27 +44,27 @@
 #' @source Derived from GEO datasets as described in Bueno \emph{et al.}, 2023].
 "seBRCA"
 
-#' DE_list_genes
+#' ex_prefilterSAM
 #'
 #' Result of running the prefilterSAM function.
 #' 
 #' @docType data
 #' @keywords datasets
-#' @name DE_list_genes
-#' @usage data(prefilterSAM)
+#' @name ex_prefilterSAM
+#' @usage data(ex_prefilterSAM)
 #' @return Load a `character` vector object.
 #' @format A `character` vector object with the list of obtained genes.
 #' @seealso \code{\link[prefilterSAM]{asuri}}
-"DE_list_genes"
+"ex_prefilterSAM"
 
-#' Pred_ER.IHC
+#' ex_genePheno
 #'
 #' Result of running the genePheno function.
 #'   
 #' @docType data
 #' @keywords datasets
-#' @name Pred_ER.IHC
-#' @usage data(genePheno)
+#' @name ex_genePheno
+#' @usage data(ex_genePheno)
 #' @return Load a `List` object.
 #' @format A `List` object with:
 #' \itemize{
@@ -83,16 +83,16 @@
 #'  the mean and the median of the beta coefficients.}
 #'  }
 #' @seealso \code{\link[genePheno]{asuri}}  
-"Pred_ER.IHC"
+"ex_genePheno"
 
-#' multivariate_risk_predictor
+#' ex_patientRisk
 #'
 #' Result of running the patientRisk function.
 #'
 #' @docType data
 #' @keywords datasets
-#' @name multivariate_risk_predictor
-#' @usage data(patientRisk)
+#' @name ex_patientRisk
+#' @usage data(ex_patientRisk)
 #' @return Load a `List` object.
 #' @format  A `List` containing the following elements:
 #' \itemize{
@@ -141,21 +141,21 @@
 #'  membership probability to the high risk group.}
 #'  }
 #' @seealso \code{\link[patientRisk]{asuri}}  
-"multivariate_risk_predictor"
+"ex_patientRisk"
 
-#' mExprs_testSingleData
+#' ex_predictPatientRisk
 #'
 #' Test matrix created in the PredictPatientRisk example
 #' 
 #' @docType data
 #' @keywords datasets
-#' @name mExprs_testSingleData
-#' @usage data(predictPatientRisk)
+#' @name ex_predictPatientRisk
+#' @usage data(ex_predictPatientRisk)
 #' @return Load a `data.frame` object.
 #' @format A `data.frame` object with:
 #' \describe{
 #'   \item{data:}{A matrix of normalized gene expression 
 #'   values (77 genes × 1 samples).}
 #' }
-#' @seealso \code{\link[genePheno]{asuri}}  
-"mExprs_testSingleData"
+#' @seealso \code{\link[predict_PatientRisk]{asuri}}  
+"ex_predictPatientRisk"

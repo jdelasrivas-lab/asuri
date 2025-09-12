@@ -59,33 +59,33 @@ function uses the survival times from the training data.
 data(seBRCA)
 
 # prefilterSAM ---
-data(prefilterSAM)
+data(ex_prefilterSAM)
 
 # genePheno ---
-data(genePheno)
+data(ex_genePheno)
 
 # patientRisk ---
-data(patientRisk)
+data(ex_patientRisk)
 
 # predictPatientRisk ---
-data(predictPatientRisk)
+data(ex_predictPatientRisk)
 
  
 #COX prediction for the training set
 mPheno <- SummarizedExperiment::colData(seBRCA)
 mExprs <- SummarizedExperiment::assay(seBRCA)
-geneList <- names(Pred_ER.IHC$genes)
+geneList <- names(ex_genePheno$genes)
 
 set.seed(5)
 mExprSelectedGenes <- mExprs[rownames(mExprs) \%in\% geneList,]
 
-cox_pred_training <- predict_PatientRisk(multivariate_risk_predictor,
+cox_pred_training <- predict_PatientRisk(ex_patientRisk,
                                          mExprSelectedGenes)
 cox_pred_training$risk_score
 #COX prediction for the test patient
 set.seed(5)
-cox_pred_test <- predict_PatientRisk(multivariate_risk_predictor,
-                                     mExprs_testSingleData)
+cox_pred_test <- predict_PatientRisk(ex_patientRisk,
+                                     ex_predictPatientRisk)
 cox_pred_test$risk_score
 #Survival curve estimation
 eval_surv_times <- seq(0, max(mPheno$time), by = 0.1)

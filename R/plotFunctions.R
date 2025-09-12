@@ -2,6 +2,17 @@
 # other functions in the package
 #
 # Plot geneSurv() results -------------------------------------------------
+#' Plot a Boxplot for geneSurv()
+#'
+#' This function is called internally by the geneSurv function to generate the
+#' expression boxplot. It also can be used after the function has been run to
+#' generate the plots again without running geneSurv().
+#'
+#' @param gs_result Returning object from running geneSurv function
+#' @seealso \code{\link{geneSurv}} for more information about the analysis
+#' @importFrom graphics boxplot legend
+#' 
+#' @export
 plotBoxplot <- function(gs_result) {
     patientExpr <- gs_result$patientExpr
     patientClass <- gs_result$patientClass
@@ -37,6 +48,18 @@ plotBoxplot <- function(gs_result) {
     )
 }
 
+#' Plot a class probability distribution for geneSurv()
+#'
+#' This function is called internally by the geneSurv function to generate the
+#' probability class distribution of the patients. It also can be used after 
+#' the function has been run to generate the plots again without 
+#' running geneSurv().
+#'
+#' @param gs_result Returning object from running geneSurv function
+#' @seealso \code{\link{geneSurv}} for more information about the analysis
+#' @importFrom graphics plot
+#' 
+#' @export
 plotProbClass <- function(gs_result) {
     patientExpr <- gs_result$patientExpr
     patientClass <- gs_result$patientClass
@@ -61,6 +84,19 @@ plotProbClass <- function(gs_result) {
 }
 
 # Plot patientRisk() result -----------------------------------------------
+
+#' Plot the logrank p-value for each patient splitting for patientRisk()
+#'
+#' This function is called internally by the patientRisk function to generate 
+#' the logrank p-value distribution for each patient splitting. 
+#' It also can be used after the function has been run to generate the plots 
+#' again without running patientRisk().
+#'
+#' @param pr_result Returning object from running patientRisk function
+#' @seealso \code{\link{patientRisk}} for more information about the analysis
+#' @importFrom graphics plot abline
+#' 
+#' @export
 plotLogRank <- function(pr_result) {
     plot_values <- pr_result$plot_values
 
@@ -98,6 +134,18 @@ plotLogRank <- function(pr_result) {
     abline(v = cutPoint, col = 3, lwd = 2, xpd = FALSE) 
 }
 
+#' Plot the ordered risk distribution for patientRisk()
+#'
+#' This function is called internally by the patientRisk function to generate 
+#' the ordered risk distribution for the patients. It also can be used after 
+#' the function has been run to generate the plots again without running 
+#' patientRisk().
+#'
+#' @param pr_result Returning object from running patientRisk function
+#' @seealso \code{\link{patientRisk}} for more information about the analysis
+#' @importFrom graphics plot abline grid
+#' 
+#' @export
 plotSigmoid <- function(pr_result) {
     plot_values <- pr_result$plot_values
 
@@ -126,6 +174,18 @@ plotSigmoid <- function(pr_result) {
     abline(v = cutPoint, col = 3, lwd = 2, xpd = FALSE)
 }
 
+#' Plot a lambda distribution for patientRisk()
+#'
+#' This function is called internally by the patientRisk function to generate 
+#' the p-value distribution for each lambda. It also can be used after 
+#' the function has been run to generate the plots again without running 
+#' patientRisk().
+#'
+#' @param pr_result Returning object from running patientRisk function
+#' @seealso \code{\link{patientRisk}} for more information about the analysis
+#' @importFrom graphics plot axis
+#' 
+#' @export
 plotLambda <- function(pr_result) {
     plot_values <- pr_result$plot_values
 
@@ -147,6 +207,20 @@ plotLambda <- function(pr_result) {
          labels = number.features, cex.axis = 0.8)
 }
 
+#' Plot the ordered beta values for patientRisk()
+#'
+#' This function is called internally by the patientRisk function to generate 
+#' the beta values of the model for each gene and the corresponding stability
+#' p-value. It also can be used after the function has been run to generate 
+#' the plots again without running patientRisk().
+#'
+#' @param pr_result Returning object from running patientRisk function
+#' @seealso \code{\link{patientRisk}} for more information about the analysis
+#' @importFrom ggplot2 aes element_blank element_text geom_point ggplot ggtitle 
+#' @importFrom ggplot2 guide_legend guides scale_size_continuous theme_light
+#' @importFrom ggplot2 scale_color_manual scale_shape_manual xlab ylab theme
+#' 
+#' @export
 plotBetas <- function(pr_result) {
     betasPlot <- pr_result$betasplot
     
@@ -210,6 +284,56 @@ plotBetas <- function(pr_result) {
 }
 
 # Both geneSurv() and patientRisk() result --------------------------------
+
+#' Plot the KM curves for geneSurv() and patientRisk()
+#'
+#' This function is called internally by the patientRisk function to generate 
+#' the Kaplan-Meier curves. It also can be used after the function has been run 
+#' to generate the plots again without running geneSurv() or patientRisk().
+#'
+#' @param result Returning object from running genesurv or patientRisk function
+#' @param col.surv Color for the survival curve lines
+#' @param col.ci Color for the confidence interval lines
+#' @param par.bot Bottom margin of the plot
+#' @param par.left Left margin of the plot
+#' @param par.top Top margin of the plot
+#' @param par.right Right margin of the plot
+#' @param y.just.legend Vertical adjustment for the legend
+#' @param x.title.adj Horizontal adjustment for the x-axis title
+#' @param mark Symbol used for censoring marks
+#' @param simple Logical; if TRUE, use a simplified plot style
+#' @param xaxis.at Positions of ticks on the x-axis
+#' @param xaxis.lab Labels for the x-axis ticks
+#' @param lty.surv Line type for survival curves
+#' @param lty.ci Line type for confidence intervals
+#' @param lwd Overall line width
+#' @param lwd.surv Line width for survival curves
+#' @param lwd.ci Line width for confidence intervals
+#' @param group.names Names of groups in the plot
+#' @param group.order Order of groups to display
+#' @param extra.left.margin Additional left margin space
+#' @param label.n.at.risk Logical; whether to label number at risk
+#' @param draw.lines Logical; whether to draw the survival lines
+#' @param cex.axis Magnification of axis annotation
+#' @param main Main title of the plot
+#' @param xlim Limits of the x-axis
+#' @param ylim Limits of the y-axis
+#' @param grid Logical; whether to draw grid lines
+#' @param lty.grid Line type for grid lines
+#' @param lwd.grid Line width for grid lines
+#' @param col.grid Color for the grid lines
+#' @param legend Logical; whether to include a legend
+#' @param loc.legend Location of the legend (e.g., "bottomleft")
+#' @param add Logical; if TRUE, add to an existing plot
+#' @param ... Additional arguments passed to plotting functions
+#' @seealso \code{\link{geneSurv}} or \code{\link{patientRisk}} for more 
+#' information about the analysis
+
+#' @importFrom graphics abline axis box lines
+#' @importFrom grDevices grey
+#' @importFrom ggplot2 alpha
+#' 
+#' @export
 plotKM <- function(result,
                    col.surv = NULL,
                    col.ci = NULL,

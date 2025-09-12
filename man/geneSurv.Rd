@@ -113,9 +113,9 @@ outputKM <- geneSurv(seBRCA, time, status, geneName, type = "exprs")
 
 # Generate the plots again
 ## Plots for c(type = exprs)
-asuri:::plotBoxplot(outputKM)
-asuri:::plotProbClass(outputKM)
-asuri:::plotKM(outputKM)
+plotBoxplot(outputKM)
+plotProbClass(outputKM)
+plotKM(outputKM)
 
 # If we instead consider to run the function as *type* = risk
 
@@ -124,7 +124,7 @@ set.seed(5)
 outputKM.TP53 <- geneSurv(seBRCA, time, status, geneName, type = "risk")
 
 ## Plots for c(type = risk)
-asuri:::plotKM(outputKM)
+plotKM(outputKM.TP53)
 
 }
 \references{

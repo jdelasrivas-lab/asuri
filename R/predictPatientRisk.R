@@ -33,17 +33,17 @@
 #' data(seBRCA)
 #' 
 #' # prefilterSAM ---
-#' data(prefilterSAM)
+#' data(ex_prefilterSAM)
 #' 
 #' # genePheno ---
-#' data(genePheno)
+#' data(ex_genePheno)
 #' 
 #' # patientRisk ---
-#' data(patientRisk)
+#' data(ex_patientRisk)
 #'                                            
 #' # Simulate expression data
 #' num_samples <- 20
-#' geneList <- names(Pred_ER.IHC$genes)
+#' geneList <- names(ex_genePheno$genes)
 #' set.seed(5)
 #' mExprs_testData <- matrix(rnorm(length(geneList) * num_samples, 
 #'                           mean = 10, sd = 3),
@@ -55,18 +55,18 @@
 #' 
 #' set.seed(5)
 #' risk_prediction_validation_set <- predict_PatientRisk(
-#'                                                 multivariate_risk_predictor, 
+#'                                                 ex_patientRisk, 
 #'                                                 mExprs_testData)
 #' 
 #' 
 #' # Example for single patient prediction: Patient fourth is selected.
-#' mExprs_testSingleData <- data.frame(mExprs_testData[, 4])
-#' colnames(mExprs_testSingleData) <- colnames(mExprs_testData)[4]
+#' ex_predictPatientRisk <- data.frame(mExprs_testData[, 4])
+#' colnames(ex_predictPatientRisk) <- colnames(mExprs_testData)[4]
 #' # Risk prediction for the optimal subset of genes selected by patientRisk() 
 #' set.seed(5)
 #' risk_prediction_one_patient <- predict_PatientRisk(
-#'                                                 multivariate_risk_predictor, 
-#'                                                 mExprs_testSingleData)
+#'                                                 ex_patientRisk, 
+#'                                                 ex_predictPatientRisk)
 #' 
 #' @references
 #' \itemize{

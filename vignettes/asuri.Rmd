@@ -74,17 +74,13 @@ Next function, (3) **patientRisk()**, which accurately predicts the patient risk
 # Package download and installation. Package dependencies.
 
 The ASURI package can be installed directly from Bioconductor typing the following commands in an R:
-
+```{R, eval = FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager")
 }
 
-BiocManager::install("ASURI")
-
-It can be installed also from a local directory if you have downloaded previously the package.
-
-install.packages("/path/to/ASURI.tar.gz", dependencies = TRUE)
-library(ASURI)
+BiocManager::install("asuri")
+```
 
 If a problem with dependencies is reported during installation, users should first download the missing R packages directly from [CRAN](https://cran.r-project.org/) R repository or from [Bioconductor](https://bioconductor.org/) repository, and then repeat previous instructions to install ASURI R package. In Windows based OS, [Rtools](https://cran.r-project.org/bin/windows/Rtools/) might need to be installed. Some of the package dependencies of ASURI are the following, from **CRAN**: ‘ggplot2’, ‘glmnet’, ‘Rdpack’, ‘ROCR’, ‘scales’; and from **Bioconductor**: ‘Biobase’, ‘siggenes’, ‘survcomp’. The ASURI package also contains an experimental dataset to illustrate the performance of the various functions and methods implemented in it.
 
@@ -94,7 +90,7 @@ The dataset included in ASURI as a study case is intended to facilitate the use 
 
 Once this dataset is loaded the *seBRCA* object is created. This SummarizedExperiment object contains the normalized gene expression data matrix and phenotypical information about each sample (i.e. clinical physio-pathological data and other phenotypic data).
 
-```{r, echo = TRUE, eval = FALSE} 
+```{r, echo = TRUE, eval = TRUE} 
 library(asuri)
 data(seBRCA)
 # To extract the normalized expression
@@ -102,7 +98,7 @@ mExprs <- assay(seBRCA)
 mPheno <- colData(seBRCA)
 ```
 
-```{r, echo = TRUE, eval = FALSE} 
+```{r, echo = TRUE, eval = TRUE} 
 # To visualize the dimensions of the two extracted objects
 dim(mExprs)
 dim(mPheno)
@@ -139,7 +135,7 @@ The input parameters for the function are the following:
 - `type` Specifies whether the two Kaplan-Meier curves are computed using the gene expression groups (by default "exprs"), or using the risk groups ("risk") if the samples are already classified by risk level and this is used directly to divide the samples into two groups.
 - `cut_time`  A numeric value specifying the cutoff time (in years) for survival analysis. All events beyond this time are treated as censored (by default = 10 years).
 
-```{r, echo = TRUE, eval = FALSE} 
+```{r, echo = TRUE, eval = TRUE} 
 data(seBRCA)
 time <- "time"
 status <- "status"
@@ -200,7 +196,7 @@ The result shown in **Figure \@ref(fig:kmesr1)**, with a p-value for the log-ran
 
 Run of the function  **geneSurv()** as `type = "risk"`:
 
-```{r, echo = TRUE, eval = FALSE} 
+```{r, echo = TRUE, eval = TRUE} 
 # If we instead consider to run the function as *type* = risk
 geneName <- "BRCA1"
 set.seed(5)
@@ -231,7 +227,7 @@ The input parameters for the function are the following:
   - `iter`: The number of iterations for the bootstrapping. Default is 100.
   - `percentageFilter`: A numeric value indicating the percentage of iterations a gene must appear in to be considered significant. Default is 80.
 
-```{r, echo = TRUE, eval = FALSE} 
+```{r, echo = TRUE, eval = TRUE} 
 data(seBRCA)
 
 # Bootstrapped differential expression based on SAM.
@@ -257,7 +253,7 @@ The input parameters are the following:
 - `iter`: Number of bootstrap iterations (default: 100). This can be changed if the function takes too long to run.
 - `numberOfFolds`: Number of folds to implement nested cross-validation (default: 10).
 
-```{r, echo = TRUE, eval = FALSE} 
+```{r, echo = TRUE, eval = TRUE} 
 vectorSampleID <- as.character(rownames(colData(seBRCA)))
 vectorGroups <- as.numeric(colData(seBRCA)$ER.IHC)
 Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID)
@@ -286,7 +282,7 @@ Pred_ER.IHC$betasTable
 <div align="center"><p><b>Table 1</b>: List of genes by Stability.</p></div>
 
 The output of the function is an object with the following elements:
-```{r, echo = TRUE, eval = FALSE} 
+```{r, echo = TRUE, eval = TRUE} 
 names(Pred_ER.IHC)
 # [1] "genes" "listCoeff" "stability" "betasMedian" "betasMean" "betasTable"
 ```
@@ -312,7 +308,7 @@ The **optimal threshold for dividing the patients into two groups (low/high)** c
 
 The following code illustrates how to apply the **patientRisk()** function to discover/identify significant gene survival markers and to accurately predict patient risk.
 
-```{r, echo = TRUE, eval = FALSE} 
+```{r, echo = TRUE, eval = TRUE} 
 # Survival times should be provided in YEARS
 time <- 'time'
 status <- 'status'
@@ -407,7 +403,7 @@ Once the multivariate risk predictor is trained by the **patientRisk()** functio
 
 The following lines show how to predict the risk score for an independent set of patients. The function plots the risk score and stratifies the patients into three groups.
 
-```{r, echo = TRUE, eval = FALSE} 
+```{r, echo = TRUE, eval = TRUE} 
 # Generate the validation set, mExprs_testData if necessary.
 # Vector of genes (same ones used in Cox model training)
 
@@ -442,7 +438,7 @@ knitr::include_graphics("figures/risk_plot_predict_patientRisk.png")
 
 This function can be applied also to predict the risk of a single patient given the gene expression profile. The mExprs_testData will contain now a column with the expression level for the list of genes selected.
 
-```{r, echo = TRUE, eval = FALSE} 
+```{r, echo = TRUE, eval = TRUE} 
 # Example for single patient prediction: Patient fourth is selected.
 mExprs_testSingleData <- data.frame(mExprs_testData[, 4])
 colnames(mExprs_testSingleData) <- colnames(mExprs_testData)[4]
@@ -451,7 +447,7 @@ set.seed(5)
 risk_prediction_one_patient <- predict_PatientRisk(multivariate_risk_predictor, mExprs_testSingleData)
 ```
 
-```{r, echo = TRUE, eval = FALSE} 
+```{r, echo = TRUE, eval = TRUE} 
 # Normalized patient Risk (0 100): 27.9017675117161
 # The patient is classified as Low Risk 
 # Low Risk interval: (0, 37.0600635839135)
@@ -470,7 +466,7 @@ The input parameters are:
 - `cox_pred_test` A numeric vector of length 1 representing the predicted risk score (or log-risk score) for the test patient. It can be obtained from **predict_PatientRisk()** function.
 - `eval_surv_times`  A numeric vector of times at which the survival curve should be evaluated. If NULL (default), the times will be taken from the training data up to the maximum event time. 
 
-```{r, echo = TRUE, eval = FALSE} 
+```{r, echo = TRUE, eval = TRUE} 
 data(seBRCA)
 # COX prediction for the training set
 mPheno <- colData(seBRCA)

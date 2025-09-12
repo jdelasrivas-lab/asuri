@@ -1,50 +1,53 @@
-# Kaplan-Meier Group Stratification Based on Gene Expression
-#
-# This function stratifies samples into two groups (high/low expression) 
-# based on gene expression levels to identify optimal cut-points that minimize 
-# p-values in survival analysis.
-#
-# @param genExpr A numeric vector representing the expression levels of a 
-# gene across samples.
-# @param mSurv A data.frame containing survival data with the 
-# following columns:
-#   \itemize{
-#     \item \code{time}: Survival time for each sample.
-#     \item \code{status}: Event indicator (1 = event occurred, 0 = censored).
-#   }
-# @param geneName A character vector of gene names corresponding to the
-#  expressions in \code{genExpr}.
-#
-# @details
-# The function uses the log-rank test to assess the difference in survival 
-# between two groups formed by varying cut-points in the expression levels. 
-# It identifies the cut-point that minimizes the p-value for each gene.
-#
-# @return
-# A list with the following elements:
-# \describe{
-#   \item{\code{matrix.groups}}{A matrix where each row corresponds to the 
-#   group assignment for a gene. Columns represent samples.}
-#   \item{\code{best_pvalue}}{The smallest p-value achieved across all 
-#   genes and cut-points.}
-# }
-#
-# @examples
-# \dontrun{
-# # Simulated data example
-# set.seed(123)
-# genExpr <- rnorm(100)
-# mSurv <- data.frame(
-#     time = rexp(100, rate = 0.1),
-#     status = sample(0:1, 100, replace = TRUE)
-# )
-# geneName <- c("Gene1")
-# result <- functionKmGroups(genExpr, mSurv, geneName)
-# print(result$best_pvalue)
-# }
-# 
-# @export
-
+#' Kaplan-Meier Group Stratification Based on Gene Expression
+#'
+#' This function stratifies samples into two groups (high/low expression) 
+#' based on gene expression levels to identify optimal cut-points that minimize 
+#' p-values in survival analysis.
+#'
+#' @noRd
+#'
+#' @param genExpr A numeric vector representing the expression levels of a 
+#' gene across samples.
+#' @param mSurv A data.frame containing survival data with the 
+#' following columns:
+#'   \itemize{
+#'     \item \code{time}: Survival time for each sample.
+#'     \item \code{status}: Event indicator (1 = event occurred, 0 = censored).
+#'   }
+#' @param geneName A character vector of gene names corresponding to the
+#'  expressions in \code{genExpr}.
+#'
+#' @details
+#' The function uses the log-rank test to assess the difference in survival 
+#' between two groups formed by varying cut-points in the expression levels. 
+#' It identifies the cut-point that minimizes the p-value for each gene.
+#'
+#' @return
+#' A list with the following elements:
+#' \describe{
+#'   \item{\code{matrix.groups}}{A matrix where each row corresponds to the 
+#'   group assignment for a gene. Columns represent samples.}
+#'   \item{\code{best_pvalue}}{The smallest p-value achieved across all 
+#'   genes and cut-points.}
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' # Simulated data example
+#' set.seed(123)
+#' genExpr <- rnorm(100)
+#' mSurv <- data.frame(
+#'     time = rexp(100, rate = 0.1),
+#'     status = sample(0:1, 100, replace = TRUE)
+#' )
+#' geneName <- c("Gene1")
+#' result <- functionKmGroups(genExpr, mSurv, geneName)
+#' print(result$best_pvalue)
+#' }
+#' 
+#' @importFrom stats pchisq
+#' @importFrom survival survdiff survfit
+#' 
 functionKmGroups <- function(genExpr, mSurv, geneName) {
     if (!is.numeric(genExpr)) {
         stop("'genExpr' must be a numeric vector with the gene expressions.")

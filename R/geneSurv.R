@@ -88,9 +88,9 @@
 #' 
 #' # Generate the plots again
 #' ## Plots for c(type = exprs)
-#' asuri:::plotBoxplot(outputKM)
-#' asuri:::plotProbClass(outputKM)
-#' asuri:::plotKM(outputKM)
+#' plotBoxplot(outputKM)
+#' plotProbClass(outputKM)
+#' plotKM(outputKM)
 #' 
 #' # If we instead consider to run the function as *type* = risk
 #' 
@@ -99,13 +99,20 @@
 #' outputKM.TP53 <- geneSurv(seBRCA, time, status, geneName, type = "risk")
 #' 
 #' ## Plots for c(type = risk)
-#' asuri:::plotKM(outputKM)
+#' plotKM(outputKM.TP53)
 #' 
 #' @references
 #' \itemize{
 #'   \item{\insertRef{martinezromero2018}{asuri}} 
 #'   \item{\insertRef{BuenoFortes2023}{asuri}}
 #' } 
+#' 
+#' @importFrom SummarizedExperiment assay colData
+#' @importFrom survival coxph survdiff survfit
+#' @importFrom stats median pchisq predict wilcox.test
+#' @importFrom utils setTxtProgressBar txtProgressBar
+#' @importFrom survcomp hazard.ratio
+#' @importFrom lubridate seconds_to_period
 #' 
 #' @export
 

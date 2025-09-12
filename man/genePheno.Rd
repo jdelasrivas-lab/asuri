@@ -82,13 +82,13 @@ for more details.
 data(seBRCA)
 
 # prefilterSAM ---
-data(prefilterSAM)
+data(ex_prefilterSAM)
 
 # genePheno ---
 vectorSampleID <- rownames(SummarizedExperiment::colData(seBRCA))
 vectorGroups <- SummarizedExperiment::colData(seBRCA)$ER.IHC |> as.numeric()
 
-Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID,
+ex_genePheno <- genePheno(seBRCA, ex_prefilterSAM, vectorGroups, vectorSampleID,
                          iter = 25)
 
 # NOTE: For consistent results with the vignettes and example data, use 

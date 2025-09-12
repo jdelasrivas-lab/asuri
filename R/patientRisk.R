@@ -4,7 +4,7 @@
 #' patients are stratified into two or more prognostic groups based on the 
 #' risk score. The Cox regression is trained using a ten-fold double nested 
 #' crossvalidation strategy to avoid overfitting.
-#' @export
+#' 
 #' @param seData SummarizedExperiment object with the normalized expression 
 #' data and the phenotypic data in colData. Phenotypic colData must contain 
 #' the samples name in the first column and two columns with time and status.
@@ -109,27 +109,27 @@
 #' data(seBRCA)
 #' 
 #' # genePheno ---
-#' data(genePheno)
+#' data(ex_genePheno)
 #' 
 #' # Survival times should be provided in YEARS
 #' time <- 'time'
 #' status <- 'status'
-#' geneList <- names(Pred_ER.IHC$genes)
+#' geneList <- names(ex_genePheno$genes)
 #' 
 #' set.seed(5)
-#' multivariate_risk_predictor <- patientRisk(seBRCA, geneList, time, status, 
-#'                                            method = "class.probs", 
-#'                                            nboot = 10)
+#' ex_patientRisk <- patientRisk(seBRCA, geneList, time, status, 
+#'                               method = "class.probs", 
+#'                               nboot = 10)
 #' 
 #' # NOTE: For consistent results with the vignettes and example data, use 
 #' # default parameters (e.g., nboot = 50).
 #' 
 #' # Generate the plots again
-#' # asuri:::plotLogRank(multivariate_risk_predictor)
-#' # asuri:::plotSigmoid(multivariate_risk_predictor)
-#' # asuri:::plotLambda(multivariate_risk_predictor)
-#' # asuri:::plotBetas(multivariate_risk_predictor)
-#' # asuri:::plotKM(multivariate_risk_predictor)
+#' # plotLogRank(multivariate_risk_predictor)
+#' # plotSigmoid(multivariate_risk_predictor)
+#' # plotLambda(multivariate_risk_predictor)
+#' # plotBetas(multivariate_risk_predictor)
+#' # plotKM(multivariate_risk_predictor)
 #' 
 #' 
 #' @references
@@ -137,6 +137,14 @@
 #'   \item{\insertRef{martinezromero2018}{asuri}} 
 #'   \item{\insertRef{BuenoFortes2023}{asuri}}
 #' } 
+#' 
+#' @importFrom SummarizedExperiment assay colData
+#' @importFrom survival coxph survfit survdiff
+#' @importFrom survcomp concordance.index
+#' @importFrom stats median pchisq quantile symnum
+#' @importFrom utils capture.output
+#' @importFrom scales rescale
+#' @importFrom lubridate seconds_to_period
 #' 
 #' @export
 

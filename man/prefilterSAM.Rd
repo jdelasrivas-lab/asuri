@@ -59,7 +59,7 @@ data(seBRCA)
 groupsVector <- SummarizedExperiment::colData(seBRCA)$ER.IHC
 
 set.seed(5)
-DE_list_genes <- prefilterSAM(seBRCA, groupsVector, iter = 25)
+ex_prefilterSAM <- prefilterSAM(seBRCA, groupsVector, iter = 25)
 
 # NOTE: For consistent results with the vignettes and example data, use 
 # default parameters (e.g., iter = 100).

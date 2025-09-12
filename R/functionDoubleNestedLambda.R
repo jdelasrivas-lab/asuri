@@ -1,44 +1,49 @@
-# Double Nested Cross-Validation for Lambda Optimization in Survival Analysis
-#
-# This function performs double nested cross-validation to optimize the lambda
-# parameter based on the risk matrix.
-# The goal is to find the lambda value that results in the lowest p-value in
-# the Kaplan-Meier survival analysis.
-#
-# @param matrixOfRisks A numeric matrix where each column corresponds to the
-# risk score of each sample for a particular lambda value.
-# @param mSurv A data.frame with survival data with the following columns:
-#  - \code{time}: Survival time for each sample.
-#  - \code{status}: Event indicator (1 = event occurred, 0 = censored).
-# @param thresholds A numeric vector of two elements that defines the index
-# range (lowIndex, highIndex) for grouping in each lambda 
-# optimization iteration. If \code{NULL}, the function uses the 
-# 30\%-70\% range (default = NULL).
-#
-# @details
-# This function iterates over different lambda values, and for each lambda,
-# it uses nested cross-validation to find the optimal cutoff for grouping the
-# samples based on their risk scores. It performs Kaplan-Meier survival
-# analysis for each group and calculates p-values using the log-rank test.
-# The lambda value that results in the lowest p-value is considered optimal.
-#
-# @return A list containing the following elements:
-#  - \code{p.vals}: A matrix where each column corresponds to the p-values 
-#  obtained for each lambda value across different cutoffs.
-#
-# @examples
-# \dontrun{
-# # Simulated data example
-# set.seed(123)
-# matrixOfRisks <- matrix(rnorm(1000), ncol = 10)
-# mSurv <- data.frame(
-#   time = rexp(100, rate = 0.1),
-#   status = sample(0:1, 100, replace = TRUE)
-# )
-# result <- function_double_nested_lambda(matrixOfRisks, mSurv)
-# print(result$p.vals)
-# }
-# @export
+#' Double Nested Cross-Validation for Lambda Optimization in Survival Analysis
+#'
+#' This function performs double nested cross-validation to optimize the lambda
+#' parameter based on the risk matrix.
+#' The goal is to find the lambda value that results in the lowest p-value in
+#' the Kaplan-Meier survival analysis.
+#'
+#' @noRd
+#'
+#' @param matrixOfRisks A numeric matrix where each column corresponds to the
+#' risk score of each sample for a particular lambda value.
+#' @param mSurv A data.frame with survival data with the following columns:
+#'  - \code{time}: Survival time for each sample.
+#'  - \code{status}: Event indicator (1 = event occurred, 0 = censored).
+#' @param thresholds A numeric vector of two elements that defines the index
+#' range (lowIndex, highIndex) for grouping in each lambda 
+#' optimization iteration. If \code{NULL}, the function uses the 
+#' 30\%-70\% range (default = NULL).
+#'
+#' @details
+#' This function iterates over different lambda values, and for each lambda,
+#' it uses nested cross-validation to find the optimal cutoff for grouping the
+#' samples based on their risk scores. It performs Kaplan-Meier survival
+#' analysis for each group and calculates p-values using the log-rank test.
+#' The lambda value that results in the lowest p-value is considered optimal.
+#'
+#' @return A list containing the following elements:
+#'  - \code{p.vals}: A matrix where each column corresponds to the p-values 
+#'  obtained for each lambda value across different cutoffs.
+#'
+#' @examples
+#' \dontrun{
+#' # Simulated data example
+#' set.seed(123)
+#' matrixOfRisks <- matrix(rnorm(1000), ncol = 10)
+#' mSurv <- data.frame(
+#'   time = rexp(100, rate = 0.1),
+#'   status = sample(0:1, 100, replace = TRUE)
+#' )
+#' result <- function_double_nested_lambda(matrixOfRisks, mSurv)
+#' print(result$p.vals)
+#' }
+#' 
+#' @importFrom stats pchisq
+#' @importFrom survival survdiff
+#' @importFrom lubridate seconds_to_period
 function_double_nested_lambda <- function(matrixOfRisks, 
                                             mSurv, thresholds = NULL) {
     nLambdas <- dim(matrixOfRisks)[2]

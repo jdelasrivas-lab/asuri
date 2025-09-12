@@ -40,7 +40,7 @@
 #' groupsVector <- SummarizedExperiment::colData(seBRCA)$ER.IHC
 #' 
 #' set.seed(5)
-#' DE_list_genes <- prefilterSAM(seBRCA, groupsVector, iter = 25)
+#' ex_prefilterSAM <- prefilterSAM(seBRCA, groupsVector, iter = 25)
 #' 
 #' # NOTE: For consistent results with the vignettes and example data, use 
 #' # default parameters (e.g., iter = 100).
@@ -51,6 +51,12 @@
 #'   \item{\insertRef{martinezromero2018}{asuri}} 
 #'   \item{\insertRef{BuenoFortes2023}{asuri}}
 #' } 
+#' 
+#' @importFrom SummarizedExperiment assay
+#' @importFrom utils setTxtProgressBar txtProgressBar
+#' @importFrom siggenes sam findDelta list.siggenes
+#' @importFrom spsUtil quiet
+#' @importFrom lubridate seconds_to_period
 #' 
 #' @export
 prefilterSAM <- function(seData, groupsVector, FDRfilter = 0.05, 
@@ -143,7 +149,7 @@ prefilterSAM <- function(seData, groupsVector, FDRfilter = 0.05,
     close(pb)
     message(Sys.time())
     list.genes <- factor(list.genes, levels = unique(list.genes))
-    result <- 
-      names(table(list.genes)[table(list.genes) >= 
-                                (iter * (percentageFilter / 100))])
+    result <- names(table(list.genes)[table(list.genes) >= 
+                                        (iter * (percentageFilter / 100))])
+    return(result)
 }
