@@ -77,7 +77,7 @@ You can install the stable version from Bioconductor:
 ``` r
 if (!requireNamespace("BiocManager", quietly=TRUE))
     install.packages("BiocManager")
-## BiocManager::install("BiocUpgrade") ## you may need this
+BiocManager::install("BiocUpgrade") ## you may need this
 BiocManager::install("asuri")
 ```
 
@@ -85,21 +85,6 @@ or the development version of asuri from
 [GitHub](https://github.com/jdelasrivas-lab/asuri) with:
 
 ``` r
-# install.packages("remotes")
+install.packages("remotes")
 remotes::install_github("jdelasrivas-lab/asuri")
-#> Downloading GitHub repo jdelasrivas-lab/asuri@HEAD
-#> 
-#> ── R CMD build ─────────────────────────────────────────────────────────────────
-#> * checking for file ‘/tmp/RtmpAsgDCa/remotes371b6c53917da0/jdelasrivas-lab-asuri-64b8b25/DESCRIPTION’ ... OK
-#> * preparing ‘asuri’:
-#> * checking DESCRIPTION meta-information ... OK
-#> * installing the package to process help pages
-#> Loading required namespace: asuri
-#> * saving partial Rd database
-#> * checking for LF line-endings in source and make files and shell scripts
-#> * checking for empty or unneeded directories
-#> * looking to see if a ‘data/datalist’ file should be added
-#> * building ‘asuri_0.99.12.tar.gz’
-#> Installing package into '/tmp/Rtmp8lYYVN/temp_libpath370180768e9bd'
-#> (as 'lib' is unspecified)
 ```

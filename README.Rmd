@@ -53,16 +53,16 @@ If you use `r tryCatch(Biocpkg("asuri"), error = function(e) "asuri")` in publis
 
 You can install the stable version from Bioconductor:
 
-```{r, eval=FALSE}
+```{r, eval = FALSE}
 if (!requireNamespace("BiocManager", quietly=TRUE))
     install.packages("BiocManager")
-## BiocManager::install("BiocUpgrade") ## you may need this
+BiocManager::install("BiocUpgrade") ## you may need this
 BiocManager::install("asuri")
 ```
 
 or the development version of asuri from [GitHub](https://github.com/jdelasrivas-lab/asuri) with:
 
-``` {r}
-# install.packages("remotes")
+```{r, eval = FALSE}
+install.packages("remotes")
 remotes::install_github("jdelasrivas-lab/asuri")
 ```
