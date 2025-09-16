@@ -14,6 +14,7 @@
 #' @param iter The number of iterations for bootstrapping. Default is 100.
 #' @param percentageFilter A numeric value indicating the percentage of 
 #' iterations a gene must appear in to be considered significant. Default is 80.
+#' @param verbose Logical. Show progress bar.
 #'
 #' @details
 #' This function implements SAM (Schwender H., 2022) robust diferential 
@@ -60,7 +61,7 @@
 #' 
 #' @export
 prefilterSAM <- function(seData, groupsVector, FDRfilter = 0.05, 
-                         iter = 100, percentageFilter = 80) {
+                         iter = 100, percentageFilter = 80, verbose = TRUE) {
     if (!is(seData, "SummarizedExperiment")) {
       stop("SEdata must be a 'SummarizedExperiment'.")
     }
@@ -95,8 +96,12 @@ prefilterSAM <- function(seData, groupsVector, FDRfilter = 0.05,
     message(Sys.time())
     # lista <- NULL
     #
-    pb <- txtProgressBar(min = 0, max = iter,  style = 3, 
-                         width = 50, char = "=")
+    # pb <- txtProgressBar(min = 0, max = iter,  style = 3, 
+                         # width = 50, char = "=")
+    if (verbose) {
+      pb <- txtProgressBar(min = 0, max = iter, style = 3, 
+                           width = 50, char = "=")
+    }
     init <- numeric(iter)
     end <- numeric(iter)
     
@@ -132,7 +137,7 @@ prefilterSAM <- function(seData, groupsVector, FDRfilter = 0.05,
       # incidence as number of times it shows as significative value, 
       # is what it's retourned as a table
       end[i] <- Sys.time()
-      setTxtProgressBar(pb, i)
+      if (verbose) setTxtProgressBar(pb, i)
       # time <- round(lubridate::seconds_to_period(sum(end - init)), 0)
       # 
       # # Estimated remaining time based on the
@@ -144,7 +149,7 @@ prefilterSAM <- function(seData, groupsVector, FDRfilter = 0.05,
       #                   " // Estimated time remaining:", remainining)
       # message(text_msg, "")
     }
-    close(pb)
+    if (verbose) close(pb)
     message(Sys.time())
     list.genes <- factor(list.genes, levels = unique(list.genes))
     result <- names(table(list.genes)[table(list.genes) >= 

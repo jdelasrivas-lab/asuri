@@ -6,6 +6,8 @@ author:
   affiliation: Bioinformatics and Functional Genomics Group - Cancer Research Centre (CiC-IBMCC, CSIC/USAL) and IBSAL, Salamanca (Spain)
 - name: Santiago Bueno-Fortes
   affiliation: Bioinformatics and Functional Genomics Group - Cancer Research Centre (CiC-IBMCC, CSIC/USAL) and IBSAL, Salamanca (Spain)
+- name: Natalia Alonso-Moreda
+  affiliation: Bioinformatics and Functional Genomics Group - Cancer Research Centre (CiC-IBMCC, CSIC/USAL) and IBSAL, Salamanca (Spain)
 - name: Jose Manuel Sanchez-Santos
   affiliation: Bioinformatics and Functional Genomics Group - Cancer Research Centre (CiC-IBMCC, CSIC/USAL) and IBSAL, Salamanca (Spain)
 - name: Manuel Martin-Merino
@@ -135,7 +137,7 @@ The input parameters for the function are the following:
 - `type` Specifies whether the two Kaplan-Meier curves are computed using the gene expression groups (by default "exprs"), or using the risk groups ("risk") if the samples are already classified by risk level and this is used directly to divide the samples into two groups.
 - `cut_time`  A numeric value specifying the cutoff time (in years) for survival analysis. All events beyond this time are treated as censored (by default = 10 years).
 
-```{r, echo = TRUE, eval = TRUE, out.width = "80%", fig.align = "center", results="asis"} 
+```{r, echo = TRUE, eval = TRUE,  fig.align = "center", results="asis", fig.height=10, fig.width=10, out.width = "80%" } 
 data(seBRCA)
 time <- "time"
 status <- "status"
@@ -144,7 +146,7 @@ geneName <- "ESR1"
 # The gene expression vector must be provided with the NAMES of each sample,
 # that should match the time and status NAMES.
 set.seed(5)
-outputKM <- geneSurv(seBRCA, time, status, geneName, type = "exprs")
+outputKM <- geneSurv(seBRCA, time, status, geneName, type = "exprs", verbose = F)
 ```
 
 The function returns different outputs, i.e., a list with values and plots that is different depending on the specified *type* or *mode* how it is run. 
@@ -196,11 +198,11 @@ The result shown in **Figure \@ref(fig:kmesr1)**, with a p-value for the log-ran
 
 Run of the function  **geneSurv()** as `type = "risk"`:
 
-```{r, echo = TRUE, eval = TRUE, out.width = "80%", fig.align = "center", results="asis"} 
+```{r, echo = TRUE, eval = TRUE, fig.align = "center", results="asis", fig.height=10, fig.width=10, out.width = "80%" } 
 # If we instead consider to run the function as *type* = risk
 geneName <- "BRCA1"
 set.seed(5)
-outputKM.TP53 <- geneSurv(seBRCA, time, status, geneName, type = "risk")
+outputKM.TP53 <- geneSurv(seBRCA, time, status, geneName, type = "risk", verbose = F)
 ```
 
 ```{r kmrisk, fig.cap="Kaplan Meier curves obtained after the assignment of the patients by bootstrap to high or low survival using the estimated risk based on feature BRCA1.", out.width = "80%", fig.align = "center", echo=FALSE, results="asis"}
@@ -238,7 +240,7 @@ data(seBRCA)
 groupsVector <- colData(seBRCA)$ER.IHC
   
 set.seed(5)
-DE_list_genes <- prefilterSAM(seBRCA, groupsVector)
+DE_list_genes <- prefilterSAM(seBRCA, groupsVector, verbose = F)
 ```
 
 The output of the `DE_list_genes` function is a list with the genes obtained from the differential expression analysis ordered by the p-value (from lowest to highest p-value).
@@ -259,7 +261,8 @@ data(ex_prefilterSAM)
 DE_list_genes <- ex_prefilterSAM
 vectorSampleID <- as.character(rownames(colData(seBRCA)))
 vectorGroups <- as.numeric(colData(seBRCA)$ER.IHC)
-Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID)
+Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID, 
+                         verbose = F)
 
 # Pred_ER.IHC is an output object with the list of genes that show a significant correlation with the clinical variable. Since a bootstrap is performed, the results of how many times across iterations a gene is found significant are reported as *stability* (in relative numbers 0-1, 1=100%) and the *beta values* from the regression across iterations are also provided as *betaMedian* and *betaMean* :
 
@@ -311,7 +314,7 @@ The **optimal threshold for dividing the patients into two groups (low/high)** c
 
 The following code illustrates how to apply the **patientRisk()** function to discover/identify significant gene survival markers and to accurately predict patient risk.
 
-```{r, echo = TRUE, eval = TRUE, out.width = "80%", fig.align = "center", results="asis"} 
+```{r, echo = TRUE, eval = TRUE, fig.align = "center", results="asis", fig.height=10, fig.width=10, out.width = "80%" } 
 # Survival times should be provided in YEARS
 time <- 'time'
 status <- 'status'
@@ -406,7 +409,7 @@ Once the multivariate risk predictor is trained by the **patientRisk()** functio
 
 The following lines show how to predict the risk score for an independent set of patients. The function plots the risk score and stratifies the patients into three groups.
 
-```{r, echo = TRUE, eval = TRUE, out.width = "80%", fig.align = "center", results="asis"} 
+```{r, echo = TRUE, eval = TRUE, fig.align = "center", results="asis", fig.height=10, fig.width=10,  out.width = "80%" } 
 # Generate the validation set, mExprs_testData if necessary.
 # Vector of genes (same ones used in Cox model training)
 
@@ -441,19 +444,14 @@ knitr::include_graphics("figures/risk_plot_predict_patientRisk.png")
 
 This function can be applied also to predict the risk of a single patient given the gene expression profile. The mExprs_testData will contain now a column with the expression level for the list of genes selected.
 
-```{r, echo = TRUE, eval = TRUE, out.width = "80%", fig.align = "center", results="asis"} 
+```{r, echo = TRUE, eval = TRUE, fig.align = "center", results="asis", fig.height=10, fig.width=10, out.width = "80%" } 
 # Example for single patient prediction: Patient fourth is selected.
 mExprs_testSingleData <- data.frame(mExprs_testData[, 4])
 colnames(mExprs_testSingleData) <- colnames(mExprs_testData)[4]
 # Risk prediction for the optimal subset of genes selected by patientRisk function
 set.seed(5)
 risk_prediction_one_patient <- predict_PatientRisk(multivariate_risk_predictor, mExprs_testSingleData)
-```
-
-```{r, echo = TRUE, eval = TRUE} 
-# Normalized patient Risk (0 100): 27.9017675117161
-# The patient is classified as Low Risk 
-# Low Risk interval: (0, 37.0600635839135)
+risk_prediction_one_patient$risk_score
 ```
 
 When a single patient is considered, the function will print the normalized risk for the test patient and the classification into three possible groups: Low, Intermediate or High. Treatment for the intermediate group is uncertain and should be studied with care.
@@ -469,7 +467,7 @@ The input parameters are:
 - `cox_pred_test` A numeric vector of length 1 representing the predicted risk score (or log-risk score) for the test patient. It can be obtained from **predict_PatientRisk()** function.
 - `eval_surv_times`  A numeric vector of times at which the survival curve should be evaluated. If NULL (default), the times will be taken from the training data up to the maximum event time. 
 
-```{r, echo = TRUE, eval = TRUE, out.width = "80%", fig.align = "center", results="asis"} 
+```{r, echo = TRUE, eval = TRUE, fig.align = "center", results="asis", fig.height=10, fig.width=10, out.width = "80%" } 
 data(seBRCA)
 # COX prediction for the training set
 mPheno <- colData(seBRCA)
@@ -479,7 +477,7 @@ set.seed(5)
 mExprSelectedGenes <- mExprs[rownames(mExprs) %in% geneList,]
 
 cox_pred_training <- predict_PatientRisk(multivariate_risk_predictor, mExprSelectedGenes)
-cox_pred_training$risk_score
+head(cox_pred_training$risk_score)
 # COX prediction for the test patient
 set.seed(5)
 cox_pred_test <- predict_PatientRisk(multivariate_risk_predictor, mExprs_testSingleData)
@@ -513,7 +511,7 @@ Finally, two Bioconductor packages that are less related to ASURI: survcomp [@sc
 
 
 # Session Info
-```{r, echo = TRUE}  
+```{r, echo = F, eval = T}  
 devtools::session_info()
 ```
 

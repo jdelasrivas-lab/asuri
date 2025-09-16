@@ -18,7 +18,8 @@
 #' changed if the function takes too long to execute).
 #' @param numberOfFolds Number of folds to implement nested cross-validation. 
 #' By default 5.
-
+#' @param verbose Logical. Show progress bar.
+#' 
 #'
 #' @details
 #' This function implements a robust version of the elastic net algorithm 
@@ -91,7 +92,7 @@
 #' @export
 
 genePheno <- function(seData, DEgenes, vectorGroups, vectorSampleID, 
-                        iter = 100, numberOfFolds = 5) {
+                        iter = 100, numberOfFolds = 5, verbose = TRUE) {
     # Validating input types
     if (!is(seData, "SummarizedExperiment")) {
       stop("SEdata must be a 'SummarizedExperiment'.")
@@ -137,8 +138,12 @@ genePheno <- function(seData, DEgenes, vectorGroups, vectorSampleID,
 
     list <- NULL
     outp <- NULL
-    pb <- txtProgressBar(min = 0, max = iter,  style = 3, 
-                         width = 50, char = "=") 
+    # pb <- txtProgressBar(min = 0, max = iter,  style = 3, 
+    #                      width = 50, char = "=") 
+    if (verbose) {
+      pb <- txtProgressBar(min = 0, max = iter, style = 3, 
+                           width = 50, char = "=")
+    }
     init <- numeric(iter)
     end <- numeric(iter)
     for (i in seq(1, iter)) {
@@ -193,7 +198,7 @@ genePheno <- function(seData, DEgenes, vectorGroups, vectorSampleID,
       x$auc <- as.numeric((performance(auc_prediction, "auc"))@y.values)
       list[[i]] <- x
       end[i] <- Sys.time()
-      setTxtProgressBar(pb, i)
+      if (verbose) setTxtProgressBar(pb, i)
       # time <- round(lubridate::seconds_to_period(sum(end - init)), 0)
       # 
       # # Estimated remaining time based on the
@@ -204,7 +209,7 @@ genePheno <- function(seData, DEgenes, vectorGroups, vectorSampleID,
       #                   " // Estimated time remaining:", remainining)
       # message(text_msg, "")
     }
-    close(pb)
+    if (verbose) close(pb)
     
     outp$listCoeff <- list
     outp$genes <- table(outp$genes)

@@ -12,7 +12,8 @@ geneSurv(
   boxplot = TRUE,
   iter = 100,
   type = c("exprs", "risk"),
-  cut_time = 10
+  cut_time = 10,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -41,6 +42,8 @@ or gene expression (default "exprs").}
 \item{cut_time}{A numeric value specifying the cutoff time (in years) for 
 survival analysis. All events beyond this time are treated as censored 
 (default = 10 years).}
+
+\item{verbose}{Logical. Show progress bar.}
 }
 \value{
 Depending on the type run, the output changes:

@@ -9,7 +9,8 @@ prefilterSAM(
   groupsVector,
   FDRfilter = 0.05,
   iter = 100,
-  percentageFilter = 80
+  percentageFilter = 80,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ significant genes. Default is 0.05.}
 
 \item{percentageFilter}{A numeric value indicating the percentage of 
 iterations a gene must appear in to be considered significant. Default is 80.}
+
+\item{verbose}{Logical. Show progress bar.}
 }
 \value{
 An ordered vector with the names of differentially expressed genes 

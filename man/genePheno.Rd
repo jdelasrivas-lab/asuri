@@ -10,7 +10,8 @@ genePheno(
   vectorGroups,
   vectorSampleID,
   iter = 100,
-  numberOfFolds = 5
+  numberOfFolds = 5,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -32,6 +33,8 @@ changed if the function takes too long to execute).}
 
 \item{numberOfFolds}{Number of folds to implement nested cross-validation. 
 By default 5.}
+
+\item{verbose}{Logical. Show progress bar.}
 }
 \value{
 A list containing the following elements:

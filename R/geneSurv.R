@@ -22,6 +22,7 @@
 #' @param cut_time A numeric value specifying the cutoff time (in years) for 
 #' survival analysis. All events beyond this time are treated as censored 
 #' (default = 10 years).
+#' @param verbose Logical. Show progress bar.
 #'
 #' @details
 #' This function improves the stability and robustness of the K-M estimator 
@@ -117,7 +118,8 @@
 #' @export
 
 geneSurv <- function(seData, time, status, geneName, boxplot = TRUE, 
-                     iter = 100, type = c("exprs", "risk"), cut_time = 10) {
+                     iter = 100, type = c("exprs", "risk"), cut_time = 10,
+                     verbose = TRUE) {
   
   if (!is(seData, "SummarizedExperiment")) {
     stop("SEdata must be a 'SummarizedExperiment'.")
@@ -197,8 +199,12 @@ geneSurv <- function(seData, time, status, geneName, boxplot = TRUE,
     # matrix to fill with results
     matrixgr <- matrix(0, nrow = n.samples, ncol = iter)
     rownames(matrixgr) <- names(genExpr)
-    pb <- txtProgressBar(min = 0, max = iter,  style = 3, 
-                         width = 50, char = "=")
+    # pb <- txtProgressBar(min = 0, max = iter,  style = 3, 
+                         # width = 50, char = "=")
+    if (verbose) {
+      pb <- txtProgressBar(min = 0, max = iter, style = 3, 
+                           width = 50, char = "=")
+    }
     init <- numeric(iter)
     end <- numeric(iter)
     
@@ -220,7 +226,7 @@ geneSurv <- function(seData, time, status, geneName, boxplot = TRUE,
       names(g) <- names(genExpr2)
       matrixgr[match(names(g), rownames(matrixgr)), i] <- as.vector(g)
       end[i] <- Sys.time()
-      setTxtProgressBar(pb, i)
+      if (verbose) setTxtProgressBar(pb, i)
       # timer <- round(lubridate::seconds_to_period(sum(end - init)), 0)
       # 
       # # Estimated remaining time based on the
@@ -232,7 +238,7 @@ geneSurv <- function(seData, time, status, geneName, boxplot = TRUE,
       #                   " // Estimated time remaining:", remainining)
       # message(text_msg, "")
     }
-    close(pb)
+    if (verbose) close(pb)
     group.assignation.vector <- NULL
     group.assignation.vector$assigned_group <- apply(
       matrixgr, 1, function(x) round(mean(x[x != 0])))
