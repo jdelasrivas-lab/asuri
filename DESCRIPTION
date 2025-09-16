@@ -33,8 +33,8 @@ Authors@R: c(
          comment = c(ORCID = "0000-0002-0984-9946"))
   )
 License: LGPL-3 + file LICENSE
-Depends: R (>= 4.4.0), stats, methods
-Imports: Rdpack, SummarizedExperiment, spsUtil, lubridate, survival, glmnet, siggenes, Biobase, survcomp, scales, ROCR, gplots, ggplot2, grDevices, graphics, utils
+Depends: R (>= 4.5.0), stats, methods
+Imports: SummarizedExperiment, spsUtil, lubridate, survival, glmnet, siggenes, survcomp, scales, ROCR, ggplot2, grDevices, graphics, utils, Rdpack
 Suggests: BiocStyle, knitr, formatR, rmarkdown, magick, devtools
 biocViews: Software, StatisticalMethod, WorkflowStep, GeneExpression, Microarray, DifferentialExpression, GenePrediction, Regression, Survival, ExonArray, MultipleComparison
 URL: https://github.com/jdelasrivas-lab/asuri

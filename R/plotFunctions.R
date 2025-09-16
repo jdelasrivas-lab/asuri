@@ -57,7 +57,7 @@ plotBoxplot <- function(gs_result) {
 #'
 #' @param gs_result Returning object from running geneSurv function
 #' @seealso \code{\link{geneSurv}} for more information about the analysis
-#' @importFrom graphics plot
+#' @importFrom graphics plot title
 #' 
 #' @export
 plotProbClass <- function(gs_result) {
@@ -94,7 +94,7 @@ plotProbClass <- function(gs_result) {
 #'
 #' @param pr_result Returning object from running patientRisk function
 #' @seealso \code{\link{patientRisk}} for more information about the analysis
-#' @importFrom graphics plot abline
+#' @importFrom graphics plot abline par
 #' 
 #' @export
 plotLogRank <- function(pr_result) {
@@ -143,7 +143,7 @@ plotLogRank <- function(pr_result) {
 #'
 #' @param pr_result Returning object from running patientRisk function
 #' @seealso \code{\link{patientRisk}} for more information about the analysis
-#' @importFrom graphics plot abline grid
+#' @importFrom graphics plot abline grid mtext par strwidth title
 #' 
 #' @export
 plotSigmoid <- function(pr_result) {
@@ -219,6 +219,7 @@ plotLambda <- function(pr_result) {
 #' @importFrom ggplot2 aes element_blank element_text geom_point ggplot ggtitle 
 #' @importFrom ggplot2 guide_legend guides scale_size_continuous theme_light
 #' @importFrom ggplot2 scale_color_manual scale_shape_manual xlab ylab theme
+#' @importFrom utils head
 #' 
 #' @export
 plotBetas <- function(pr_result) {
@@ -328,10 +329,10 @@ plotBetas <- function(pr_result) {
 #' @param ... Additional arguments passed to plotting functions
 #' @seealso \code{\link{geneSurv}} or \code{\link{patientRisk}} for more 
 #' information about the analysis
-
-#' @importFrom graphics abline axis box lines
+#' @import methods
+#' @importFrom graphics abline axis box lines par title mtext strwidth
 #' @importFrom grDevices grey
-#' @importFrom ggplot2 alpha
+#' @importFrom ggplot2 alpha 
 #' 
 #' @export
 plotKM <- function(result,
@@ -580,6 +581,26 @@ plotKM <- function(result,
 
 
 # KM plot for custom groups -----------------------------------------------
+#' Plot the KM curves for pre-generated groups
+#'
+#' This function can be used to generate pre-calculated groups Kaplan-Meier
+#' curves.
+#' @noRd
+#'
+#' @param genExpr Vector with the gene expression.
+#' @param time Vector with the time for the used samples.
+#' @param status Vector with the status for the used samples.
+#' @param group.assignation.vector Groups for the used samples.
+#' @param group.labels Labels for the used samples.
+#' @param group.colors Color for each of the groups.
+#' @param boxplot Should a boxplot be generated.
+
+#' @seealso \code{\link{geneSurv}}
+
+#' @importFrom graphics abline axis box lines
+#' @importFrom grDevices grey
+#' @importFrom ggplot2 alpha element_line unit theme_bw scale_fill_manual 
+#' @importFrom ggplot2 geom_jitter geom_boxplot stat_boxplot
 plotKmCustomGroups <- function(genExpr, time, status,
                                group.assignation.vector, group.labels,
                                group.colors, boxplot = FALSE) {

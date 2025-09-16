@@ -51,7 +51,7 @@
 #' print(fit$nfeatures) # Number of selected features for each lambda
 #' }
 #'
-#' @importFrom stats quantile
+#' @importFrom stats quantile runif
 #' 
 uniCox <- function(x, y, status, lamlist = NULL, nlam = 20, 
                    del.thres = .01, max.iter = 5) {

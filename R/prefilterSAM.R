@@ -54,7 +54,7 @@
 #' 
 #' @importFrom SummarizedExperiment assay
 #' @importFrom utils setTxtProgressBar txtProgressBar
-#' @importFrom siggenes sam findDelta list.siggenes
+#' @importFrom siggenes sam findDelta list.siggenes d.stat
 #' @importFrom spsUtil quiet
 #' @importFrom lubridate seconds_to_period
 #' 
@@ -116,16 +116,14 @@ prefilterSAM <- function(seData, groupsVector, FDRfilter = 0.05,
       if (inherits(samR, "try-error")) next
       
       # extracting best genes by FDR
-      delta <- try(
-        spsUtil::quiet(findDelta(samR, fdr = FDRfilter)),
+      delta <- try(quiet(findDelta(samR, fdr = FDRfilter)),
         silent = TRUE
       )
       if (inherits(delta, "try-error")) next
       
       delta <- unlist(delta)[1]
 
-      new_genes <- try(
-        siggenes::list.siggenes(samR, delta),
+      new_genes <- try(list.siggenes(samR, delta),
         silent = TRUE
       )
       
