@@ -113,6 +113,10 @@ plotKM(
 
 \item{...}{Additional arguments passed to plotting functions}
 }
+\value{
+Plot of Kaplan-Meier for each risk/expression group from 
+geneSurv() or patientRisk()
+}
 \description{
 This function is called internally by the patientRisk function to generate 
 the Kaplan-Meier curves. It also can be used after the function has been run 

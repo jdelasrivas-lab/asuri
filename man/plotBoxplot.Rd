@@ -9,6 +9,9 @@ plotBoxplot(gs_result)
 \arguments{
 \item{gs_result}{Returning object from running geneSurv function}
 }
+\value{
+Boxplot with the expression values from geneSurv()
+}
 \description{
 This function is called internally by the geneSurv function to generate the
 expression boxplot. It also can be used after the function has been run to

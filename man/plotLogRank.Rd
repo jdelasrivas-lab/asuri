@@ -9,6 +9,9 @@ plotLogRank(pr_result)
 \arguments{
 \item{pr_result}{Returning object from running patientRisk function}
 }
+\value{
+Plot of the log-rank p-value distribution from geneSurv()
+}
 \description{
 This function is called internally by the patientRisk function to generate 
 the logrank p-value distribution for each patient splitting. 

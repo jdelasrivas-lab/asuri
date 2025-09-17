@@ -9,6 +9,10 @@ plotProbClass(gs_result)
 \arguments{
 \item{gs_result}{Returning object from running geneSurv function}
 }
+\value{
+Plot of the class probability distribution across samples 
+for geneSurv()
+}
 \description{
 This function is called internally by the geneSurv function to generate the
 probability class distribution of the patients. It also can be used after 

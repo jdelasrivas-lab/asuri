@@ -4,7 +4,7 @@
 
 <!-- badges: start -->
 
-[![](https://img.shields.io/badge/devel%20version-0.99.13-green.svg)](https://github.com/jdelasrivas-lab/asuri)
+[![](https://img.shields.io/badge/devel%20version-0.99.14-green.svg)](https://github.com/jdelasrivas-lab/asuri)
 [![](https://img.shields.io/badge/download-NA/total-blue.svg)](https://bioconductor.org/packages/stats/bioc/asuri)
 [![](https://img.shields.io/badge/download-NA/month-blue.svg)](https://bioconductor.org/packages/stats/bioc/asuri)
 <!-- badges: end -->

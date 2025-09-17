@@ -11,7 +11,7 @@
 #' @param gs_result Returning object from running geneSurv function
 #' @seealso \code{\link{geneSurv}} for more information about the analysis
 #' @importFrom graphics boxplot legend
-#' 
+#' @return Boxplot with the expression values from geneSurv()
 #' @examples
 #' data(seBRCA)
 #' time <- "time"
@@ -73,6 +73,8 @@ plotBoxplot <- function(gs_result) {
 #' @param gs_result Returning object from running geneSurv function
 #' @seealso \code{\link{geneSurv}} for more information about the analysis
 #' @importFrom graphics plot title
+#' @return Plot of the class probability distribution across samples 
+#' for geneSurv()
 #' @examples
 #' data(seBRCA)
 #' time <- "time"
@@ -124,6 +126,7 @@ plotProbClass <- function(gs_result) {
 #' @param pr_result Returning object from running patientRisk function
 #' @seealso \code{\link{patientRisk}} for more information about the analysis
 #' @importFrom graphics plot abline par
+#' @return Plot of the log-rank p-value distribution from geneSurv()
 #' @examples
 #' data(seBRCA)
 #' 
@@ -194,6 +197,7 @@ plotLogRank <- function(pr_result) {
 #' @param pr_result Returning object from running patientRisk function
 #' @seealso \code{\link{patientRisk}} for more information about the analysis
 #' @importFrom graphics plot abline grid mtext par strwidth title
+#' @return Plot of the ordered risk distribution from patientRisk()
 #' @examples
 #' data(seBRCA)
 #' 
@@ -254,6 +258,7 @@ plotSigmoid <- function(pr_result) {
 #' @param pr_result Returning object from running patientRisk function
 #' @seealso \code{\link{patientRisk}} for more information about the analysis
 #' @importFrom graphics plot axis
+#' @return Plot of the p-value distribution for each lambda from patientRisk()
 #' @examples
 #' data(seBRCA)
 #' 
@@ -311,6 +316,7 @@ plotLambda <- function(pr_result) {
 #' @importFrom ggplot2 guide_legend guides scale_size_continuous theme_light
 #' @importFrom ggplot2 scale_color_manual scale_shape_manual xlab ylab theme
 #' @importFrom utils head
+#' @return Plot of the beta values of the model for each gene from patientRisk()
 #' @examples 
 #' data(seBRCA)
 #' 
@@ -444,7 +450,9 @@ plotBetas <- function(pr_result) {
 #' @import methods
 #' @importFrom graphics abline axis box lines par title mtext strwidth
 #' @importFrom grDevices grey
-#' @importFrom ggplot2 alpha 
+#' @importFrom ggplot2 alpha
+#' @return Plot of Kaplan-Meier for each risk/expression group from 
+#' geneSurv() or patientRisk() 
 #' @examples
 #' 
 #' # Genesurv

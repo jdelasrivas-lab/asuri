@@ -9,6 +9,9 @@ plotSigmoid(pr_result)
 \arguments{
 \item{pr_result}{Returning object from running patientRisk function}
 }
+\value{
+Plot of the ordered risk distribution from patientRisk()
+}
 \description{
 This function is called internally by the patientRisk function to generate 
 the ordered risk distribution for the patients. It also can be used after 

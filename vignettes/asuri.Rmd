@@ -146,7 +146,7 @@ geneName <- "ESR1"
 # The gene expression vector must be provided with the NAMES of each sample,
 # that should match the time and status NAMES.
 set.seed(5)
-outputKM <- geneSurv(seBRCA, time, status, geneName, type = "exprs", verbose = F)
+outputKM <- geneSurv(seBRCA, time, status, geneName, type = "exprs", verbose = FALSE)
 ```
 
 The function returns different outputs, i.e., a list with values and plots that is different depending on the specified *type* or *mode* how it is run. 
@@ -202,7 +202,7 @@ Run of the function  **geneSurv()** as `type = "risk"`:
 # If we instead consider to run the function as *type* = risk
 geneName <- "BRCA1"
 set.seed(5)
-outputKM.TP53 <- geneSurv(seBRCA, time, status, geneName, type = "risk", verbose = F)
+outputKM.TP53 <- geneSurv(seBRCA, time, status, geneName, type = "risk", verbose = FALSE)
 ```
 
 ```{r kmrisk, fig.cap="Kaplan Meier curves obtained after the assignment of the patients by bootstrap to high or low survival using the estimated risk based on feature BRCA1.", out.width = "80%", fig.align = "center", echo=FALSE, results="asis"}
@@ -240,7 +240,7 @@ data(seBRCA)
 groupsVector <- colData(seBRCA)$ER.IHC
   
 set.seed(5)
-DE_list_genes <- prefilterSAM(seBRCA, groupsVector, verbose = F)
+DE_list_genes <- prefilterSAM(seBRCA, groupsVector, verbose = FALSE)
 ```
 
 The output of the `DE_list_genes` function is a list with the genes obtained from the differential expression analysis ordered by the p-value (from lowest to highest p-value).
@@ -262,7 +262,7 @@ DE_list_genes <- ex_prefilterSAM
 vectorSampleID <- as.character(rownames(colData(seBRCA)))
 vectorGroups <- as.numeric(colData(seBRCA)$ER.IHC)
 Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID, 
-                         verbose = F)
+                         verbose = FALSE)
 
 # Pred_ER.IHC is an output object with the list of genes that show a significant correlation with the clinical variable. Since a bootstrap is performed, the results of how many times across iterations a gene is found significant are reported as *stability* (in relative numbers 0-1, 1=100%) and the *beta values* from the regression across iterations are also provided as *betaMedian* and *betaMean* :
 

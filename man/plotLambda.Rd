@@ -9,6 +9,9 @@ plotLambda(pr_result)
 \arguments{
 \item{pr_result}{Returning object from running patientRisk function}
 }
+\value{
+Plot of the p-value distribution for each lambda from patientRisk()
+}
 \description{
 This function is called internally by the patientRisk function to generate 
 the p-value distribution for each lambda. It also can be used after 
