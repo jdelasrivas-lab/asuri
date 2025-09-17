@@ -511,7 +511,7 @@ Finally, two Bioconductor packages that are less related to ASURI: survcomp [@sc
 
 
 # Session Info
-```{r, echo = F, eval = T}  
+```{r, echo = F, eval = TRUE}  
 devtools::session_info()
 ```
 

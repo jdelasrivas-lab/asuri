@@ -12,6 +12,21 @@
 #' @seealso \code{\link{geneSurv}} for more information about the analysis
 #' @importFrom graphics boxplot legend
 #' 
+#' @examples
+#' data(seBRCA)
+#' time <- "time"
+#' status <- "status"
+#' geneName <- "ESR1"
+#' # The TIME value must be transformed to YEARS
+#' # The gene expression vector must be provided with the NAMES of each sample,
+#' # that should match the time and status NAMES.
+#' set.seed(5)
+#' outputKM <- geneSurv(seBRCA, time, status, geneName, type = "exprs")
+#' 
+#' # Generate the plots again
+#' ## Plots for c(type = exprs)
+#' plotBoxplot(outputKM)
+#' 
 #' @export
 plotBoxplot <- function(gs_result) {
     patientExpr <- gs_result$patientExpr
@@ -58,6 +73,20 @@ plotBoxplot <- function(gs_result) {
 #' @param gs_result Returning object from running geneSurv function
 #' @seealso \code{\link{geneSurv}} for more information about the analysis
 #' @importFrom graphics plot title
+#' @examples
+#' data(seBRCA)
+#' time <- "time"
+#' status <- "status"
+#' geneName <- "ESR1"
+#' # The TIME value must be transformed to YEARS
+#' # The gene expression vector must be provided with the NAMES of each sample,
+#' # that should match the time and status NAMES.
+#' set.seed(5)
+#' outputKM <- geneSurv(seBRCA, time, status, geneName, type = "exprs")
+#' 
+#' # Generate the plots again
+#' ## Plots for c(type = exprs)
+#' plotProbClass(outputKM)
 #' 
 #' @export
 plotProbClass <- function(gs_result) {
@@ -95,6 +124,27 @@ plotProbClass <- function(gs_result) {
 #' @param pr_result Returning object from running patientRisk function
 #' @seealso \code{\link{patientRisk}} for more information about the analysis
 #' @importFrom graphics plot abline par
+#' @examples
+#' data(seBRCA)
+#' 
+#' # genePheno ---
+#' data(ex_genePheno)
+#' 
+#' # Survival times should be provided in YEARS
+#' time <- 'time'
+#' status <- 'status'
+#' geneList <- names(ex_genePheno$genes)
+#' 
+#' set.seed(5)
+#' ex_patientRisk <- patientRisk(seBRCA, geneList, time, status, 
+#'                               method = "class.probs", 
+#'                               nboot = 10)
+#' 
+#' # NOTE: For consistent results with the vignettes and example data, use 
+#' # default parameters (e.g., nboot = 50).
+#' 
+#' # Generate the plots again
+#' plotLogRank(ex_patientRisk)
 #' 
 #' @export
 plotLogRank <- function(pr_result) {
@@ -144,7 +194,27 @@ plotLogRank <- function(pr_result) {
 #' @param pr_result Returning object from running patientRisk function
 #' @seealso \code{\link{patientRisk}} for more information about the analysis
 #' @importFrom graphics plot abline grid mtext par strwidth title
+#' @examples
+#' data(seBRCA)
 #' 
+#' # genePheno ---
+#' data(ex_genePheno)
+#' 
+#' # Survival times should be provided in YEARS
+#' time <- 'time'
+#' status <- 'status'
+#' geneList <- names(ex_genePheno$genes)
+#' 
+#' set.seed(5)
+#' ex_patientRisk <- patientRisk(seBRCA, geneList, time, status, 
+#'                               method = "class.probs", 
+#'                               nboot = 10)
+#' 
+#' # NOTE: For consistent results with the vignettes and example data, use 
+#' # default parameters (e.g., nboot = 50).
+#' 
+#' # Generate the plots again
+#' plotSigmoid(ex_patientRisk)
 #' @export
 plotSigmoid <- function(pr_result) {
     plot_values <- pr_result$plot_values
@@ -184,6 +254,27 @@ plotSigmoid <- function(pr_result) {
 #' @param pr_result Returning object from running patientRisk function
 #' @seealso \code{\link{patientRisk}} for more information about the analysis
 #' @importFrom graphics plot axis
+#' @examples
+#' data(seBRCA)
+#' 
+#' # genePheno ---
+#' data(ex_genePheno)
+#' 
+#' # Survival times should be provided in YEARS
+#' time <- 'time'
+#' status <- 'status'
+#' geneList <- names(ex_genePheno$genes)
+#' 
+#' set.seed(5)
+#' ex_patientRisk <- patientRisk(seBRCA, geneList, time, status, 
+#'                               method = "class.probs", 
+#'                               nboot = 10)
+#' 
+#' # NOTE: For consistent results with the vignettes and example data, use 
+#' # default parameters (e.g., nboot = 50).
+#' 
+#' # Generate the plots again
+#' plotLambda(ex_patientRisk)
 #' 
 #' @export
 plotLambda <- function(pr_result) {
@@ -220,6 +311,27 @@ plotLambda <- function(pr_result) {
 #' @importFrom ggplot2 guide_legend guides scale_size_continuous theme_light
 #' @importFrom ggplot2 scale_color_manual scale_shape_manual xlab ylab theme
 #' @importFrom utils head
+#' @examples 
+#' data(seBRCA)
+#' 
+#' # genePheno ---
+#' data(ex_genePheno)
+#' 
+#' # Survival times should be provided in YEARS
+#' time <- 'time'
+#' status <- 'status'
+#' geneList <- names(ex_genePheno$genes)
+#' 
+#' set.seed(5)
+#' ex_patientRisk <- patientRisk(seBRCA, geneList, time, status, 
+#'                               method = "class.probs", 
+#'                               nboot = 10)
+#' 
+#' # NOTE: For consistent results with the vignettes and example data, use 
+#' # default parameters (e.g., nboot = 50).
+#' 
+#' # Generate the plots again
+#' plotBetas(ex_patientRisk)
 #' 
 #' @export
 plotBetas <- function(pr_result) {
@@ -333,6 +445,44 @@ plotBetas <- function(pr_result) {
 #' @importFrom graphics abline axis box lines par title mtext strwidth
 #' @importFrom grDevices grey
 #' @importFrom ggplot2 alpha 
+#' @examples
+#' 
+#' # Genesurv
+#' data(seBRCA)
+#' time <- "time"
+#' status <- "status"
+#' geneName <- "ESR1"
+#' # The TIME value must be transformed to YEARS
+#' # The gene expression vector must be provided with the NAMES of each sample,
+#' # that should match the time and status NAMES.
+#' set.seed(5)
+#' outputKM <- geneSurv(seBRCA, time, status, geneName, type = "exprs")
+#' 
+#' # Generate the plots again
+#' ## Plots for c(type = exprs)
+#' plotKM(outputKM)
+#' 
+#' # PatientRisk
+#' data(seBRCA)
+#' 
+#' # genePheno ---
+#' data(ex_genePheno)
+#' 
+#' # Survival times should be provided in YEARS
+#' time <- 'time'
+#' status <- 'status'
+#' geneList <- names(ex_genePheno$genes)
+#' 
+#' set.seed(5)
+#' ex_patientRisk <- patientRisk(seBRCA, geneList, time, status, 
+#'                               method = "class.probs", 
+#'                               nboot = 10)
+#' 
+#' # NOTE: For consistent results with the vignettes and example data, use 
+#' # default parameters (e.g., nboot = 50).
+#' 
+#' # Generate the plots again
+#' plotKM(ex_patientRisk)
 #' 
 #' @export
 plotKM <- function(result,
@@ -577,152 +727,4 @@ plotKM <- function(result,
     } else {
         title(main = paste0("Kaplan-Meier plot (", geneName, ")"))
     }
-}
-
-
-# KM plot for custom groups -----------------------------------------------
-#' Plot the KM curves for pre-generated groups
-#'
-#' This function can be used to generate pre-calculated groups Kaplan-Meier
-#' curves.
-#' @noRd
-#'
-#' @param genExpr Vector with the gene expression.
-#' @param time Vector with the time for the used samples.
-#' @param status Vector with the status for the used samples.
-#' @param group.assignation.vector Groups for the used samples.
-#' @param group.labels Labels for the used samples.
-#' @param group.colors Color for each of the groups.
-#' @param boxplot Should a boxplot be generated.
-
-#' @seealso \code{\link{geneSurv}}
-
-#' @importFrom graphics abline axis box lines
-#' @importFrom grDevices grey
-#' @importFrom ggplot2 alpha element_line unit theme_bw scale_fill_manual 
-#' @importFrom ggplot2 geom_jitter geom_boxplot stat_boxplot
-plotKmCustomGroups <- function(genExpr, time, status,
-                               group.assignation.vector, group.labels,
-                               group.colors, boxplot = FALSE) {
-    if (length(genExpr) != length(time)) {
-        stop("the expr values and time vector must have the same length")
-    }
-    if (length(genExpr) != length(status)) {
-        stop("the expr values and status vector must have the same length")
-    }
-    # gene name in vectors time status
-    if (!identical(names(genExpr), names(time))) {
-        stop("expr values names must match time vector names")
-    }
-    if (!identical(names(genExpr), names(status))) {
-        stop("expr values names must match status vector names")
-    }
-
-    mSurv <- cbind(time, status)
-    colnames(mSurv) <- c("time", "status")
-    mSurv <- as.data.frame(mSurv)
-    rownames(mSurv) <- names(time)
-    # limit to 10 years and new censored
-    mSurv$status[mSurv$time > 10] <- 0
-    mSurv$time[mSurv$time > 10] <- 10.1
-
-    # n.genes <- 1
-    # n.samples <- length(genExpr)
-    # probesets.names <- names(genExpr)
-
-    fits1 <- survfit(Surv(time, status) ~ group.assignation.vector, 
-                     data = mSurv)
-    log.rank.groups.surv <- 
-      survdiff(Surv(time, status) ~ group.assignation.vector, data = mSurv)
-    p.val <- (1 - pchisq(log.rank.groups.surv$chisq, 
-                         length(log.rank.groups.surv$n) - 1))
-
-    indices <- c(
-        table(group.assignation.vector)[[1]],
-        table(group.assignation.vector)[[2]]
-    )
-    group.colors <- rep(group.colors, indices)
-
-
-    hazardR <- hazard.ratio(
-        x = group.assignation.vector,
-        surv.time = mSurv$time[match(colnames(genExpr), names(time))],
-        surv.event = mSurv$status[match(colnames(genExpr), names(status))]
-    )
-
-    names(hazardR) <- c(
-        "hazard.ratio", "coef", "se", "lower.ci", "upper.ci", "p.value",
-        "n", "coxm", "data"
-    )
-
-    if (hazardR$hazard.ratio < 1) {
-        stop("1/hazar.ratio was calculated")
-        hazardR$hazard.ratio <- format(1 / as.numeric(hazardR$hazard.ratio, 3))
-        hazardR$upper <- format(1 / as.numeric(hazardR$lower, 3))
-        hazardR$lower <- format(1 / as.numeric(hazardR$upper, 3))
-    }
-
-    plot_values <- NULL
-    plot_values$km <- list(
-        "fitsKM" = fits1,
-        "p.val" = p.val,
-        "hazardR" = hazardR
-    )
-
-    rList <- list("plot_values" = plot_values)
-
-    plotKM(rList,
-        xaxis.at = c(0:10),
-        col.surv = unique(group.colors),
-        group.names = c(group.labels[1], group.labels[2]),
-        col.ci = unique(group.colors)
-    )
-    if (boxplot) {
-        # expression and t test
-        vector.exprs.j <- as.numeric(genExpr)
-        level1 <- vector.exprs.j[group.assignation.vector == 
-                                   levels(factor(group.assignation.vector))[1]]
-        level2 <- vector.exprs.j[group.assignation.vector == 
-                                   levels(factor(group.assignation.vector))[2]]
-        Ttest <- wilcox.test(level1, level2)
-
-
-        mm <- data.frame("values" = vector.exprs.j, "group" = c(
-            rep(
-                unique(group.assignation.vector)[1],
-                indices[1]
-            ),
-            rep(unique(group.assignation.vector)[2], indices[2])
-        ))
-
-        group <- values <- NULL
-        plot <- ggplot(data = mm, aes(x = group, y = values)) +
-            stat_boxplot(geom = "errorbar") +
-            geom_boxplot(aes(fill = group), coef = 1.5, alpha = .5, 
-                         show.legend = FALSE, outlier.alpha = 0, notch = TRUE) +
-            geom_jitter(aes(fill = group), color = group.colors, size = 2) +
-            scale_fill_manual(labels = unique(mm$group), 
-                              values = unique(group.colors)) +
-            ggtitle(paste0("Expresion for gene ", rownames(genExpr), 
-                           " in ", unique(mm$group)[1], " and ", 
-                           unique(mm$group)[2])) +
-            ylab("Expression level") +
-            xlab(paste0("wilcox-test p.value for groups: ", "\n", 
-                        Ttest$p.value)) +
-            theme_bw() +
-            theme(
-                panel.border = element_blank(),
-                panel.grid.major = element_blank(),
-                panel.grid.minor = element_blank(),
-                axis.line = element_line(colour = "black"),
-                legend.title = element_blank(),
-                legend.text = element_text(size = 10),
-                legend.key.size = unit(1.5, "cm")
-            ) +
-            guides(fill = guide_legend(override.aes = list(shape = 22, 
-                                                           size = 10)))
-        plot
-    }
-    msg <- paste("P value: ", p.val)
-    message(msg)
 }

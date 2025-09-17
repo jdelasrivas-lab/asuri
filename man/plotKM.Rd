@@ -118,6 +118,46 @@ This function is called internally by the patientRisk function to generate
 the Kaplan-Meier curves. It also can be used after the function has been run 
 to generate the plots again without running geneSurv() or patientRisk().
 }
+\examples{
+
+# Genesurv
+data(seBRCA)
+time <- "time"
+status <- "status"
+geneName <- "ESR1"
+# The TIME value must be transformed to YEARS
+# The gene expression vector must be provided with the NAMES of each sample,
+# that should match the time and status NAMES.
+set.seed(5)
+outputKM <- geneSurv(seBRCA, time, status, geneName, type = "exprs")
+
+# Generate the plots again
+## Plots for c(type = exprs)
+plotKM(outputKM)
+
+# PatientRisk
+data(seBRCA)
+
+# genePheno ---
+data(ex_genePheno)
+
+# Survival times should be provided in YEARS
+time <- 'time'
+status <- 'status'
+geneList <- names(ex_genePheno$genes)
+
+set.seed(5)
+ex_patientRisk <- patientRisk(seBRCA, geneList, time, status, 
+                              method = "class.probs", 
+                              nboot = 10)
+
+# NOTE: For consistent results with the vignettes and example data, use 
+# default parameters (e.g., nboot = 50).
+
+# Generate the plots again
+plotKM(ex_patientRisk)
+
+}
 \seealso{
 \code{\link{geneSurv}} or \code{\link{patientRisk}} for more 
 information about the analysis

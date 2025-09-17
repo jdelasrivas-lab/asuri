@@ -1,5 +1,6 @@
 #' Kaplan-Meier Group Stratification Based on Gene Expression
 #'
+#' DISCLAIMER: INTERNAL FUNCTION OF THE PACKAGE
 #' This function stratifies samples into two groups (high/low expression) 
 #' based on gene expression levels to identify optimal cut-points that minimize 
 #' p-values in survival analysis.
@@ -31,20 +32,6 @@
 #'   genes and cut-points.}
 #' }
 #'
-#' @examples
-#' \dontrun{
-#' # Simulated data example
-#' set.seed(123)
-#' genExpr <- rnorm(100)
-#' mSurv <- data.frame(
-#'     time = rexp(100, rate = 0.1),
-#'     status = sample(0:1, 100, replace = TRUE)
-#' )
-#' geneName <- c("Gene1")
-#' result <- functionKmGroups(genExpr, mSurv, geneName)
-#' print(result$best_pvalue)
-#' }
-#' 
 #' @importFrom stats pchisq
 #' @importFrom survival survdiff survfit
 #' 

@@ -14,6 +14,22 @@ This function is called internally by the geneSurv function to generate the
 expression boxplot. It also can be used after the function has been run to
 generate the plots again without running geneSurv().
 }
+\examples{
+data(seBRCA)
+time <- "time"
+status <- "status"
+geneName <- "ESR1"
+# The TIME value must be transformed to YEARS
+# The gene expression vector must be provided with the NAMES of each sample,
+# that should match the time and status NAMES.
+set.seed(5)
+outputKM <- geneSurv(seBRCA, time, status, geneName, type = "exprs")
+
+# Generate the plots again
+## Plots for c(type = exprs)
+plotBoxplot(outputKM)
+
+}
 \seealso{
 \code{\link{geneSurv}} for more information about the analysis
 }

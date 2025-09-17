@@ -1,5 +1,6 @@
 #' Double Nested Cross-Validation for Lambda Optimization in Survival Analysis
 #'
+#' DISCLAIMER: INTERNAL FUNCTION OF THE PACKAGE
 #' This function performs double nested cross-validation to optimize the lambda
 #' parameter based on the risk matrix.
 #' The goal is to find the lambda value that results in the lowest p-value in
@@ -28,19 +29,6 @@
 #'  - \code{p.vals}: A matrix where each column corresponds to the p-values 
 #'  obtained for each lambda value across different cutoffs.
 #'
-#' @examples
-#' \dontrun{
-#' # Simulated data example
-#' set.seed(123)
-#' matrixOfRisks <- matrix(rnorm(1000), ncol = 10)
-#' mSurv <- data.frame(
-#'   time = rexp(100, rate = 0.1),
-#'   status = sample(0:1, 100, replace = TRUE)
-#' )
-#' result <- function_double_nested_lambda(matrixOfRisks, mSurv)
-#' print(result$p.vals)
-#' }
-#' 
 #' @importFrom stats pchisq
 #' @importFrom survival survdiff
 #' @importFrom lubridate seconds_to_period

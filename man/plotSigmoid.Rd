@@ -15,6 +15,28 @@ the ordered risk distribution for the patients. It also can be used after
 the function has been run to generate the plots again without running 
 patientRisk().
 }
+\examples{
+data(seBRCA)
+
+# genePheno ---
+data(ex_genePheno)
+
+# Survival times should be provided in YEARS
+time <- 'time'
+status <- 'status'
+geneList <- names(ex_genePheno$genes)
+
+set.seed(5)
+ex_patientRisk <- patientRisk(seBRCA, geneList, time, status, 
+                              method = "class.probs", 
+                              nboot = 10)
+
+# NOTE: For consistent results with the vignettes and example data, use 
+# default parameters (e.g., nboot = 50).
+
+# Generate the plots again
+plotSigmoid(ex_patientRisk)
+}
 \seealso{
 \code{\link{patientRisk}} for more information about the analysis
 }

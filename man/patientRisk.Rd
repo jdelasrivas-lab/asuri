@@ -154,11 +154,11 @@ ex_patientRisk <- patientRisk(seBRCA, geneList, time, status,
 # default parameters (e.g., nboot = 50).
 
 # Generate the plots again
-# plotLogRank(multivariate_risk_predictor)
-# plotSigmoid(multivariate_risk_predictor)
-# plotLambda(multivariate_risk_predictor)
-# plotBetas(multivariate_risk_predictor)
-# plotKM(multivariate_risk_predictor)
+# plotLogRank(ex_patientRisk)
+# plotSigmoid(ex_patientRisk)
+# plotLambda(ex_patientRisk)
+# plotBetas(ex_patientRisk)
+# plotKM(ex_patientRisk)
 
 
 }
