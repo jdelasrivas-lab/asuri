@@ -4,6 +4,9 @@
 \alias{asuri}
 \title{asuri: \strong{A}nalysis of disease \strong{SU}rvival and patient 
 \strong{RI}sk prediction based on gene signatures}
+\value{
+This page does not return any value. Provides general usage information.
+}
 \description{
 The \pkg{asuri} package provides functions to discovers marker genes that 
 are related to risk prediction capabilities and to a clinical variable of 

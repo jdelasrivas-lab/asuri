@@ -10,7 +10,6 @@
 #' are provided to visualise the relevance of the genes, the risk score, 
 #' and patient stratification, as well as a robust version of the 
 #' Kaplan-Meier curves.
-
 #'
 #' @section Main functions:
 #' \itemize{
@@ -24,5 +23,6 @@
 #'     \code{\link{plotBoxplot}}, \code{\link{plotProbClass}}, \code{\link{plotLogRank}}, 
 #'     \code{\link{plotSigmoid}}, \code{\link{plotLambda}}, \code{\link{plotBetas}}, \code{\link{plotKM}}.
 #' }
+#' @return This page does not return any value. Provides general usage information.
 #' @name asuri
 NULL
