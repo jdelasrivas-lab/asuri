@@ -1,6 +1,6 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# asuri <a href="https://github.com/jdelasrivas-lab/asuri"><img src="vignettes/logo.png" align="right" height="138" alt="asuri"/></a>
+# asuri <a href="https://github.com/jdelasrivas-lab/asuri"><img src="vignettes/figures/logo.png" align="right" height="138" alt="asuri"/></a>
 
 <!-- badges: start -->
 
