@@ -54,7 +54,7 @@
 #' @usage data(ex_prefilterSAM)
 #' @return Load a `character` vector object.
 #' @format A `character` vector object with the list of obtained genes.
-#' @seealso \code{\link[prefilterSAM]{asuri}}
+#' @seealso \code{\link{prefilterSAM}}
 "ex_prefilterSAM"
 
 #' ex_genePheno
@@ -82,7 +82,7 @@
 #'  stability coefficient. Contains several metrics: the stability index, 
 #'  the mean and the median of the beta coefficients.}
 #'  }
-#' @seealso \code{\link[genePheno]{asuri}}  
+#' @seealso \code{\link{genePheno}}  
 "ex_genePheno"
 
 #' ex_patientRisk
@@ -140,7 +140,7 @@
 #'  classification to the low risk group while the second one is the 
 #'  membership probability to the high risk group.}
 #'  }
-#' @seealso \code{\link[patientRisk]{asuri}}  
+#' @seealso \code{\link{patientRisk}}  
 "ex_patientRisk"
 
 #' ex_predictPatientRisk
@@ -157,5 +157,5 @@
 #'   \item{data:}{A matrix of normalized gene expression 
 #'   values (77 genes × 1 samples).}
 #' }
-#' @seealso \code{\link[predict_PatientRisk]{asuri}}  
+#' @seealso \code{\link{predict_PatientRisk}}  
 "ex_predictPatientRisk"

@@ -1,10 +1,10 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# asuri
+# asuri <a href="https://github.com/jdelasrivas-lab/asuri"><img src="vignettes/figures/logo.png" align="right" height="138" alt="ggplot2 website" /></a>
 
 <!-- badges: start -->
 
-[![](https://img.shields.io/badge/devel%20version-0.99.15-green.svg)](https://github.com/jdelasrivas-lab/asuri)
+[![](https://img.shields.io/badge/devel%20version-0.99.16-green.svg)](https://github.com/jdelasrivas-lab/asuri)
 [![](https://img.shields.io/badge/download-NA/total-blue.svg)](https://bioconductor.org/packages/stats/bioc/asuri)
 [![](https://img.shields.io/badge/download-NA/month-blue.svg)](https://bioconductor.org/packages/stats/bioc/asuri)
 <!-- badges: end -->

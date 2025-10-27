@@ -17,6 +17,6 @@ Load a `character` vector object.
 Result of running the prefilterSAM function.
 }
 \seealso{
-\code{\link[prefilterSAM]{asuri}}
+\code{\link{prefilterSAM}}
 }
 \keyword{datasets}

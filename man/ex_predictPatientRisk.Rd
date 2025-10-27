@@ -21,6 +21,6 @@ Load a `data.frame` object.
 Test matrix created in the PredictPatientRisk example
 }
 \seealso{
-\code{\link[predict_PatientRisk]{asuri}}
+\code{\link{predict_PatientRisk}}
 }
 \keyword{datasets}

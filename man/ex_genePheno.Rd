@@ -32,6 +32,6 @@ Load a `List` object.
 Result of running the genePheno function.
 }
 \seealso{
-\code{\link[genePheno]{asuri}}
+\code{\link{genePheno}}
 }
 \keyword{datasets}

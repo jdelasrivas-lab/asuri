@@ -137,7 +137,7 @@ The input parameters for the function are the following:
 - `type` Specifies whether the two Kaplan-Meier curves are computed using the gene expression groups (by default "exprs"), or using the risk groups ("risk") if the samples are already classified by risk level and this is used directly to divide the samples into two groups.
 - `cut_time`  A numeric value specifying the cutoff time (in years) for survival analysis. All events beyond this time are treated as censored (by default = 10 years).
 
-```{r, echo = TRUE, eval = TRUE,  fig.align = "center", results="asis", fig.height=10, fig.width=10, out.width = "80%" } 
+```{r, echo = TRUE, eval = TRUE, fig.show = "hide", results="asis"} 
 data(seBRCA)
 time <- "time"
 status <- "status"
@@ -177,19 +177,19 @@ Also a plot is provided:
 - Kaplan-Meier plot showing the curves calculated based on the survival of the two groups of samples generated (high risk and low risk). The plot includes the p.value of the log-rank statistical test obtained when comparing the K-M survival profile of the two groups (**Figure \@ref(fig:kmrisk)**).
 
 ```{r pclassesr1, fig.cap="Patient Class Probability for low exprs (89) and high exprs (111) groups).", out.width = "80%", fig.align = "center", echo=FALSE, results="asis"}
-knitr::include_graphics("figures/PclassProbability.png")
+plotProbClass(outputKM)
 ```
 
 **Figure \@ref(fig:pclassesr1)** shows the plot of the probability of the samples to be assigned to one of the expression groups: low expression in green or high expression in red. The samples in the example correspond to the tumors isolated from 200 breast cancer patients. The probability of belonging to a group is estimated by bootstrapping. Patients with a membership probability greater than 0.8 are classified with a high degree of confidence. The classification is uncertain (p < 0.8) for patients around the intermediate gene expression level.
 
 ```{r boxesr1, fig.cap="Boxplot: high expression vs low expression for ESR1 gene.", out.width = "80%", fig.align = "center", echo=FALSE, results="asis", results="asis"}
-knitr::include_graphics("figures/expr.png")
+plotBoxplot(outputKM)
 ```
 
 **Figure \@ref(fig:boxesr1)** boxplots showing the expression distribution of the samples divided into the two defined groups (LowExpr versus HighExpr). The plot includes the p.value of the Wilcoxon test comparing these two expression groups. Notice that there is a small overlapping between the high and low expression groups. This is due to the reassignment of patients with intermediate expression level accomplished by the bootstrap strategy.
 
 ```{r kmesr1, fig.cap="Kaplan Meier curves obtained after the assignment of the patients by bootstrap to high or low survival using the selected feature ESR1.", out.width = "80%", fig.align = "center", echo=FALSE, results="asis"}
-knitr::include_graphics("figures/kmESR1.png")
+plotKM(outputKM)
 ```
 
 **Figure \@ref(fig:kmesr1)** shows the two Kaplan-Meier curves with the confidence intervals obtained by the function **geneSurv()** for the gene ESR1. The threshold for the gene expression level that splits the samples in two groups is estimated by optimization of the log-rank test statistic. The procedure is repeated 100 times using a bootstrap strategy to improve the classification of intermediate risk patients. 
@@ -198,7 +198,7 @@ The result shown in **Figure \@ref(fig:kmesr1)**, with a p-value for the log-ran
 
 Run of the function  **geneSurv()** as `type = "risk"`:
 
-```{r, echo = TRUE, eval = TRUE, fig.align = "center", results="asis", fig.height=10, fig.width=10, out.width = "80%" } 
+```{r, echo = TRUE, eval = TRUE, fig.show = "hide"} 
 # If we instead consider to run the function as *type* = risk
 geneName <- "BRCA1"
 set.seed(5)
@@ -206,7 +206,7 @@ outputKM.TP53 <- geneSurv(seBRCA, time, status, geneName, type = "risk", verbose
 ```
 
 ```{r kmrisk, fig.cap="Kaplan Meier curves obtained after the assignment of the patients by bootstrap to high or low survival using the estimated risk based on feature BRCA1.", out.width = "80%", fig.align = "center", echo=FALSE, results="asis"}
-knitr::include_graphics("figures/kmtyperisk.png")
+plotKM(outputKM.TP53)
 ```
 
 **Figure \@ref(fig:kmrisk)** shows the two Kaplan-Meier curves with the confidence intervals obtained by the function **geneSurv()** for the gene BRCA1. Now the two groups are obtained by estimating the risk for each patient and determining the split threshold by optimizing the log-rank test statistic between the two curves. The procedure is repeated 100 times using a bootstrap strategy to improve the classification of intermediate risk patients.
@@ -269,23 +269,12 @@ Pred_ER.IHC <- genePheno(seBRCA, DE_list_genes, vectorGroups, vectorSampleID,
 Pred_ER.IHC$stability
 Pred_ER.IHC$betasMedian
 Pred_ER.IHC$betasMean
-Pred_ER.IHC$betasTable
 ```
 
-<div id="tabla-1"></div>
-| Gene   | stability | betasMedian | betasMean   |
-|--------|-----------|-------------|-------------|
-| NAT1   | 0.90      | 0.13152533  | 0.13359943  |
-| ESR1   | 0.84      | 0.16505283  | 0.16619666  |
-| USP6NL | 0.73      | -0.30479925 | -0.35228853 |
-| SUSD3  | 0.68      | 0.07534488  | 0.08846058  |
-| PREX1  | 0.67      | 0.10376235  | 0.13750165  |
-| TPBG   | 0.60      | 0.22454524  | 0.25966395  |
-| CA12   | 0.56      | 0.08063623  | 0.08739032  |
-| AGR3   | 0.55      | 0.04043867  | 0.04232274  |
-| PROX1  | 0.54      | -0.38767094 | -0.43736144 |
-| CALML5 | 0.53      | -0.03846191 | -0.04940331 |
-<div align="center"><p><b>Table 1</b>: List of genes by Stability.</p></div>
+```{r, echo = TRUE, eval = TRUE} 
+knitr::kable(head(Pred_ER.IHC$betasTable, 10), 
+             caption = "List of genes by Stability.")
+```
 
 The output of the function is an object with the following elements:
 ```{r, echo = TRUE, eval = TRUE} 
@@ -314,7 +303,7 @@ The **optimal threshold for dividing the patients into two groups (low/high)** c
 
 The following code illustrates how to apply the **patientRisk()** function to discover/identify significant gene survival markers and to accurately predict patient risk.
 
-```{r, echo = TRUE, eval = TRUE, fig.align = "center", results="asis", fig.height=10, fig.width=10, out.width = "80%" } 
+```{r, echo = TRUE, eval = TRUE, fig.show = "hide"} 
 # Survival times should be provided in YEARS
 time <- 'time'
 status <- 'status'
@@ -359,15 +348,15 @@ The **patientRisk()** function returns a list containing the following objects:
 The function **patientRisk()** generates 5 plots:
 
 ```{r plot1risk, fig.cap="Curve of log-rank p-values for each possible splitting of patients into 2 risk groups. The X axis represents the patient number ranked from low to high risk. The green line marks the selected cutpoint, i.e., the point that provides the threshold for stratifying patients into 2 risk groups: low risk, in blue; high risk, in red. The blue & red lines define thresholds for classifying patients into 3 risk groups: *low*, *intermediate* and *high*. These lines mark samples that fall in an *intermediate* region, where risk assignment is not very precise and samples may fluctuate in position.", out.width = "80%", fig.align = "center", echo=FALSE, results="asis"}
-knitr::include_graphics("figures/pval.png")
+plotLogRank(multivariate_risk_predictor)
 ```
 
 ```{r plot2risk, fig.cap="Risk Score, between 0 and 100, calculated for each patient, i.e., for each of the 200 patient tumor samples included in this study, obtained with a multivariate UNICOX regression model. The model includes as features the subset of selected genes included in the *geneList*, which are tested to find out their correlation with risk. The green and blue & red lines provide the thresholds estimated by the **patientRisk()** function to split the patients respectively in 2 or 3 groups, as described in the legend of the previous figure. Note that the implemented algorithm is capable of detecting changes in the slope of the risk curve, giving rise to risk groups of differenciated prognosis.", out.width = "80%", fig.align = "center", echo=FALSE, results="asis"}
-knitr::include_graphics("figures/risk.png")
+plotSigmoid(multivariate_risk_predictor)
 ```
 
 ```{r plot3risk, fig.cap="Log-rank p-values of the minimum optimal versus the number of genes selected by the model. As the regularization parameter in UNICOX increases, the regression model becomes more especific in the selection of features and, therefore the number of genes that have non-zero (non-null) coefficients is reduced.", out.width = "80%", fig.align = "center", echo=FALSE, results="asis"}
-knitr::include_graphics("figures/pvaldistribution.png")
+plotLambda(multivariate_risk_predictor)
 ```
 
 The **patientRisk()** function offers multiple values for the regularization parameter, the user can choose the value that minimizes the log-rank p-value, and then re-evaluate everything with that new gene list. For our case study the optimal value is achieved with 12 genes. Biotechnologists, physicians, and researchers in general often prefer to have a smaller set of selected genes (selected features)  as risk markers, at the expense of a slight increase in p-value. Taken together, this representation allows us to choose the optimal number of genes that achieve a balance between the lowest (most significant) log-rank p-value and the fewest number of selected genes. Once the subset of genes is selected, the corresponding COX model can be retrieved from the list of objects returned by the **patientRisk()** function. Finally, the risk score for new patients (placed as an independent query) can be estimated considering this constructed model as a predictor (this is further explained in the next section). Note that the **patientRisk()** function can be applied to any subset of genes provided by the user (related or unrelated to a clinical variable). Thus, this function can be applied to study the association of each gene with risk and to select the best gene risk markers (i.e., providing a gene signature of risk markers). In this study, considering the selected gene signature, the **patientRisk()** function provides an accurate risk prediction for each patient tumor sample and also the stratification of patients in low, intermediate and high risk. 
@@ -375,31 +364,16 @@ The **patientRisk()** function offers multiple values for the regularization par
 **Figure \@ref(fig:plot4risk)** presents the genes selected by the multivariate COX model, ranked by the value of the regression coefficients in the model. Genes with "positive" values (in red) increase the hazard ratio (HR) and, therefore, increase the risk in the samples (so they can be associated with an oncogenic effect). While genes with "negative" values (in blue) reduce the HR and the risk in the samples (so they can be associated with a tumor suppression or a protective effect). The absolute value of the coefficients determines the relevance of each gene with respect to the patient's risk.
 
 ```{r plot4risk, fig.cap="Plot of the genes selected by the multivariate COX model, ranked by the value of the regression coefficients in the model. Genes with *positive* values (red) increase the risk in the samples. While genes with *negative* values (blue) reduce the risk in the samples. Genes with significant p-values are marked with asterisks (** p-value<0.01, * p-value<0.05). Similarly, genes with slightly significance level are marked with a dot (\u00B7 between 0.1 and 0.05). All the analyses carried out in this part are multivariate and take into account additive interactions among the genes.", out.width = "80%", fig.align = "center", echo=FALSE, results="asis"}
-knitr::include_graphics("figures/betas.png")
+plotBetas(multivariate_risk_predictor)
 ```
 
-| Gene       | Beta Value   | Beta Group | P-Value       | Signif |
-|------------|--------------|------------|---------------|--------|
-| AKR1B10    | 0.32736318   | type1      | 0.004322987   | **     |
-| EVL        | -0.32328558  | type2      | 0.010718153   | *      |
-| SUSD3      | -0.26224518  | type2      | 0.003719841   | **     |
-| SLC39A6    | -0.21327395  | type2      | 0.016501657   | *      |
-| ADIRF      | -0.20193189  | type2      | 0.022008641   | *      |
-| GFRA1      | -0.14895182  | type2      | 0.036662667   | *      |
-| SOX11      | 0.14360541   | type1      | 0.053214622   | ·      |
-| CLIC6      | -0.12819465  | type2      | 0.057410691   | ·      |
-| CPB1       | -0.11722549  | type2      | 0.002609143   | **     |
-| PGR        | -0.10142232  | type2      | 0.199169763   |        |
-| NPY1R      | -0.09605778  | type2      | 0.027526344   | *      |
-| CALML5     | 0.07877817   | type1      | 0.147320701   |        |
-| SERPINA5   | -0.07173386  | type2      | 0.280007397   |        |
-| NAT1       | -0.06950291  | type2      | 0.253075375   |        |
-| SCGB1D2    | -0.06748915  | type2      | 0.114389857   |        |
-| AGR3       | -0.02526576  | type2      | 0.548559368   |        |
-<div align="center"><p><b>Table 2</b>: List of genes by relevance for risk assignement.</p></div>
+```{r, echo = TRUE, eval = TRUE} 
+knitr::kable(multivariate_risk_predictor$betasplot, 
+             caption = "List of genes by relevance for risk assignement.")
+```
 
 ```{r plot5risk, fig.cap="Kaplan Meier plot: Blue (low risk) and red (high risk) of the two groups of samples with different survival obtained from the stratification of the multivariate risk curve (Figure 6).", out.width = "80%", fig.align = "center", echo=FALSE, results="asis"}
-knitr::include_graphics("figures/km.png")
+plotKM(multivariate_risk_predictor)
 ```
 
 ## Risk Prediction for an independent set of patients: **predict_PatientRisk()**
@@ -409,7 +383,7 @@ Once the multivariate risk predictor is trained by the **patientRisk()** functio
 
 The following lines show how to predict the risk score for an independent set of patients. The function plots the risk score and stratifies the patients into three groups.
 
-```{r, echo = TRUE, eval = TRUE, fig.align = "center", results="asis", fig.height=10, fig.width=10,  out.width = "80%" } 
+```{r, echo = TRUE, eval = TRUE, fig.align = "center", fig.cap="Risk score prediction for an independent set of patients using the optimal multivariate COX model trained by function patientRisk(). Green and blue/red lines correspond to the optimal thresholds that split the patients in two and three groups respectively. These thresholds were learned in training phase.", results="asis", fig.height=10, fig.width=10,  out.width = "80%" } 
 # Generate the validation set, mExprs_testData if necessary.
 # Vector of genes (same ones used in Cox model training)
 
@@ -437,12 +411,7 @@ The output of the function **predict_PatientRisk()** is a risk plot and a list w
 - **risk_score**: The unscaled risk score provided by the multivariate COX regression.
 - **scaled_risk_score**: The scaled risk score (0-100) for the independent set of patients.
 
-This function provides a plot with the predicted risk score using the multivariate COX model trained by function **patientRisk()**. 
-```{r predprisk, fig.cap="Risk score prediction for an independent set of patients using the optimal multivariate COX model trained by function patientRisk(). Green and blue/red lines correspond to the optimal thresholds that split the patients in two and three groups respectively. These thresholds were learned in training phase.", out.width = "80%", fig.align = "center", echo=FALSE, results="asis"}
-knitr::include_graphics("figures/risk_plot_predict_patientRisk.png")
-```
-
-This function can be applied also to predict the risk of a single patient given the gene expression profile. The mExprs_testData will contain now a column with the expression level for the list of genes selected.
+This function provides a plot with the predicted risk score using the multivariate COX model trained by function **patientRisk()** and can be applied also to predict the risk of a single patient given the gene expression profile. The mExprs_testData will contain now a column with the expression level for the list of genes selected.
 
 ```{r, echo = TRUE, eval = TRUE, fig.align = "center", results="asis", fig.height=10, fig.width=10, out.width = "80%" } 
 # Example for single patient prediction: Patient fourth is selected.
@@ -467,7 +436,7 @@ The input parameters are:
 - `cox_pred_test` A numeric vector of length 1 representing the predicted risk score (or log-risk score) for the test patient. It can be obtained from **predict_PatientRisk()** function.
 - `eval_surv_times`  A numeric vector of times at which the survival curve should be evaluated. If NULL (default), the times will be taken from the training data up to the maximum event time. 
 
-```{r, echo = TRUE, eval = TRUE, fig.align = "center", results="asis", fig.height=10, fig.width=10, out.width = "80%" } 
+```{r, echo = TRUE, eval = TRUE, fig.show = "hide"} 
 data(seBRCA)
 # COX prediction for the training set
 mPheno <- colData(seBRCA)
@@ -482,6 +451,8 @@ head(cox_pred_training$risk_score)
 set.seed(5)
 cox_pred_test <- predict_PatientRisk(multivariate_risk_predictor, mExprs_testSingleData)
 cox_pred_test$risk_score
+```
+```{r predSurv, echo = TRUE, eval = TRUE, fig.align = "center", fig.cap="Survival curve estimation for a single patient based on the risk score predicted by a multivariate COX model. The blue line shows the median survival time at which the survival probability drops to 0.5.", results="asis", fig.height=10, fig.width=10, out.width = "80%" }
 # Survival curve estimation
 eval_surv_times <- seq(0, max(mPheno$time), by = 0.1)
 set.seed(5)
@@ -495,9 +466,6 @@ The output for this function is a list with three objects:
 - **S_test_patient**: Vector with the survival probability at `eval_times` for the test patient.
 
 It provides also a plot with the expected survival curve estimation for the test patient.
-```{r predSurv, fig.cap="Survival curve estimation for a single patient based on the risk score predicted by a multivariate COX model. The blue line shows the median survival time at which the survival probability drops to 0.5.", out.width = "80%", fig.align = "center", echo=FALSE, results="asis"}
-knitr::include_graphics("figures/surv_plot_breslow.png")
-```
 
 
 # Brief comparison of ASURI and other related R tools

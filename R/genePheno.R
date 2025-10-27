@@ -83,6 +83,7 @@
 #' } 
 #' 
 #' @importFrom SummarizedExperiment assay colData
+#' @importFrom Rdpack reprompt
 #' @importFrom glmnet cv.glmnet
 #' @importFrom stats median na.omit predict
 #' @importFrom ROCR performance prediction
