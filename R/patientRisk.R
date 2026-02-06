@@ -303,27 +303,42 @@ patientRisk <- function(seData,
   # after CV optimal lambda is stored and used to re-compute groups and pvalue
   index.optimalLambda <- which.min(optimal.p.vals)
   
-  range_optimal.p.vals_5 <- abs(
-    range(optimal.p.vals)[2] - range(optimal.p.vals)[1])
-  threshold_optimal.p.vals_5 <- 
-    optimal.p.vals[index.optimalLambda] + 0.2 * range_optimal.p.vals_5
-  optimal.p.vals_temp <- optimal.p.vals[seq(1, index.optimalLambda)]
+  # range_optimal.p.vals_5 <- abs(
+  #   range(optimal.p.vals)[2] - range(optimal.p.vals)[1])
+  # threshold_optimal.p.vals_5 <- 
+  #   optimal.p.vals[index.optimalLambda] + 0.2 * range_optimal.p.vals_5
+  # optimal.p.vals_temp <- optimal.p.vals[seq(1, index.optimalLambda)]
+  # 
+  # if (!any(optimal.p.vals_temp >= threshold_optimal.p.vals_5)) {
+  #   index.optimalLambda_5 <- which.min(
+  #     abs(optimal.p.vals - threshold_optimal.p.vals_5))
+  # } else {
+  #   min_optimal.p.vals_temp <- min(
+  #     optimal.p.vals_temp[optimal.p.vals_temp >= 
+  #                           threshold_optimal.p.vals_5])
+  #   index.optimalLambda_5 <- which.min(
+  #     abs(optimal.p.vals - min_optimal.p.vals_temp))
+  #   if (min(optimal.p.vals[seq(1, (index.optimalLambda_5 - 1))]) < 
+  #       threshold_optimal.p.vals_5) {
+  #     index.optimalLambda_5 <- which.min(
+  #       optimal.p.vals[seq(1, (index.optimalLambda_5 - 1))])
+  #   }
+  # }
   
-  if (!any(optimal.p.vals_temp >= threshold_optimal.p.vals_5)) {
-    index.optimalLambda_5 <- which.min(
-      abs(optimal.p.vals - threshold_optimal.p.vals_5))
-  } else {
-    min_optimal.p.vals_temp <- min(
-      optimal.p.vals_temp[optimal.p.vals_temp >= 
-                            threshold_optimal.p.vals_5])
-    index.optimalLambda_5 <- which.min(
-      abs(optimal.p.vals - min_optimal.p.vals_temp))
-    if (min(optimal.p.vals[seq(1, (index.optimalLambda_5 - 1))]) < 
-        threshold_optimal.p.vals_5) {
-      index.optimalLambda_5 <- which.min(
-        optimal.p.vals[seq(1, (index.optimalLambda_5 - 1))])
-    }
-  }
+  # New optimal lambda search
+  # 1. Define range and threshold for acceptable p-value
+  range_optimal.p.vals_5 <- abs(diff(range(optimal.p.vals)))
+  threshold_optimal.p.vals_5 <- optimal.p.vals[index.optimalLambda] + 0.2 * range_optimal.p.vals_5
+  
+  # 2. Restrict the search only to values to the left of the selected minima
+  candidate_index <- 1:index.optimalLambda
+  candidate_p_val  <- optimal.p.vals[candidate_index]
+  
+  # 3. Search nearest candidate to the threshold
+  selected_index <- which.min(abs(candidate_p_val - threshold_optimal.p.vals_5))
+  
+  # 4. Assign the global index
+  index.optimalLambda_5 <- candidate_index[selected_index]
   
   # Concordance index
   fConcordanceIndex <- function(risk_vector) {
