@@ -599,17 +599,14 @@ patientRisk <- function(seData,
     surv.event = mSurv$status[match(colnames(mExpr), names(status))]
   )
   
+  hazardR$hazard.ratio <- round(hazardR$hazard.ratio, 3)
+  hazardR$lower <-        round(hazardR$lower, 3)
+  hazardR$upper <-        round(hazardR$upper, 3)	
+  
   names(hazardR) <- c(
     "hazard.ratio", "coef", "se", "lower.ci", "upper.ci", "p.value",
     "n", "coxm", "data"
   )
-  
-  if (hazardR$hazard.ratio < 1) {
-    # message("1/hazar.ratio was calculated")
-    hazardR$hazard.ratio <- format(1 / as.numeric(hazardR$hazard.ratio), 3)
-    hazardR$upper.ci <- format(1 / as.numeric(hazardR$lower.ci), 3)
-    hazardR$lower.ci <- format(1 / as.numeric(hazardR$upper.ci), 3)
-  }
   
   if (missing(group.vector)) {
     group.vector <- definitiveGroups

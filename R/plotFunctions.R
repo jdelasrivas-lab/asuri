@@ -38,10 +38,9 @@ plotBoxplot <- function(gs_result) {
     if (plot_values$source == "geneSurv-risk") {
         stop("This function cannot be used when c(type = 'risk').")
     }
+    
+    par(cex.lab = 1.5, cex.axis = 1.5) # Cex lab is for y, cex axis is for x
 
-
-    par(cex.lab = 1.5) # is for y-axis
-    par(cex.axis = 1.5) # is for x-axis
     boxplot(patientExpr[patientClass == 1],
         patientExpr[patientClass == 2],
         col = c(3, 2),
@@ -54,7 +53,7 @@ plotBoxplot <- function(gs_result) {
     title(main = paste0("Expression plot (", geneName, ")"))
     legend("bottomright",
         title = "N\u00BA of samples",
-        c(
+        legend = c(
             as.character(sum(patientClass == 1)),
             as.character(sum(patientClass == 2))
         ),
@@ -359,17 +358,22 @@ plotBetas <- function(pr_result) {
     top25betasPlot <- 
       top25betasPlot[order(top25betasPlot$signif_numeric, 
                            abs(top25betasPlot$beta_value), decreasing = TRUE), ]
+    
     top25betasPlot$point_size <- -log10(top25betasPlot$p_value) * 1.1
 
+    top25betasPlot$is_significant <- factor(top25betasPlot$p_value < 0.0501, 
+                                            levels = c(TRUE, FALSE))
+    
     beta_value <- gene <- beta_group <- point_size <- p_value <- NULL
     h <- ggplot(top25betasPlot, aes(
         x = abs(beta_value),
         y = gene,
         color = beta_group,
         size = point_size,
-        shape = p_value < 0.06
+        shape = is_significant
     )) +
-        scale_shape_manual(name = "p.value < 0.05", values = c(1, 19)) +
+        scale_shape_manual(name = "p.value < 0.05", 
+                           values = c("TRUE" = 19, "FALSE" = 1)) +
         ggtitle(paste0("Top ", ngenes, 
                        " genes with the greatest influence on risk")) +
         geom_point() +

@@ -264,23 +264,16 @@ geneSurv <- function(seData, time, status, geneName, boxplot = TRUE,
     names(fits1)
     
     # library hazardR
-    hazardR <- hazard.ratio(
+    HR <- hazard.ratio(
       x = (as.numeric(group.assignation.vector$assigned_group)),
       surv.time = time,
       surv.event = status
     )
     
-    names(hazardR) <- c(
-      "hazard.ratio", "coef", "se", "lower.ci", "upper.ci", "p.value",
-      "n", "coxm", "data"
-    )
-    
-    if (hazardR$hazard.ratio < 1) {
-      # message("1/hazar.ratio was calculated")
-      hazardR$hazard.ratio <- format(1/as.numeric(hazardR$hazard.ratio),3)
-      hazardR$upper.ci <- format(1 / as.numeric(hazardR$lower.ci), 3)
-      hazardR$lower.ci <- format(1 / as.numeric(hazardR$upper.ci), 3)
-    }
+    hazardR <- NULL
+    hazardR$hazard.ratio <- round(HR$hazard.ratio, 3)
+    hazardR$lower.ci <- round(HR$lower, 3)
+    hazardR$upper.ci <- round(HR$upper, 3)	
     
     Ttest <- wilcox.test(
       vector.exprs[group.assignation.vector$assigned_group == 1],
@@ -318,13 +311,16 @@ geneSurv <- function(seData, time, status, geneName, boxplot = TRUE,
     fitPredict <- predict(fit, type = "risk")
     riskVal <- as.integer(fitPredict > median(fitPredict))
     fits1 <- survfit(Surv(mSurv$time, mSurv$status) ~ riskVal, data = mSurv)
-    p.val <- summary(fit)$sctest[3]
+    
+    HR <- hazard.ratio(x = riskVal, 
+                            surv.time = mSurv$time, surv.event = mSurv$status)
+    p.val <- HR$p.value
     
     hazardR <- NULL
-    hazardR$hazard.ratio <- exp(-fit$coefficients)
-    hazardR$upper.ci <- 1 / summary(fit)$conf.int[3]
-    hazardR$lower.ci <- 1 / summary(fit)$conf.int[4]
-    
+    hazardR$hazard.ratio <- round(HR$hazard.ratio, 3)
+    hazardR$lower.ci <- round(HR$lower, 3)
+    hazardR$upper.ci <- round(HR$upper, 3)	
+     
     plot_values <- NULL
     plot_values$km <- list(
       "fitsKM" = fits1,
