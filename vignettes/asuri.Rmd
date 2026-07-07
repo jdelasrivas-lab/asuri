@@ -211,6 +211,21 @@ plotKM(outputKM.TP53)
 
 **Figure \@ref(fig:kmrisk)** shows the two Kaplan-Meier curves with the confidence intervals obtained by the function **geneSurv()** for the gene BRCA1. Now the two groups are obtained by estimating the risk for each patient and determining the split threshold by optimizing the log-rank test statistic between the two curves. The procedure is repeated 100 times using a bootstrap strategy to improve the classification of intermediate risk patients.
 
+### Hazard Ratio Specification
+
+The Hazard Ratio (HR) reported in the analysis is estimated using a univariate Cox Proportional Hazards model. Specifically:
+
+1. **Methodology**: The HR is calculated comparing the "High Risk" group 
+   against the "Low Risk" (reference) group, or in the case of expression 
+   "High Expr" against the "Low Expr" group. The estimation is performed 
+   using the `hazard.ratio` function from the `survcomp` package.
+2. **Interpretation**: An $HR > 1$ indicates an increased risk of the event 
+   for the high (risk-expr) group, while an $HR < 1$ suggests a protective effect.
+3. **Statistical Rigor**: All HR estimates are provided with their 
+   corresponding 95% Confidence Intervals (CI) and p-values derived from the 
+   Wald test. The proportionality of hazards is an underlying assumption for 
+   the consistency of these estimates.
+
 ## Discovery of genes associated with phenotypic factors: **genePheno()**
  
 It has been suggested in the literature that the clinical features and physiopathological parameters of a patient's disease can be associated with specific biomolecular pathways or genes that can be identified as markers of that patient's condition or status. The **genePheno()** function implements a robust algorithm to obtain a list of genes associated with a given clinical variable or phenotypic factor [@Bueno2023] measured in a cohort of patients. These genes may provide alternative and novel targets to standard known disease markers.
@@ -326,7 +341,6 @@ The input parameters of the **patientRisk()** function are the following:
 - `status` A numeric vector representing the event status (1 = event, 0 = censored) for each sample, names(status) should be defined as the sample names.
 - `group.vector` Optional numeric vector specifying predefined risk groups for the patients.
 - `method` A string that determines the method considered to stratified the patients in two risk groups according to the risk score for the lower 10th percentile of the p-values: (1) `min.pval` Defines risk groups based on the minimum p-value. (2) `med.pval` Defines risk groups based on the median p-value. This approach can be more robust when several local minima are found. Finally, (3) `class.probs` Defines risk groups based on the classification probabilities from the model. It provides also a membership probability to each risk group. `class.probs` is selected by default.
-- `nboot` An integer specifying the number of bootstrap iterations for risk score calculation. Default is 50.
 - `cut_time`  A numeric value specifying the cutoff time (in years) for survival analysis. All events beyond this time are treated as censored (by default = 10 years).
 
 The **patientRisk()** function returns a list containing the following objects:

@@ -100,8 +100,12 @@ is estimated from the classification of each sample in the replicates.
 This membership probability allow us to reclassify patients around the gene 
 expression threshold in a more robust way.
 The function provides a robust estimation of the log-rank p-value and the 
-Hazard ratio that allow us to evaluate the ability of a given gene 
-to mark survival.
+Hazard ratio (HR) that allow us to evaluate the ability of a given gene 
+to mark survival. The HR is calculated using univariate Cox proportional 
+hazards model, comparing the risk/expression groups (high vs low). 
+The HR function from survcomp package is used, which estimates the 
+log-hazard ratio and transforms it to obtain the HR and its 95% 
+confidence intervals.
 }
 \examples{
 data(seBRCA)

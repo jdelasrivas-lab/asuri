@@ -373,7 +373,8 @@ plotBetas <- function(pr_result) {
         shape = is_significant
     )) +
         scale_shape_manual(name = "p.value < 0.05", 
-                           values = c("TRUE" = 19, "FALSE" = 1)) +
+                           values = c("TRUE" = 19, "FALSE" = 1),
+                           drop = FALSE) +
         ggtitle(paste0("Top ", ngenes, 
                        " genes with the greatest influence on risk")) +
         geom_point() +
@@ -395,8 +396,9 @@ plotBetas <- function(pr_result) {
         # labs(size = "1 / p.value") +
         scale_size_continuous(
             name = "-log10(p.value)",
-            breaks = -log10(c(0.05, 0.01, 0.001, 0.0001)) * 1.1, 
-            labels = c("0.05", "0.01", "0.001", "0.0001")
+            breaks = -log10(c(1, 0.5, 0.05, 0.01, 0.001, 0.0001)) * 1.1, 
+            labels = c("1", "0.5", "0.05", "0.01", "0.001", "0.0001"),
+            limits = c(0, max(-log10(top25betasPlot$p_value) * 1.1, -log10(0.001) * 1.1))
         ) +
         guides(
             color = guide_legend(order = 1), 

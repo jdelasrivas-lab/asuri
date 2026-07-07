@@ -11,7 +11,6 @@ patientRisk(
   status,
   group.vector,
   method = NULL,
-  nboot = 50,
   cut_time = 10
 )
 }
@@ -39,9 +38,6 @@ groups, the default method is \code{"class.probs"}. Possible options are:
  - \code{"med.pval"}: Define risk groups based on the median p-value.
  - \code{"class.probs"}: Defines risk groups based on the classification 
  probabilities from the model.}
-
-\item{nboot}{An integer specifying the number of bootstrap iterations for 
-risk score calculation. Default is 50.}
 
 \item{cut_time}{A numeric value specifying the cutoff time (in years) for 
 survival analysis. All events beyond this time are treated as censored 
@@ -88,7 +84,10 @@ A list containing the following elements:
  \item{\code{betasplot}: Dataset used to create the plot of genes ranked 
  according to the regression coefficients in the multivariate Cox model.}
  \item{\code{plot_values}: A list containing Kaplan-Meier fit results, 
- logrank p-value, and hazard ratio.}
+ logrank p-value, and hazard ratio. The hazard ratio is calculated
+  following the final stratification, and represents the relative increase 
+  in risk between the group identified as ‘High Risk’ and the ‘Low Risk’ 
+  group based on the linear predictor of the optimised Cox-Lasso model.}
  \item{\code{membership_prob}: If method "class.probs" is selected a table 
  with two columns is returned. The first one is the probability of 
  classification to the low risk group while the second one is the 

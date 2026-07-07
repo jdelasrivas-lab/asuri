@@ -38,9 +38,13 @@
 #' This membership probability allow us to reclassify patients around the gene 
 #' expression threshold in a more robust way.
 #' The function provides a robust estimation of the log-rank p-value and the 
-#' Hazard ratio that allow us to evaluate the ability of a given gene 
-#' to mark survival.
-#'
+#' Hazard ratio (HR) that allow us to evaluate the ability of a given gene 
+#' to mark survival. The HR is calculated using univariate Cox proportional 
+#' hazards model, comparing the risk/expression groups (high vs low). 
+#' The HR function from survcomp package is used, which estimates the 
+#' log-hazard ratio and transforms it to obtain the HR and its 95% 
+#' confidence intervals.
+#' 
 #' @return Depending on the type run, the output changes:
 #' \itemize{ 
 #'  \item{For \code{type = exprs}, a Kaplan-Meier plot based on expression groups, a 
@@ -128,8 +132,8 @@ geneSurv <- function(seData, time, status, geneName, boxplot = TRUE,
   
   genExpr <- assay(seData)
   genExpr <- genExpr[rownames(genExpr) %in% geneName,]
-  time    <- colData(seData)$time
-  status  <- colData(seData)$status
+  time    <- colData(seData)[[time]]
+  status  <- colData(seData)[[status]]
   
   names(time)   <- colData(seData)[,1]
   names(status) <- colData(seData)[,1]
