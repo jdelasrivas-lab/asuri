@@ -4,6 +4,8 @@ subtitle: "Survival analysis and risk prediction for patients based on gene expr
 author:
 - name: Alberto Berral-Gonzalez
   affiliation: Bioinformatics and Functional Genomics Group - Cancer Research Centre (CiC-IBMCC, CSIC/USAL) and IBSAL, Salamanca (Spain)
+- name: Maria Sanchez-Martin
+  affiliation: Bioinformatics and Functional Genomics Group - Cancer Research Centre (CiC-IBMCC, CSIC/USAL) and IBSAL, Salamanca (Spain)
 - name: Santiago Bueno-Fortes
   affiliation: Bioinformatics and Functional Genomics Group - Cancer Research Centre (CiC-IBMCC, CSIC/USAL) and IBSAL, Salamanca (Spain)
 - name: Natalia Alonso-Moreda
