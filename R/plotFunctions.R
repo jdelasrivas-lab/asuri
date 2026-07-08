@@ -372,9 +372,6 @@ plotBetas <- function(pr_result) {
         size = point_size,
         shape = is_significant
     )) +
-        scale_shape_manual(name = "p.value < 0.05", 
-                           values = c("TRUE" = 19, "FALSE" = 1),
-                           drop = FALSE) +
         ggtitle(paste0("Top ", ngenes, 
                        " genes with the greatest influence on risk")) +
         geom_point() +
@@ -387,6 +384,9 @@ plotBetas <- function(pr_result) {
         ) +
         xlab("Absolute Beta Values (Genes Risk Influence)") +
         ylab("") +
+        scale_shape_manual(name = "p.value < 0.05", 
+                          values = c("TRUE" = 19, "FALSE" = 1),
+                          drop = FALSE) +
         scale_color_manual(
             name = "Beta Sign",
             breaks = c("type1", "type2"),
@@ -403,7 +403,7 @@ plotBetas <- function(pr_result) {
         guides(
             color = guide_legend(order = 1), 
             size = guide_legend(order = 2),
-            shape = guide_legend(order = 3)
+            shape = guide_legend(order = 3, override.aes = list(size = 4))
         )
     graphics::plot(h)
 }
